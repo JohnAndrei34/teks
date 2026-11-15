@@ -5,7 +5,13 @@ import Store from './pages/Store.jsx'
 import CollectionPage from './pages/CollectionPage.jsx'
 import GameDetails from './pages/GameDetails.jsx'
 import DeveloperPage from './pages/DeveloperPage.jsx'
-import ComingSoon from './pages/ComingSoon.jsx'
+import Cart from './pages/Cart.jsx'
+import Checkout from './pages/Checkout.jsx'
+import OrderPage from './pages/OrderPage.jsx'
+import Sell from './pages/Sell.jsx'
+import About from './pages/About.jsx'
+import Contact from './pages/Contact.jsx'
+import Admin from './pages/Admin.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -17,13 +23,13 @@ export default function App() {
         <Route path="collections/:slug" element={<CollectionPage />} />
         <Route path="game/:slug" element={<GameDetails />} />
         <Route path="developers/:slug" element={<DeveloperPage />} />
-        <Route path="cart" element={<ComingSoon title="Cart" />} />
-        <Route path="checkout" element={<ComingSoon title="Checkout" />} />
-        <Route path="order/:code" element={<ComingSoon title="Order" />} />
-        <Route path="sell" element={<ComingSoon title="Sell on TEKS" />} />
-        <Route path="about" element={<ComingSoon title="About" />} />
-        <Route path="contact" element={<ComingSoon title="Contact" />} />
-        <Route path="admin" element={<ComingSoon title="Admin" />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="order/:code" element={<OrderPage />} />
+        <Route path="sell" element={<Sell />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

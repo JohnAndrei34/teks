@@ -5,6 +5,7 @@ import { Check, ExternalLink, Lightbulb, ShoppingCart } from 'lucide-react'
 import { getConfig, getGame, peso } from '../lib/api.js'
 import { COLLECTION_TITLES } from '../lib/content.js'
 import { useCart } from '../context/useCart.js'
+import { useToast } from '../context/useToast.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
 import GameCover from '../components/GameCover.jsx'
 import PlatformIcons from '../components/PlatformIcons.jsx'
@@ -55,6 +56,7 @@ function Gallery({ game }) {
 export default function GameDetails() {
   const { slug } = useParams()
   const { addToCart, inCart } = useCart()
+  const { toast } = useToast()
   const query = useQuery({
     queryKey: ['game', slug],
     queryFn: () => getGame(slug),
@@ -142,7 +144,7 @@ export default function GameDetails() {
             {added ? (
               <p className="mt-4 flex flex-wrap items-center gap-3">
                 <span className="flex items-center gap-1 font-semibold text-teks-teal">
-                  <Check size={18} aria-hidden="true" /> In cart
+                  <Check size={18} aria-hidden="true" /> In cart ✓
                 </span>
                 <Link to="/cart" className="rounded-lg border border-teks-teal px-4 py-2 font-semibold text-teks-teal hover:bg-teks-teal hover:text-teks-bg">
                   View cart
@@ -151,7 +153,10 @@ export default function GameDetails() {
             ) : (
               <button
                 type="button"
-                onClick={() => addToCart(g)}
+                onClick={() => {
+                  addToCart(g)
+                  toast(`${g.title} added to cart`)
+                }}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-teks-primary px-5 py-3 font-semibold text-white hover:bg-teks-primary-soft sm:w-auto"
               >
                 <ShoppingCart size={18} aria-hidden="true" /> Add to Cart

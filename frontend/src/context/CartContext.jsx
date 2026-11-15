@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { CartContext } from './cartContext.js'
 
 const KEY = 'teks-cart'
+const PROMO_KEY = 'teks-promo'
 
 function load() {
   try {
@@ -12,9 +13,19 @@ function load() {
   }
 }
 
+function loadPromo() {
+  try {
+    const p = JSON.parse(localStorage.getItem(PROMO_KEY))
+    return p && p.code && p.percent ? p : null
+  } catch {
+    return null
+  }
+}
+
 // Cart items are for display only. The backend recomputes all prices at checkout.
 export function CartProvider({ children }) {
   const [items, setItems] = useState(load)
+  const [promo, setPromo] = useState(loadPromo) // { code, percent } validated via /promo
 
   useEffect(() => {
     try {
@@ -23,6 +34,15 @@ export function CartProvider({ children }) {
       /* storage unavailable: cart still works for this session */
     }
   }, [items])
+
+  useEffect(() => {
+    try {
+      if (promo) localStorage.setItem(PROMO_KEY, JSON.stringify(promo))
+      else localStorage.removeItem(PROMO_KEY)
+    } catch {
+      /* ignore */
+    }
+  }, [promo])
 
   const addToCart = useCallback((game) => {
     setItems((prev) =>
@@ -43,7 +63,10 @@ export function CartProvider({ children }) {
     )
   }, [])
   const removeFromCart = useCallback((id) => setItems((prev) => prev.filter((i) => i.id !== id)), [])
-  const clearCart = useCallback(() => setItems([]), [])
+  const clearCart = useCallback(() => {
+    setItems([])
+    setPromo(null)
+  }, [])
 
   const value = useMemo(
     () => ({
@@ -51,10 +74,12 @@ export function CartProvider({ children }) {
       addToCart,
       removeFromCart,
       clearCart,
+      promo,
+      setPromo,
       count: items.length,
       inCart: (id) => items.some((i) => i.id === id),
     }),
-    [items, addToCart, removeFromCart, clearCart],
+    [items, promo, addToCart, removeFromCart, clearCart],
   )
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

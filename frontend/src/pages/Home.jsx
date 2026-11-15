@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Gamepad2, HeartHandshake, MonitorSmartphone } from 'lucide-react'
 import { getCollections, getConfig, getGames } from '../lib/api.js'
-import { BRAND, GENRES, TEKS_STORY, WHY_TEKS } from '../lib/content.js'
+import { BRAND, GENRES, HOME_DEV_BANNER, TEKS_STORY, WHY_TEKS } from '../lib/content.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
 import SectionHeader from '../components/SectionHeader.jsx'
 import CollectionCard from '../components/CollectionCard.jsx'
@@ -111,13 +111,11 @@ export default function Home() {
       <section className={`${section} pb-2`}>
         <div className="flex flex-col items-start gap-4 rounded-2xl bg-gradient-to-r from-teks-primary to-teks-gold p-8 text-teks-bg sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-display text-2xl font-extrabold">Make games? Sell them on TEKS.</h2>
-            <p className="mt-1 max-w-xl font-medium">
-              Student teams, indie devs and studios are welcome. Share your Filipino story with players.
-            </p>
+            <h2 className="font-display text-2xl font-extrabold">{HOME_DEV_BANNER.title}</h2>
+            <p className="mt-1 max-w-xl font-medium">{HOME_DEV_BANNER.body}</p>
           </div>
           <Link to="/sell" className="shrink-0 rounded-lg bg-teks-bg px-6 py-3 font-semibold text-teks-text hover:bg-teks-dark">
-            Sell on TEKS
+            {HOME_DEV_BANNER.cta}
           </Link>
         </div>
       </section>

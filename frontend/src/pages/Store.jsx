@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Search, SlidersHorizontal } from 'lucide-react'
 import { getGames } from '../lib/api.js'
-import { COLLECTION_LINKS, COLLECTION_TITLES, GENRES, PLATFORMS, SORTS } from '../lib/content.js'
+import { COLLECTION_LINKS, COLLECTION_TITLES, GENRES, PLATFORMS, SORTS, STORE_SUBTITLE } from '../lib/content.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
 import GameGrid from '../components/GameGrid.jsx'
 import EmptyState from '../components/EmptyState.jsx'
@@ -68,7 +68,7 @@ export default function Store() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Store</h1>
-      <p className="mt-1 text-teks-muted">Games by Filipino developers, for PC and mobile.</p>
+      <p className="mt-1 text-teks-muted">{STORE_SUBTITLE}</p>
 
       <div className="mt-6 grid gap-6 md:grid-cols-[16rem_1fr]">
         <aside aria-label="Filters">

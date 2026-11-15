@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import { CartProvider } from './context/CartContext.jsx'
+import { ToastProvider } from './context/ToastContext.jsx'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1, refetchOnWindowFocus: false } },
@@ -14,9 +15,11 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <CartProvider>
-          <App />
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </ToastProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

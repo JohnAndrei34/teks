@@ -35,3 +35,12 @@ export const getCollections = () => api('/collections')
 export const getCollection = (slug) => api(`/collections/${encodeURIComponent(slug)}`)
 export const getDeveloper = (slug) => api(`/developers/${encodeURIComponent(slug)}`)
 export const getConfig = () => api('/config')
+
+const post = (path, body) => api(path, { method: 'POST', body: JSON.stringify(body) })
+
+export const checkPromo = (code) => api(`/promo/${encodeURIComponent(code)}`)
+export const createOrder = (body) => post('/orders', body)
+export const getOrder = (code) => api(`/orders/${encodeURIComponent(code)}`)
+export const createContact = (body) => post('/contact', body)
+export const createSubmission = (body) => post('/submissions', body)
+export const getAdminList = (kind, key) => api(`/admin/${kind}`, { headers: { 'X-Admin-Key': key } })

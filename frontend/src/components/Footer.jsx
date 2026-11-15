@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BRAND, COLLECTION_LINKS, FOOTER_YEAR, GENRES, SOCIALS } from '../lib/content.js'
+import { BRAND, COLLECTION_LINKS, GENRES, SOCIALS } from '../lib/content.js'
 
 function Column({ title, children }) {
   return (
@@ -57,7 +57,7 @@ export default function Footer() {
         </Column>
       </div>
       <p className="border-t border-teks-border py-4 text-center text-xs text-teks-muted">
-        © {FOOTER_YEAR} TEKS. All rights reserved.
+        © {new Date().getFullYear()} TEKS. All rights reserved.
       </p>
     </footer>
   )
