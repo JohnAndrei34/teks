@@ -11,6 +11,41 @@ You will keep **two terminals** open: one for each.
 
 ---
 
+## Daily quick start
+
+Already finished the setup below? This is all you need each day.
+
+**Before you start working** (once per task):
+
+```powershell
+git checkout main
+git pull
+git checkout -b feature/short-name
+```
+
+After pulling, in case someone added packages: run `npm install` in `frontend/`, and `pip install -r requirements.txt` in `backend/` (venv active).
+
+**Start the project** (two terminals):
+
+| Terminal | Commands |
+|----------|----------|
+| Terminal 1 (backend) | `cd backend` then `.\.venv\Scripts\Activate.ps1` then `uvicorn app.main:app --reload` |
+| Terminal 2 (frontend) | `cd frontend` then `npm run dev` |
+
+**Open in your browser:**
+
+- Site: http://localhost:5173
+- API docs: http://localhost:8000/docs
+- Admin page: http://localhost:5173/admin (needs the admin key, see [section 10](#10-the-admin-page))
+
+> **WARNING: everyone shares ONE Supabase database.**
+>
+> - **Never run `python -m scripts.seed --reset`.** It deletes and recreates every table, which **wipes all orders, messages and submissions** for the whole team. Only **Drei** runs it.
+> - The plain `python -m scripts.seed` (no `--reset`) is OK after you edit `backend/data/games.json` or `backend/data/developers.json`. It only adds and updates games and developers. **Tell Drei first** so nobody is surprised by the change.
+> - Test orders, messages and submissions you create land in the shared database too. Keep tests small and tell Drei so they can be cleaned up.
+
+---
+
 ## 1. Install tools
 
 Install these four things. After each install, open a **new** PowerShell window and run the check command.
@@ -53,12 +88,10 @@ git config --global core.autocrlf true
 
    ```powershell
    cd $HOME\Documents
-   git clone https://github.com/<OWNER>/teks.git
+   git clone https://github.com/JohnAndrei34/teks.git
    cd teks
    code .
    ```
-
-   (Replace `<OWNER>` with the GitHub username that owns the repo. Ask Drei if unsure.)
 
 4. VS Code reopens inside the project. A popup in the bottom right says it has **recommended extensions**. Click **Install All**.
 
@@ -127,11 +160,13 @@ Open http://localhost:5173 to see the site.
 |---------------|-------|---------|
 | Activate the Python venv | `backend/` | `.venv\Scripts\Activate.ps1` |
 | Run the backend | `backend/` (venv active) | `uvicorn app.main:app --reload` |
-| Load/refresh games in the database | `backend/` (venv active) | `python -m scripts.seed` |
+| Update games/developers in the database (after editing the JSON files; tell Drei first) | `backend/` (venv active) | `python -m scripts.seed` |
+| **DO NOT RUN:** wipe and recreate all tables | | `python -m scripts.seed --reset` (Drei only; it deletes all orders, messages and submissions) |
 | Install a new Python package | `backend/` (venv active) | `pip install <package>` then `pip freeze` to check, and add it to `requirements.txt` |
 | Install Python packages (after pulling) | `backend/` (venv active) | `pip install -r requirements.txt` |
 | Run the frontend | `frontend/` | `npm run dev` |
 | Build the frontend (check for errors) | `frontend/` | `npm run build` |
+| Check the frontend code style | `frontend/` | `npm run lint` |
 | Install JS packages (after pulling) | `frontend/` | `npm install` |
 
 > When you add a Python package, add its name to `backend/requirements.txt` so everyone gets it.
@@ -151,11 +186,11 @@ Open http://localhost:5173 to see the site.
 ```powershell
 git checkout main
 git pull
-git checkout -b feat/short-description
+git checkout -b feature/short-description
 # ...make your changes...
 git add .
 git commit -m "feat: add game card hover effect"
-git push -u origin feat/short-description
+git push -u origin feature/short-description
 ```
 
 Then:
@@ -177,6 +212,7 @@ Then:
 **Good to know:**
 
 - Every PR gets a **Vercel preview link**, so you can click it to see your change live before merging.
+- **Merging a PR into `main` deploys both the site and the API automatically.** See [section 11](#11-live-site).
 - After every `git pull`, run `npm install` (in `frontend/`) and `pip install -r requirements.txt` (in `backend/`, venv active) in case someone added packages.
 
 ---
@@ -185,24 +221,37 @@ Then:
 
 ```
 frontend/
-  public/images/       images used by the site
+  public/images/
+    games/             game images: <slug>-cover.webp, <slug>-1.webp, ...
+    collections/       collection covers: <collection-slug>-cover.webp
+    developers/        developer logos: <developer-slug>.webp
   src/
-    pages/             one file per page (Home, Game, Cart, ...)
-    components/        reusable pieces (GameCard, Navbar, ...)
-    lib/api.js         ALL calls to the backend live here
+    pages/             one file per page (Home, Store, GameDetails, Cart, ...)
+    components/        reusable pieces (GameCard, Navbar, Footer, ...)
+    context/           shared state (cart, toast messages)
+    lib/
+      api.js           ALL calls to the backend live here
+      content.js       EDITABLE SITE TEXT (tagline, About, FAQ, ...)
 backend/
   app/
-    routers/           API endpoints (games, orders, submissions, ...)
+    routers/           API endpoints (games, collections, developers, orders, ...)
     models.py          database tables
-  data/games.json      the game catalog
-  scripts/seed.py      loads games.json into the database
+    collections.py     text for the 4 Pinoy Collections
+  data/
+    games.json         the game catalog
+    developers.json    the developers (games point to them by slug)
+  scripts/seed.py      loads the two JSON files into the database
 ```
 
-If you edit `backend/data/games.json`, **re-run the seed** (from `backend/`, venv active) to update the database:
+**To change site text, edit `frontend/src/lib/content.js`.** Most wording (tagline, mission, vision, FAQ, team, contact email) lives there, so you rarely need to touch the page files.
+
+If you edit `backend/data/games.json` or `backend/data/developers.json`, **tell Drei, then re-run the seed** (from `backend/`, venv active) to update the database:
 
 ```powershell
 python -m scripts.seed
 ```
+
+(Plain seed only. Never add `--reset`, see the warning at the top.)
 
 ---
 
@@ -217,7 +266,38 @@ python -m scripts.seed
 
 ---
 
-## 10. Troubleshooting
+## 10. The admin page
+
+The admin page shows orders, game submissions and contact messages.
+
+1. Start both terminals (see the quick start) and open http://localhost:5173/admin.
+2. Enter the **admin key**. It is the `ADMIN_KEY` value in your `backend/.env`.
+3. Use the **Orders**, **Submissions** and **Messages** tabs. Click **Log out** when done.
+
+The `ADMIN_KEY` comes from **Drei, privately**. **Never share it publicly** (group chat, pull requests, screenshots, commits). The admin page is not linked in the site menu on purpose.
+
+---
+
+## 11. Live site
+
+- Site: https://teks-web.vercel.app
+- API: https://teks-api.vercel.app
+- **Merging a pull request into `main` deploys both automatically.** Don't merge unless it has been reviewed.
+- Every pull request also gets a **Vercel preview link** (a temporary copy of the site with your changes) so reviewers can try it first.
+
+---
+
+## 12. Using Claude Code (optional)
+
+If you use Claude Code (the AI coding assistant) in VS Code:
+
+- Open the **teks folder** (the project root) so it can see the whole project. It reads `CLAUDE.md` automatically, which tells it how TEKS is built and what the rules are.
+- **Never paste the contents of `.env`, passwords, the admin key or database URLs into the chat.**
+- Review what it changes before you commit, and run the site to check it works. Remember the rules in section 9.
+
+---
+
+## 13. Troubleshooting
 
 | Problem | Fix |
 |---------|-----|
