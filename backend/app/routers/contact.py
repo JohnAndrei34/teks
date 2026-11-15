@@ -1,3 +1,5 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, EmailStr, Field
 from sqlmodel import Session
@@ -11,6 +13,7 @@ router = APIRouter(tags=["contact"])
 class ContactIn(BaseModel):
     name: str = Field(min_length=1)
     email: EmailStr
+    inquiry_type: Literal["general", "developer", "creator", "community", "school"] = "general"
     message: str = Field(min_length=1)
 
 

@@ -1,3 +1,5 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, EmailStr, Field
 from sqlmodel import Session
@@ -13,7 +15,10 @@ class SubmissionIn(BaseModel):
     contact_name: str = Field(min_length=1)
     email: EmailStr
     game_title: str = Field(min_length=1)
-    genre: str = Field(min_length=1)
+    genre: Literal["RPG", "Horror", "Simulation", "Casual", "Strategy"]
+    developer_type: Literal["student", "indie", "studio"]
+    collection: Literal["folklore", "traditional-games", "history", "everyday-life"] | None = None
+    platforms: list[Literal["PC", "Mobile"]] = Field(min_length=1)
     build_url: str = Field(min_length=1)
     description: str = Field(min_length=1)
 

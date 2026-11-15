@@ -4,6 +4,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr, Field
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from app.database import get_session
@@ -29,12 +30,12 @@ def check_promo(code: str):
     return {"valid": percent is not None, "percent": percent or 0}
 
 
-def new_order_code(session: Session) -> str:
+ORDER_CODE_ATTEMPTS = 5
+
+
+def candidate_order_code() -> str:
     day = datetime.now(timezone.utc).strftime("%Y%m%d")
-    while True:
-        code = f"TEKS-{day}-{secrets.randbelow(10000):04d}"
-        if session.exec(select(Order).where(Order.code == code)).first() is None:
-            return code
+    return f"TEKS-{day}-{secrets.randbelow(10000):04d}"
 
 
 @router.post("/orders", status_code=201)
@@ -54,19 +55,34 @@ def create_order(body: OrderIn, session: Session = Depends(get_session)):
         raise HTTPException(status_code=400, detail="Invalid promo code")
     discount = subtotal * percent // 100
 
-    order = Order(
-        code=new_order_code(session),
-        customer_name=body.customer_name,
-        email=body.email,
-        mobile=body.mobile,
-        payment_method=body.payment_method,
-        promo_code=promo_code,
-        subtotal=subtotal,
-        discount=discount,
-        total=subtotal - discount,
-    )
-    session.add(order)
-    session.flush()
+    # Retry with a fresh code if the generated one is already taken (checked up front,
+    # and again via the unique constraint to cover concurrent orders).
+    order = None
+    for _ in range(ORDER_CODE_ATTEMPTS):
+        code = candidate_order_code()
+        if session.exec(select(Order).where(Order.code == code)).first() is not None:
+            continue
+        candidate = Order(
+            code=code,
+            customer_name=body.customer_name,
+            email=body.email,
+            mobile=body.mobile,
+            payment_method=body.payment_method,
+            promo_code=promo_code,
+            subtotal=subtotal,
+            discount=discount,
+            total=subtotal - discount,
+        )
+        try:
+            with session.begin_nested():
+                session.add(candidate)
+                session.flush()
+        except IntegrityError:
+            continue
+        order = candidate
+        break
+    if order is None:
+        raise HTTPException(status_code=503, detail="Could not generate an order code. Please try again.")
     for game in games:
         session.add(
             OrderItem(order_id=order.id, game_id=game.id, title=game.title, price=prices[game.id])

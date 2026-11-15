@@ -8,17 +8,36 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+class Developer(SQLModel, table=True):
+    __tablename__ = "developers"
+
+    id: int | None = Field(default=None, primary_key=True)
+    slug: str = Field(unique=True, index=True)
+    name: str
+    type: str  # 'student' | 'indie' | 'studio' (validated in Pydantic input models)
+    bio: str
+    location: str
+    website_url: str | None = None
+    facebook_url: str | None = None
+    logo_image: str | None = None
+    created_at: datetime = Field(default_factory=utcnow)
+
+
 class Game(SQLModel, table=True):
     __tablename__ = "games"
 
     id: int | None = Field(default=None, primary_key=True)
     slug: str = Field(unique=True, index=True)
     title: str
-    developer: str
+    developer_id: int = Field(foreign_key="developers.id", index=True)
     genre: str = Field(index=True)
+    # 'folklore' | 'traditional-games' | 'history' | 'everyday-life' | None
+    collection: str | None = Field(default=None, index=True)
+    cultural_note: str | None = None
     tags: list[str] = Field(default_factory=list, sa_column=Column(JSON))
-    folklore: bool = False
     featured: bool = False
+    is_new: bool = False
+    trailer_url: str | None = None
     price: int
     sale_price: int | None = None
     cover_image: str
@@ -66,6 +85,9 @@ class DeveloperSubmission(SQLModel, table=True):
     email: str
     game_title: str
     genre: str
+    developer_type: str  # 'student' | 'indie' | 'studio'
+    collection: str | None = None
+    platforms: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     build_url: str
     description: str
     status: str = "pending"
@@ -78,5 +100,6 @@ class ContactMessage(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
     email: str
+    inquiry_type: str = "general"  # general | developer | creator | community | school
     message: str
     created_at: datetime = Field(default_factory=utcnow)

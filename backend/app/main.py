@@ -6,7 +6,16 @@ from sqlalchemy import text
 from sqlmodel import Session
 
 from app.database import get_session
-from app.routers import admin, contact, games, orders, submissions
+from app.routers import (
+    admin,
+    collections,
+    config,
+    contact,
+    developers,
+    games,
+    orders,
+    submissions,
+)
 
 app = FastAPI(title="TEKS API")
 
@@ -30,5 +39,5 @@ def health(session: Session = Depends(get_session)):
     return {"ok": True, "database": "up"}
 
 
-for router in (games, orders, submissions, contact, admin):
+for router in (games, collections, developers, config, orders, submissions, contact, admin):
     app.include_router(router.router, prefix="/api")
