@@ -1,4 +1,5 @@
 import json
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -7,12 +8,28 @@ from sqlmodel import Session, SQLModel, select
 
 from app import models  # noqa: F401  (registers tables on the metadata)
 from app.database import engine
-from app.models import Game
+from app.models import Developer, Game
 
-GAMES_FILE = Path(__file__).resolve().parent.parent / "data" / "games.json"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
+
+def upsert(session: Session, model, data: dict):
+    obj = session.exec(select(model).where(model.slug == data["slug"])).first()
+    if obj is None:
+        session.add(model(**data))
+    else:
+        for key, value in data.items():
+            setattr(obj, key, value)
+        session.add(obj)
 
 
 def main():
+    if "--reset" in sys.argv[1:]:
+        print("WARNING: --reset DROPS ALL TEKS TABLES (games, developers, orders, order_items,")
+        print("         developer_submissions, contact_messages) and recreates them.")
+        print("         All data in them, including orders and messages, will be lost.")
+        SQLModel.metadata.drop_all(engine)
+
     SQLModel.metadata.create_all(engine)
 
     # Block Supabase's auto-generated public API. The backend connects as the
@@ -21,20 +38,23 @@ def main():
         for table in SQLModel.metadata.tables:
             conn.execute(text(f'ALTER TABLE public."{table}" ENABLE ROW LEVEL SECURITY'))
 
-    games = json.loads(GAMES_FILE.read_text(encoding="utf-8"))
+    developers = json.loads((DATA_DIR / "developers.json").read_text(encoding="utf-8"))
+    games = json.loads((DATA_DIR / "games.json").read_text(encoding="utf-8"))
+
     with Session(engine) as session:
+        for data in developers:
+            upsert(session, Developer, data)
+        session.commit()
+
+        dev_ids = {d.slug: d.id for d in session.exec(select(Developer)).all()}
         for data in games:
+            data = dict(data)
+            data["developer_id"] = dev_ids[data.pop("developer")]
             if data.get("release_date"):
                 data["release_date"] = date.fromisoformat(data["release_date"])
-            game = session.exec(select(Game).where(Game.slug == data["slug"])).first()
-            if game is None:
-                session.add(Game(**data))
-            else:
-                for key, value in data.items():
-                    setattr(game, key, value)
-                session.add(game)
+            upsert(session, Game, data)
         session.commit()
-    print(f"Seeded {len(games)} games.")
+    print(f"Seeded {len(developers)} developers and {len(games)} games.")
 
 
 if __name__ == "__main__":
