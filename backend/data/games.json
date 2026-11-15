@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "gabi-ng-aswang",
+    "title": "Gabi ng Aswang",
+    "developer": "Madilim Studio (placeholder)",
+    "genre": "Horror",
+    "tags": ["horror", "survival", "folklore"],
+    "folklore": true,
+    "featured": true,
+    "price": 249,
+    "sale_price": 199,
+    "cover_image": "/images/games/gabi-ng-aswang-cover.webp",
+    "screenshots": [
+      "/images/games/gabi-ng-aswang-1.webp",
+      "/images/games/gabi-ng-aswang-2.webp"
+    ],
+    "short_description": "Survive one night in a haunted barrio as the aswang hunts.",
+    "description": "A fictional placeholder game. Lock your doors, ration your salt and garlic, and outlast a long night in a remote provincial barrio while something wicked stalks the rooftops.",
+    "promo_caption": "Launch sale",
+    "platforms": ["Windows"],
+    "release_date": "2025-10-31"
+  },
+  {
+    "slug": "tumbang-preso-turbo",
+    "title": "Tumbang Preso Turbo",
+    "developer": "Laro Labs (placeholder)",
+    "genre": "Arcade",
+    "tags": ["arcade", "multiplayer", "casual"],
+    "folklore": false,
+    "featured": false,
+    "price": 99,
+    "sale_price": null,
+    "cover_image": "/images/games/tumbang-preso-turbo-cover.webp",
+    "screenshots": ["/images/games/tumbang-preso-turbo-1.webp"],
+    "short_description": "The classic street game, now with power-ups and chaos.",
+    "description": "A fictional placeholder game. Knock the can, dodge the taya, and race your friends in fast-paced local multiplayer rounds set in a sunny neighborhood street.",
+    "promo_caption": null,
+    "platforms": ["Windows", "Web"],
+    "release_date": "2025-06-12"
+  },
+  {
+    "slug": "biyaheng-jeepney",
+    "title": "Biyaheng Jeepney",
+    "developer": "Daan Games (placeholder)",
+    "genre": "Simulation",
+    "tags": ["driving", "simulation", "relaxing"],
+    "folklore": false,
+    "featured": true,
+    "price": 199,
+    "sale_price": 149,
+    "cover_image": "/images/games/biyaheng-jeepney-cover.webp",
+    "screenshots": [
+      "/images/games/biyaheng-jeepney-1.webp",
+      "/images/games/biyaheng-jeepney-2.webp"
+    ],
+    "short_description": "Drive your jeepney route, pick up pasahero, and beat the traffic.",
+    "description": "A fictional placeholder game. Customize your jeepney, call out the stops, and keep your passengers happy while navigating a bustling city route from dawn to dusk.",
+    "promo_caption": "Weekend deal",
+    "platforms": ["Windows", "Mac"],
+    "release_date": "2025-08-20"
+  },
+  {
+    "slug": "sigaw-ng-katipunan",
+    "title": "Sigaw ng Katipunan",
+    "developer": "Kasaysayan Interactive (placeholder)",
+    "genre": "Strategy",
+    "tags": ["strategy", "historical", "turn-based"],
+    "folklore": false,
+    "featured": false,
+    "price": 349,
+    "sale_price": null,
+    "cover_image": "/images/games/sigaw-ng-katipunan-cover.webp",
+    "screenshots": ["/images/games/sigaw-ng-katipunan-1.webp"],
+    "short_description": "Plan the uprising in a turn-based strategy set in the 1890s.",
+    "description": "A fictional placeholder game. Recruit allies, manage secret meetings, and coordinate supply lines in a turn-based strategy inspired by the revolutionary era.",
+    "promo_caption": null,
+    "platforms": ["Windows", "Mac", "Linux"],
+    "release_date": "2025-03-15"
+  },
+  {
+    "slug": "tindahan-tycoon",
+    "title": "Tindahan Tycoon",
+    "developer": "Suki Games (placeholder)",
+    "genre": "Simulation",
+    "tags": ["tycoon", "management", "casual"],
+    "folklore": true,
+    "featured": false,
+    "price": 149,
+    "sale_price": 99,
+    "cover_image": "/images/games/tindahan-tycoon-cover.webp",
+    "screenshots": [
+      "/images/games/tindahan-tycoon-1.webp",
+      "/images/games/tindahan-tycoon-2.webp"
+    ],
+    "short_description": "Grow your sari-sari store from a tiny window to a neighborhood hub.",
+    "description": "A fictional placeholder game. Stock the shelves, sell tingi-tingi, extend utang to loyal suki, and keep the resident duwende happy with offerings as your sari-sari store grows.",
+    "promo_caption": "Sale",
+    "platforms": ["Windows", "Web"],
+    "release_date": "2025-05-01"
+  },
+  {
+    "slug": "diwata-ng-bundok",
+    "title": "Diwata ng Bundok",
+    "developer": "Bundok Pixel (placeholder)",
+    "genre": "RPG",
+    "tags": ["rpg", "fantasy", "folklore"],
+    "folklore": true,
+    "featured": false,
+    "price": 299,
+    "sale_price": null,
+    "cover_image": "/images/games/diwata-ng-bundok-cover.webp",
+    "screenshots": [
+      "/images/games/diwata-ng-bundok-1.webp",
+      "/images/games/diwata-ng-bundok-2.webp"
+    ],
+    "short_description": "Befriend the diwata and restore balance to a mythic mountain.",
+    "description": "A fictional placeholder game. Explore an enchanted mountain, bargain with spirits, and grow in power as you uncover why the diwata have gone silent.",
+    "promo_caption": null,
+    "platforms": ["Windows", "Mac"],
+    "release_date": "2025-11-02"
+  }
+]
