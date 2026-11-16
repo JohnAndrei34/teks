@@ -1,10 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Copy, Download } from 'lucide-react'
-import { getConfig, getOrder, peso } from '../lib/api.js'
+import { getConfig, getOrder, peso, pesoExact } from '../lib/api.js'
 import { PAYMENT_LABELS } from '../lib/content.js'
 import { useToast } from '../context/useToast.js'
+import { useAllGames } from '../lib/useAllGames.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
+import GameCover from '../components/GameCover.jsx'
 import ErrorState from '../components/ErrorState.jsx'
 import { BlockSkeleton } from '../components/Skeletons.jsx'
 import NotFound from './NotFound.jsx'
@@ -18,21 +20,23 @@ export default function OrderPage() {
     retry: (count, err) => err.status !== 404 && count < 1,
   })
   const config = useQuery({ queryKey: ['config'], queryFn: getConfig })
+  const all = useAllGames()
   useDocumentTitle(query.data ? `Order ${query.data.code}` : 'Order')
 
   if (query.error?.status === 404) {
     return <NotFound title="Order not found" message="We couldn't find an order with that code. Check the code and try again." documentTitle="Order not found" />
   }
   if (query.isError) {
-    return <div className="mx-auto max-w-2xl px-4 py-16"><ErrorState message="Couldn't load this order." onRetry={() => query.refetch()} /></div>
+    return <div className="wrap section"><ErrorState message="Couldn't load this order." onRetry={() => query.refetch()} /></div>
   }
   if (query.isPending) {
-    return <div className="mx-auto max-w-3xl space-y-4 px-4 py-10"><BlockSkeleton className="h-32" /><BlockSkeleton className="h-64" /></div>
+    return <div className="wrap section" style={{ display: 'grid', gap: '1.5rem' }}><BlockSkeleton /><BlockSkeleton style={{ minHeight: '16rem' }} /></div>
   }
 
   const o = query.data
   const share = config.data?.developer_share_percent
   const toDevs = share ? Math.floor((o.total * share) / 100) : null
+  const gameOf = (item) => all.data?.find((g) => g.id === item.game_id)
 
   const copy = async () => {
     try {
@@ -44,59 +48,71 @@ export default function OrderPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <header className="text-center">
-        <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Salamat, {o.customer_name.split(' ')[0]}!</h1>
-        <p className="mt-2 text-teks-muted">Your order is confirmed (demo). No real payment was processed.</p>
-        <p className="mt-5 inline-flex items-center gap-2 rounded-xl border border-dashed border-teks-gold px-4 py-2">
-          <span className="text-sm text-teks-muted">Order code</span>
-          <span className="font-display text-lg font-extrabold text-teks-gold">{o.code}</span>
-          <button type="button" onClick={copy} aria-label="Copy order code" className="rounded p-1 text-teks-muted hover:text-teks-gold">
-            <Copy size={18} aria-hidden="true" />
+    <div className="wrap" style={{ paddingBottom: '4rem' }}>
+      <div className="success">
+        <h1>Salamat, {o.customer_name.split(' ')[0]}!</h1>
+        <p>Your order is confirmed (demo). No real payment was processed.</p>
+        <p className="code-row">
+          <span>Order code</span>
+          <span className="code">{o.code}</span>
+          <button type="button" className="btn alt small" onClick={copy}>
+            <Copy size={16} aria-hidden="true" /> Copy<span className="sr-only"> order code</span>
           </button>
         </p>
-      </header>
+        <Link className="btn yellow" to="/library">Open My Library</Link>
+      </div>
 
-      <dl className="mt-8 grid gap-4 rounded-2xl border border-teks-border bg-teks-surface p-5 sm:grid-cols-2">
-        <div><dt className="text-sm text-teks-muted">Date</dt><dd>{new Date(o.created_at).toLocaleString('en-PH', { dateStyle: 'long', timeStyle: 'short' })}</dd></div>
-        <div><dt className="text-sm text-teks-muted">Payment method</dt><dd>{PAYMENT_LABELS[o.payment_method] ?? o.payment_method}</dd></div>
-        <div><dt className="text-sm text-teks-muted">Email</dt><dd className="break-all">{o.email}</dd></div>
-        <div><dt className="text-sm text-teks-muted">Status</dt><dd>{o.status}</dd></div>
+      <dl className="box facts">
+        <div><dt>Date</dt><dd>{new Date(o.created_at).toLocaleString('en-PH', { dateStyle: 'long', timeStyle: 'short' })}</dd></div>
+        <div><dt>Payment method</dt><dd>{PAYMENT_LABELS[o.payment_method] ?? o.payment_method}</dd></div>
+        <div><dt>Email</dt><dd>{o.email}</dd></div>
+        <div><dt>Status</dt><dd>{o.status}</dd></div>
       </dl>
 
-      <section className="mt-6" aria-labelledby="items-h">
-        <h2 id="items-h" className="mb-3 font-display text-xl font-extrabold">Your games</h2>
-        <ul className="space-y-2">
-          {o.items.map((i) => (
-            <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-teks-border bg-teks-surface p-3">
-              <div>
-                <p className="font-semibold">{i.title}</p>
-                <p className="text-sm text-teks-muted">{peso(i.price)}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => toast('Download started (demo)')}
-                className="flex items-center gap-2 rounded-lg border border-teks-gold px-3 py-1.5 text-sm font-semibold text-teks-gold hover:bg-teks-gold hover:text-teks-bg"
-              >
-                <Download size={16} aria-hidden="true" /> Download<span className="sr-only"> {i.title}</span>
-              </button>
-            </li>
-          ))}
+      <section aria-labelledby="items-h" style={{ marginTop: '2rem' }}>
+        <h2 id="items-h" style={{ fontSize: '1.8rem', marginBottom: '1.2rem' }}>Your games</h2>
+        <ul className="lines">
+          {o.items.map((i) => {
+            const g = gameOf(i)
+            return (
+              <li key={i.id} className="line">
+                <Link className="thumb" to={g ? `/game/${g.slug}` : '/store'} aria-label={i.title}>
+                  <GameCover game={g ?? { title: i.title }} decorative />
+                </Link>
+                <div>
+                  <h3>{i.title}</h3>
+                  <p>{peso(i.price)}</p>
+                </div>
+                <button type="button" className="btn small" onClick={() => toast('Download started (demo)')}>
+                  <Download size={16} aria-hidden="true" /> Download<span className="sr-only"> {i.title}</span>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </section>
 
-      <dl className="mt-6 space-y-2 rounded-2xl border border-teks-border bg-teks-surface p-5">
-        <div className="flex justify-between"><dt className="text-teks-muted">Subtotal</dt><dd>{peso(o.subtotal)}</dd></div>
-        <div className="flex justify-between"><dt className="text-teks-muted">Discount{o.promo_code ? ` (${o.promo_code})` : ''}</dt><dd>−{peso(o.discount)}</dd></div>
-        <div className="flex justify-between border-t border-teks-border pt-2 text-lg font-extrabold"><dt>Total</dt><dd className="text-teks-gold">{peso(o.total)}</dd></div>
-      </dl>
+      <div className="sum" style={{ position: 'static', maxWidth: '26rem' }}>
+        <div className="row"><span>Subtotal</span><span>{peso(o.subtotal)}</span></div>
+        <div className="row"><span>Discount{o.promo_code ? ` (${o.promo_code})` : ''}</span><span>−{peso(o.discount)}</span></div>
+        <div className="row total"><span>Total</span><span>{peso(o.total)}</span></div>
+      </div>
 
-      <p className="mt-6 rounded-xl bg-teks-teal/10 px-4 py-3 text-center font-semibold text-teks-teal">
-        {toDevs != null ? `${peso(toDevs)} went directly to Filipino developers.` : 'A fair share of this order went directly to Filipino developers.'}
-      </p>
+      <div className="box" style={{ marginTop: '1.5rem' }}>
+        <h3>Where your money went</h3>
+        {share != null && (
+          <div className="bar-split" role="img" aria-label={`${share} percent to the developers`}>
+            <i style={{ width: `${share}%` }} />
+            <b />
+          </div>
+        )}
+        <p className="split">
+          {toDevs != null ? `${pesoExact(toDevs)} went directly to Filipino developers.` : 'A fair share of this order went directly to Filipino developers.'}
+        </p>
+      </div>
 
-      <p className="mt-8 text-center">
-        <Link to="/store" className="font-semibold text-teks-gold hover:underline">Keep browsing →</Link>
+      <p style={{ marginTop: '2rem' }}>
+        <Link className="btn alt" to="/store">Keep browsing</Link>
       </p>
     </div>
   )

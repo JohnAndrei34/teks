@@ -55,6 +55,8 @@ export function CartProvider({ children }) {
               slug: game.slug,
               title: game.title,
               cover_image: game.cover_image,
+              motif: game.motif,
+              palette: game.palette,
               developer: game.developer?.name,
               price: game.price,
               sale_price: game.sale_price,

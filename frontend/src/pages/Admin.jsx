@@ -4,7 +4,6 @@ import { getAdminList, peso } from '../lib/api.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
 import ErrorState from '../components/ErrorState.jsx'
 import EmptyState from '../components/EmptyState.jsx'
-import { inputClass } from '../lib/formStyles.js'
 
 const KEY = 'teks-admin-key'
 const readKey = () => {
@@ -57,28 +56,28 @@ const TABS = {
 function DataList({ columns, rows }) {
   return (
     <>
-      <div className="hidden overflow-x-auto md:block">
-        <table className="w-full text-left text-sm">
-          <thead className="text-teks-muted">
-            <tr>{columns.map((c) => <th key={c.label} scope="col" className="border-b border-teks-border px-3 py-2 font-semibold">{c.label}</th>)}</tr>
+      <div className="box tbl-wrap max-md:hidden" style={{ padding: 0 }}>
+        <table className="tbl">
+          <thead>
+            <tr>{columns.map((c) => <th key={c.label} scope="col">{c.label}</th>)}</tr>
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.id} className="align-top odd:bg-teks-surface">
-                {columns.map((c) => <td key={c.label} className="max-w-xs break-words px-3 py-2">{c.render(r)}</td>)}
+              <tr key={r.id}>
+                {columns.map((c) => <td key={c.label}>{c.render(r)}</td>)}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <ul className="space-y-3 md:hidden">
+      <ul className="admin-cards md:hidden">
         {rows.map((r) => (
-          <li key={r.id} className="rounded-xl border border-teks-border bg-teks-surface p-4">
-            <dl className="space-y-1 text-sm">
+          <li key={r.id} className="box" style={{ padding: '1rem' }}>
+            <dl>
               {columns.map((c) => (
                 <div key={c.label}>
-                  <dt className="inline text-teks-muted">{c.label}: </dt>
-                  <dd className="inline break-words">{c.render(r)}</dd>
+                  <dt>{c.label}: </dt>
+                  <dd>{c.render(r)}</dd>
                 </div>
               ))}
             </dl>
@@ -142,28 +141,32 @@ export default function Admin() {
 
   if (!loggedIn) {
     return (
-      <div className="mx-auto max-w-sm px-4 py-20">
-        <h1 className="font-display text-2xl font-extrabold">Admin</h1>
-        <form onSubmit={login} className="mt-4 space-y-3">
-          <label htmlFor="admin-key" className="block text-sm font-semibold">Admin key</label>
-          <input id="admin-key" type="password" autoComplete="off" value={input} onChange={(e) => setInput(e.target.value)} className={inputClass} aria-describedby="admin-msg" />
-          <p id="admin-msg" role="alert" className="text-sm text-teks-primary-soft">
-            {rejected ? 'Invalid admin key. Try again.' : notice}
-          </p>
-          <button type="submit" className="rounded-lg bg-teks-primary px-5 py-2.5 font-semibold text-white hover:bg-teks-primary-soft">Enter</button>
-        </form>
+      <div className="wrap section">
+        <div className="box login">
+          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Admin</h1>
+          <form className="form" onSubmit={login}>
+            <div className={`field${rejected ? ' bad' : ''}`}>
+              <label htmlFor="admin-key">Admin key</label>
+              <input id="admin-key" type="password" autoComplete="off" value={input} onChange={(e) => setInput(e.target.value)} aria-describedby="admin-msg" />
+              <p id="admin-msg" role="alert" className="err">
+                {rejected ? 'Invalid admin key. Try again.' : notice}
+              </p>
+            </div>
+            <button type="submit" className="btn" style={{ justifySelf: 'start' }}>Enter</button>
+          </form>
+        </div>
       </div>
     )
   }
 
   const t = TABS[tab]
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-extrabold">Admin</h1>
-        <button type="button" onClick={logout} className="rounded-lg border border-teks-border px-3 py-1.5 text-sm font-semibold hover:border-teks-gold">Log out</button>
+    <div className="wrap section">
+      <div className="head" style={{ marginBottom: '1.2rem' }}>
+        <h1 style={{ fontSize: '2.4rem' }}>Admin</h1>
+        <button type="button" onClick={logout} className="btn alt small">Log out</button>
       </div>
-      <div role="tablist" aria-label="Admin sections" className="mt-5 flex gap-2">
+      <div role="tablist" aria-label="Admin sections" className="tabs">
         {Object.entries(TABS).map(([id, v]) => (
           <button
             key={id}
@@ -173,15 +176,15 @@ export default function Admin() {
             aria-selected={tab === id}
             aria-controls="admin-panel"
             onClick={() => setTab(id)}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold ${tab === id ? 'bg-teks-gold text-teks-bg' : 'bg-teks-surface hover:text-teks-gold'}`}
+            className="chip"
           >
             {v.label}
           </button>
         ))}
       </div>
-      <div id="admin-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} className="mt-5">
+      <div id="admin-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} style={{ marginTop: '1.5rem' }}>
         {query.isPending ? (
-          <p className="text-teks-muted" role="status">Loading…</p>
+          <p className="results-n" role="status">Loading…</p>
         ) : query.isError ? (
           <ErrorState message={query.error.message} onRetry={() => query.refetch()} />
         ) : query.data.length ? (

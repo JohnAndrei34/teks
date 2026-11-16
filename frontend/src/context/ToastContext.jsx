@@ -1,30 +1,26 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ToastContext } from './toastContext.js'
 
+// One toast at a time, as in Dea's design: a new message replaces the old one.
 export function ToastProvider({ children }) {
-  const [toasts, setToasts] = useState([])
-  const nextId = useRef(1)
+  const [message, setMessage] = useState('')
+  const [show, setShow] = useState(false)
+  const timer = useRef(null)
 
-  const toast = useCallback((message) => {
-    const id = nextId.current++
-    setToasts((prev) => [...prev.slice(-2), { id, message }])
-    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3000)
+  const toast = useCallback((text) => {
+    setMessage(text)
+    setShow(true)
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => setShow(false), 2400)
   }, [])
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   const value = useMemo(() => ({ toast }), [toast])
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div
-        role="status"
-        aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-4 z-[200] flex flex-col items-center gap-2 px-4"
-      >
-        {toasts.map((t) => (
-          <div key={t.id} className="rounded-lg border border-teks-gold/60 bg-teks-surface px-4 py-2 text-sm font-semibold shadow-xl">
-            {t.message}
-          </div>
-        ))}
+      <div className={`toast${show ? ' show' : ''}`} role="status" aria-live="polite">
+        {message}
       </div>
     </ToastContext.Provider>
   )

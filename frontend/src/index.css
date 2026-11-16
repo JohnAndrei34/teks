@@ -1,48 +1,19 @@
 @import "tailwindcss";
+@import "./styles/teks.css";
 
-@theme {
-  --color-teks-primary: #e63946;
-  --color-teks-primary-soft: #ff6b74;
-  --color-teks-dark: #1d1b2f;
-  --color-teks-bg: #14121f;
-  --color-teks-surface: #1f1c2e;
-  --color-teks-surface-2: #2a2640;
-  --color-teks-border: #3b3655;
-  --color-teks-text: #f6f1e7;
-  --color-teks-muted: #aaa4bf;
-  --color-teks-gold: #f6b73c;
-  --color-teks-teal: #35c4ad;
-  --font-display: "Poppins", sans-serif;
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-}
-
-@layer base {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    background-color: var(--color-teks-bg);
-    color: var(--color-teks-text);
-    font-family: var(--font-sans);
-  }
-  :focus-visible {
-    outline: 3px solid var(--color-teks-gold);
-    outline-offset: 2px;
-    border-radius: 6px;
-  }
-}
-
-@utility sun-rays {
-  background-image:
-    radial-gradient(circle at 85% 0%, rgb(246 183 60 / 0.28), transparent 45%),
-    radial-gradient(circle at 0% 100%, rgb(230 57 70 / 0.25), transparent 50%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
+/* Dea's palette and fonts live in teks.css as :root variables.
+   `inline` makes Tailwind utilities read the variables, so the two stay in sync. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+  --color-green: var(--green);
+  --color-pink: var(--pink);
+  --color-paper: var(--paper);
+  --color-muted: var(--muted);
+  --font-display: var(--display);
+  --font-sans: var(--body);
+  --radius-teks: var(--r);
+  --shadow-hard: var(--hard);
 }

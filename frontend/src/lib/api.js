@@ -20,6 +20,13 @@ const pesoFormat = new Intl.NumberFormat('en-PH', {
 
 export const peso = (n) => pesoFormat.format(n)
 
+// For developer payouts, which can include centavos (e.g. 80% of 149 is 119.20).
+const pesoCurrency = (digits) =>
+  new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', minimumFractionDigits: digits, maximumFractionDigits: digits })
+const pesoWhole = pesoCurrency(0)
+const pesoCents = pesoCurrency(2)
+export const pesoExact = (n) => (Number.isInteger(n) ? pesoWhole : pesoCents).format(n)
+
 const toQuery = (params = {}) => {
   const qs = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {

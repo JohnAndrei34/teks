@@ -30,6 +30,7 @@ class Game(SQLModel, table=True):
     slug: str = Field(unique=True, index=True)
     title: str
     developer_id: int = Field(foreign_key="developers.id", index=True)
+    card_no: int | None = None  # the "No. 01" number printed on the teks card
     genre: str = Field(index=True)
     # 'folklore' | 'traditional-games' | 'history' | 'everyday-life' | None
     collection: str | None = Field(default=None, index=True)
@@ -40,10 +41,13 @@ class Game(SQLModel, table=True):
     trailer_url: str | None = None
     price: int
     sale_price: int | None = None
-    cover_image: str
+    cover_image: str | None = None  # optional; the procedural TeksArt is used when absent
+    motif: str | None = None  # TeksArt motif key
+    palette: list[str] = Field(default_factory=list, sa_column=Column(JSON))  # 3 hex colours
     screenshots: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     short_description: str
     description: str
+    highlights: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     promo_caption: str | None = None
     platforms: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     release_date: date | None = None

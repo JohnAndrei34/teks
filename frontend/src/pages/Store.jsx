@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Search, SlidersHorizontal } from 'lucide-react'
 import { getGames } from '../lib/api.js'
 import { COLLECTION_LINKS, COLLECTION_TITLES, GENRES, PLATFORMS, SORTS, STORE_SUBTITLE } from '../lib/content.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
@@ -10,16 +9,24 @@ import EmptyState from '../components/EmptyState.jsx'
 import ErrorState from '../components/ErrorState.jsx'
 import { GameGridSkeleton } from '../components/Skeletons.jsx'
 
-const field =
-  'w-full rounded-lg border border-teks-border bg-teks-surface px-3 py-2 text-sm placeholder:text-teks-muted'
-const label = 'mb-1 block text-xs font-semibold uppercase tracking-wider text-teks-muted'
-
 const validInt = (v) => (/^\d+$/.test(v ?? '') ? v : '')
+
+function Chips({ label, value, options, onPick, allLabel = 'All' }) {
+  return (
+    <div className="filter-row" role="group" aria-label={label}>
+      <span className="lab">{label}</span>
+      {[{ value: '', label: allLabel }, ...options].map((o) => (
+        <button key={o.value} type="button" className="chip" aria-pressed={value === o.value} onClick={() => onPick(o.value)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 export default function Store() {
   useDocumentTitle('Store')
   const [params, setParams] = useSearchParams()
-  const [filtersOpen, setFiltersOpen] = useState(false)
 
   const genre = GENRES.includes(params.get('genre')) ? params.get('genre') : ''
   const collection = params.get('collection') in COLLECTION_TITLES ? params.get('collection') : ''
@@ -66,96 +73,44 @@ export default function Store() {
   })
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Store</h1>
-      <p className="mt-1 text-teks-muted">{STORE_SUBTITLE}</p>
-
-      <div className="mt-6 grid gap-6 md:grid-cols-[16rem_1fr]">
-        <aside aria-label="Filters">
-          <button
-            type="button"
-            aria-expanded={filtersOpen}
-            aria-controls="filter-panel"
-            onClick={() => setFiltersOpen((o) => !o)}
-            className="flex w-full items-center justify-between rounded-lg border border-teks-border bg-teks-surface px-4 py-2.5 font-semibold md:hidden"
-          >
-            <span className="flex items-center gap-2">
-              <SlidersHorizontal size={18} aria-hidden="true" /> Filters
-            </span>
-            <span className="text-sm text-teks-muted">{filtersOpen ? 'Hide' : 'Show'}</span>
-          </button>
-
-          <div id="filter-panel" className={`${filtersOpen ? 'block' : 'hidden'} mt-3 space-y-4 md:mt-0 md:block`}>
-            <div>
-              <label htmlFor="search" className={label}>Search</label>
-              <div className="relative">
-                <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-teks-muted" aria-hidden="true" />
-                <input
-                  id="search"
-                  type="search"
-                  value={draft.q}
-                  onChange={(e) => onDraft('q', e.target.value)}
-                  placeholder="Title or developer"
-                  className={`${field} pl-9`}
-                />
-              </div>
+    <>
+      <section className="page-head">
+        <div className="wrap">
+          <h1>Store</h1>
+          <p>{STORE_SUBTITLE}</p>
+        </div>
+      </section>
+      <div className="wrap">
+        <div className="filters">
+          <div className="toolbar">
+            <div className="field search">
+              <label htmlFor="search">Search</label>
+              <input id="search" type="search" placeholder="Title or developer" value={draft.q} onChange={(e) => onDraft('q', e.target.value)} />
             </div>
-            <div>
-              <label htmlFor="genre" className={label}>Genre</label>
-              <select id="genre" value={genre} onChange={(e) => setParam('genre', e.target.value)} className={field}>
-                <option value="">All genres</option>
-                {GENRES.map((g) => <option key={g}>{g}</option>)}
+            <div className="field sort">
+              <label htmlFor="sort">Sort by</label>
+              <select id="sort" value={sort} onChange={(e) => setParam('sort', e.target.value === 'featured' ? '' : e.target.value)}>
+                {SORTS.map((s) => (
+                  <option key={s.value} value={s.value}>{s.label}</option>
+                ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="collection" className={label}>Collection</label>
-              <select id="collection" value={collection} onChange={(e) => setParam('collection', e.target.value)} className={field}>
-                <option value="">All collections</option>
-                {COLLECTION_LINKS.map((c) => <option key={c.slug} value={c.slug}>{c.title}</option>)}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="platform" className={label}>Platform</label>
-              <select id="platform" value={platform} onChange={(e) => setParam('platform', e.target.value)} className={field}>
-                <option value="">PC & Mobile</option>
-                {PLATFORMS.map((p) => <option key={p}>{p}</option>)}
-              </select>
-            </div>
-            <fieldset>
-              <legend className={label}>Price (₱)</legend>
-              <div className="flex items-center gap-2">
-                <input
-                  aria-label="Minimum price in pesos"
-                  inputMode="numeric"
-                  placeholder="Min"
-                  value={draft.min_price}
-                  onChange={(e) => onDraft('min_price', e.target.value.replace(/\D/g, ''))}
-                  className={field}
-                />
-                <span aria-hidden="true">–</span>
-                <input
-                  aria-label="Maximum price in pesos"
-                  inputMode="numeric"
-                  placeholder="Max"
-                  value={draft.max_price}
-                  onChange={(e) => onDraft('max_price', e.target.value.replace(/\D/g, ''))}
-                  className={field}
-                />
-              </div>
-            </fieldset>
-            <div>
-              <label htmlFor="sort" className={label}>Sort by</label>
-              <select id="sort" value={sort} onChange={(e) => setParam('sort', e.target.value === 'featured' ? '' : e.target.value)} className={field}>
-                {SORTS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-              </select>
+          </div>
+          <Chips label="Genre" value={genre} options={GENRES.map((g) => ({ value: g, label: g }))} onPick={(v) => setParam('genre', v)} />
+          <Chips label="Collection" value={collection} options={COLLECTION_LINKS.map((c) => ({ value: c.slug, label: c.title }))} onPick={(v) => setParam('collection', v)} />
+          <Chips label="Platform" value={platform} options={PLATFORMS.map((p) => ({ value: p, label: p }))} onPick={(v) => setParam('platform', v)} />
+          <div className="filter-row" role="group" aria-label="Price in pesos">
+            <span className="lab">Price (₱)</span>
+            <div className="price-range">
+              <input className="input" aria-label="Minimum price in pesos" inputMode="numeric" placeholder="Min" value={draft.min_price} onChange={(e) => onDraft('min_price', e.target.value.replace(/\D/g, ''))} />
+              <span aria-hidden="true">–</span>
+              <input className="input" aria-label="Maximum price in pesos" inputMode="numeric" placeholder="Max" value={draft.max_price} onChange={(e) => onDraft('max_price', e.target.value.replace(/\D/g, ''))} />
             </div>
             {hasFilters && (
-              <button type="button" onClick={clearFilters} className="text-sm font-semibold text-teks-gold hover:underline">
-                Clear filters
-              </button>
+              <button type="button" className="linkish" onClick={clearFilters}>Clear filters</button>
             )}
           </div>
-        </aside>
+        </div>
 
         <section aria-label="Results" aria-busy={query.isFetching}>
           {query.isPending ? (
@@ -164,30 +119,25 @@ export default function Store() {
             <ErrorState message="Couldn't load games." onRetry={() => query.refetch()} />
           ) : (
             <>
-              <p className="mb-4 text-sm text-teks-muted" role="status">
+              <p className="results-n" role="status">
                 {query.data.length} {query.data.length === 1 ? 'game' : 'games'}
               </p>
               {query.data.length ? (
-                <div className={query.isPlaceholderData ? 'opacity-60 transition-opacity' : ''}>
+                <div style={query.isPlaceholderData ? { opacity: 0.6 } : undefined}>
                   <GameGrid games={query.data} />
                 </div>
               ) : (
                 <EmptyState
-                  title="No games match your filters"
-                  message="Try a different search or remove some filters."
-                  action={
-                    hasFilters && (
-                      <button type="button" onClick={clearFilters} className="rounded-lg bg-teks-primary px-4 py-2 text-sm font-semibold text-white">
-                        Clear filters
-                      </button>
-                    )
-                  }
+                  title="No games match"
+                  message="Try a different word, or clear the filters to see everything."
+                  action={hasFilters && <button type="button" className="btn" onClick={clearFilters}>Clear filters</button>}
                 />
               )}
             </>
           )}
         </section>
+        <div style={{ height: '4rem' }} />
       </div>
-    </div>
+    </>
   )
 }

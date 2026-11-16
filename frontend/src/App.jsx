@@ -5,6 +5,7 @@ import Store from './pages/Store.jsx'
 import CollectionPage from './pages/CollectionPage.jsx'
 import GameDetails from './pages/GameDetails.jsx'
 import DeveloperPage from './pages/DeveloperPage.jsx'
+import Library from './pages/Library.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
 import OrderPage from './pages/OrderPage.jsx'
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="collections/:slug" element={<CollectionPage />} />
         <Route path="game/:slug" element={<GameDetails />} />
         <Route path="developers/:slug" element={<DeveloperPage />} />
+        <Route path="library" element={<Library />} />
         <Route path="cart" element={<Cart />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="order/:code" element={<OrderPage />} />

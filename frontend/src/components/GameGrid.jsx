@@ -5,7 +5,7 @@ import { GameGridSkeleton } from './Skeletons.jsx'
 
 export default function GameGrid({ games }) {
   return (
-    <ul className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <ul className="card-grid">
       {games.map((g) => (
         <li key={g.id}>
           <GameCard game={g} />

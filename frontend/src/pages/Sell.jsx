@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { createSubmission, getConfig } from '../lib/api.js'
+import { createSubmission, getConfig, pesoExact } from '../lib/api.js'
 import { COLLECTION_LINKS, DEVELOPER_TYPES, GENRES, PLATFORMS, SELL } from '../lib/content.js'
 import { useDocumentTitle } from '../lib/useDocumentTitle.js'
 import Field from '../components/FormField.jsx'
-import { fieldProps, inputClass } from '../lib/formStyles.js'
+import { fieldProps } from '../lib/formStyles.js'
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const EMPTY = {
@@ -24,6 +24,24 @@ function validate(f) {
   if (!/^https?:\/\/\S+$/i.test(f.build_url.trim())) e.build_url = 'Enter a link starting with http:// or https://'
   if (f.description.trim().length < 20) e.description = 'Tell us a bit more (at least 20 characters).'
   return e
+}
+
+// Client-side only: the share comes from GET /api/config.
+function EarningsCalculator({ share }) {
+  const [price, setPrice] = useState(299)
+  const per = Math.round(price * share) / 100
+  return (
+    <div className="box dark calc">
+      <h2>What you earn</h2>
+      <div className="field">
+        <label htmlFor="cp" style={{ color: '#fff' }}>Price: <span>{pesoExact(price)}</span></label>
+        <input id="cp" type="range" min="49" max="999" step="10" value={price} onChange={(e) => setPrice(+e.target.value)} />
+      </div>
+      <p style={{ margin: '1rem 0 .2rem' }}>Per copy you receive</p>
+      <div className="big" aria-live="polite">{pesoExact(per)}</div>
+      <p style={{ margin: '1rem 0 0' }}>Sell 100 copies and you receive {pesoExact(Math.round(price * share * 100) / 100)}.</p>
+    </div>
+  )
 }
 
 export default function Sell() {
@@ -54,132 +72,130 @@ export default function Sell() {
 
   return (
     <>
-      <section className="sun-rays border-b border-teks-border">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:py-20">
-          <h1 className="max-w-3xl font-display text-4xl font-extrabold leading-tight sm:text-5xl">{SELL.title}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-teks-muted">{SELL.subtitle}</p>
-          <a href="#submit" className="mt-6 inline-block rounded-lg bg-teks-primary px-6 py-3 font-semibold text-white hover:bg-teks-primary-soft">
-            Submit your game
-          </a>
+      <section className="page-head">
+        <div className="wrap">
+          <h1>{SELL.title}</h1>
+          <p>{SELL.subtitle}</p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl space-y-14 px-4 py-12">
-        <section aria-labelledby="benefits-h">
-          <h2 id="benefits-h" className="mb-5 font-display text-2xl font-extrabold sm:text-3xl">Why sell on TEKS</h2>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="wrap section">
+        <div className="two" style={{ alignItems: 'start' }}>
+          <div className="box" id="submit">
+            <h2>Submit a game</h2>
+            {mutation.isSuccess ? (
+              <div role="status">
+                <h3>Submission received!</h3>
+                <p>Salamat! We&apos;ll review your build and email you at {form.email.trim()}.</p>
+                <button type="button" className="btn" onClick={() => { setForm(EMPTY); mutation.reset() }}>
+                  Submit another game
+                </button>
+              </div>
+            ) : (
+              <form className="form" onSubmit={onSubmit} noValidate>
+                <div className="pair">
+                  <Field id="studio_name" label="Team / studio name" error={errors.studio_name}>
+                    <input {...fieldProps('studio_name', errors)} value={form.studio_name} onChange={set('studio_name')} autoComplete="organization" />
+                  </Field>
+                  <Field id="contact_name" label="Contact person" error={errors.contact_name}>
+                    <input {...fieldProps('contact_name', errors)} value={form.contact_name} onChange={set('contact_name')} autoComplete="name" />
+                  </Field>
+                </div>
+                <div className="pair">
+                  <Field id="email" label="Email" error={errors.email}>
+                    <input {...fieldProps('email', errors)} type="email" value={form.email} onChange={set('email')} autoComplete="email" />
+                  </Field>
+                  <Field id="developer_type" label="Developer type" error={errors.developer_type}>
+                    <select {...fieldProps('developer_type', errors)} value={form.developer_type} onChange={set('developer_type')}>
+                      <option value="">Choose one</option>
+                      {Object.entries(DEVELOPER_TYPES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                    </select>
+                  </Field>
+                </div>
+                <Field id="game_title" label="Game title" error={errors.game_title}>
+                  <input {...fieldProps('game_title', errors)} value={form.game_title} onChange={set('game_title')} />
+                </Field>
+                <div className="pair">
+                  <Field id="genre" label="Genre" error={errors.genre}>
+                    <select {...fieldProps('genre', errors)} value={form.genre} onChange={set('genre')}>
+                      <option value="">Choose one</option>
+                      {GENRES.map((g) => <option key={g}>{g}</option>)}
+                    </select>
+                  </Field>
+                  <Field id="collection" label="Collection (optional)">
+                    <select {...fieldProps('collection', errors)} value={form.collection} onChange={set('collection')}>
+                      <option value="">None</option>
+                      {COLLECTION_LINKS.map((c) => <option key={c.slug} value={c.slug}>{c.title}</option>)}
+                    </select>
+                  </Field>
+                </div>
+                <fieldset className={`field${errors.platforms ? ' bad' : ''}`} aria-describedby="platforms-msg">
+                  <legend>Platforms</legend>
+                  <div className="checks" id="platforms" tabIndex={-1}>
+                    {PLATFORMS.map((p) => (
+                      <label key={p}>
+                        <input type="checkbox" checked={form.platforms.includes(p)} onChange={() => togglePlatform(p)} />
+                        {p}
+                      </label>
+                    ))}
+                  </div>
+                  <p id="platforms-msg" className="err">{errors.platforms}</p>
+                </fieldset>
+                <Field id="build_url" label="Playable build or trailer link" error={errors.build_url} hint="A link to a playable build or a download (Google Drive, itch.io, etc.).">
+                  <input {...fieldProps('build_url', errors)} type="url" value={form.build_url} onChange={set('build_url')} placeholder="https://" />
+                </Field>
+                <Field id="description" label="Short pitch" error={errors.description}>
+                  <textarea {...fieldProps('description', errors)} rows={4} value={form.description} onChange={set('description')} placeholder="What is the game, and which part of Filipino life or story does it draw on?" />
+                </Field>
+                {mutation.isError && <p role="alert" className="err">{mutation.error.message}</p>}
+                <button type="submit" className="btn red" disabled={mutation.isPending} style={{ justifySelf: 'start' }}>
+                  {mutation.isPending ? 'Sending' : 'Send for review'}
+                </button>
+              </form>
+            )}
+          </div>
+
+          <div className="stack-gap">
+            {share != null && <EarningsCalculator share={share} />}
+            <div className="box">
+              <h2>How it works</h2>
+              <ol className="steps">
+                {SELL.steps.map((s) => (
+                  <li key={s.title}><span><strong>{s.title}.</strong> {s.body}</span></li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section className="section" style={{ paddingTop: 0 }} aria-labelledby="benefits-h">
+        <div className="wrap">
+          <div className="head"><h2 id="benefits-h">Why sell on TEKS</h2></div>
+          <ul className="panels" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {SELL.benefits(share).map((b) => (
-              <li key={b.title} className="rounded-2xl border border-teks-border bg-teks-surface p-5">
-                <h3 className="font-display font-extrabold text-teks-gold">{b.title}</h3>
-                <p className="mt-1 text-sm text-teks-muted">{b.body}</p>
+              <li key={b.title} className="box">
+                <h3>{b.title}</h3>
+                <p style={{ margin: 0 }}>{b.body}</p>
               </li>
             ))}
           </ul>
-        </section>
+        </div>
+      </section>
 
-        <section aria-labelledby="how-h">
-          <h2 id="how-h" className="mb-5 font-display text-2xl font-extrabold sm:text-3xl">How it works</h2>
-          <ol className="grid gap-4 md:grid-cols-3">
-            {SELL.steps.map((s, i) => (
-              <li key={s.title} className="flex gap-4 rounded-2xl border border-teks-border bg-teks-surface p-5">
-                <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teks-gold font-display font-extrabold text-teks-bg">{i + 1}</span>
-                <div>
-                  <h3 className="font-display font-extrabold">{s.title}</h3>
-                  <p className="text-sm text-teks-muted">{s.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section id="submit" aria-labelledby="submit-h" className="max-w-2xl scroll-mt-24">
-          <h2 id="submit-h" className="mb-5 font-display text-2xl font-extrabold sm:text-3xl">Submit your game</h2>
-          {mutation.isSuccess ? (
-            <div role="status" className="rounded-2xl border border-teks-teal bg-teks-teal/10 p-6">
-              <h3 className="font-display text-xl font-extrabold text-teks-teal">Submission received!</h3>
-              <p className="mt-2 text-teks-muted">Salamat! We&apos;ll review your build and email you at {form.email.trim()}.</p>
-              <button
-                type="button"
-                onClick={() => { setForm(EMPTY); mutation.reset() }}
-                className="mt-4 rounded-lg border border-teks-teal px-4 py-2 font-semibold text-teks-teal"
-              >
-                Submit another game
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={onSubmit} noValidate className="space-y-5">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <Field id="studio_name" label="Team / studio name" error={errors.studio_name}>
-                  <input {...fieldProps('studio_name', errors)} value={form.studio_name} onChange={set('studio_name')} className={inputClass} />
-                </Field>
-                <Field id="contact_name" label="Contact person" error={errors.contact_name}>
-                  <input {...fieldProps('contact_name', errors)} value={form.contact_name} onChange={set('contact_name')} autoComplete="name" className={inputClass} />
-                </Field>
-                <Field id="email" label="Email" error={errors.email}>
-                  <input {...fieldProps('email', errors)} type="email" value={form.email} onChange={set('email')} autoComplete="email" className={inputClass} />
-                </Field>
-                <Field id="developer_type" label="Developer type" error={errors.developer_type}>
-                  <select {...fieldProps('developer_type', errors)} value={form.developer_type} onChange={set('developer_type')} className={inputClass}>
-                    <option value="">Choose…</option>
-                    {Object.entries(DEVELOPER_TYPES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-                  </select>
-                </Field>
-                <Field id="game_title" label="Game title" error={errors.game_title}>
-                  <input {...fieldProps('game_title', errors)} value={form.game_title} onChange={set('game_title')} className={inputClass} />
-                </Field>
-                <Field id="genre" label="Genre" error={errors.genre}>
-                  <select {...fieldProps('genre', errors)} value={form.genre} onChange={set('genre')} className={inputClass}>
-                    <option value="">Choose…</option>
-                    {GENRES.map((g) => <option key={g}>{g}</option>)}
-                  </select>
-                </Field>
-              </div>
-              <Field id="collection" label="Pinoy Collection (optional)" hint="Pick one if your game fits.">
-                <select {...fieldProps('collection', errors)} value={form.collection} onChange={set('collection')} className={inputClass}>
-                  <option value="">None</option>
-                  {COLLECTION_LINKS.map((c) => <option key={c.slug} value={c.slug}>{c.title}</option>)}
-                </select>
-              </Field>
-              <fieldset aria-describedby="platforms-msg">
-                <legend className="mb-1 text-sm font-semibold">Platforms</legend>
-                <div id="platforms" tabIndex={-1} className="flex gap-5">
-                  {PLATFORMS.map((p) => (
-                    <label key={p} className="flex items-center gap-2">
-                      <input type="checkbox" checked={form.platforms.includes(p)} onChange={() => togglePlatform(p)} className="h-5 w-5 accent-teks-gold" />
-                      {p}
-                    </label>
-                  ))}
-                </div>
-                <p id="platforms-msg" className="mt-1 text-sm text-teks-primary-soft">{errors.platforms}</p>
-              </fieldset>
-              <Field id="build_url" label="Build link" error={errors.build_url} hint="A link to a playable build or a download (Google Drive, itch.io, etc.).">
-                <input {...fieldProps('build_url', errors)} type="url" value={form.build_url} onChange={set('build_url')} placeholder="https://" className={inputClass} />
-              </Field>
-              <Field id="description" label="About your game" error={errors.description}>
-                <textarea {...fieldProps('description', errors)} rows={5} value={form.description} onChange={set('description')} className={inputClass} />
-              </Field>
-              {mutation.isError && (
-                <p role="alert" className="rounded-lg border border-teks-primary bg-teks-primary/10 px-4 py-3 text-teks-primary-soft">{mutation.error.message}</p>
-              )}
-              <button type="submit" disabled={mutation.isPending} className="rounded-lg bg-teks-primary px-6 py-3 font-semibold text-white hover:bg-teks-primary-soft disabled:opacity-70">
-                {mutation.isPending ? 'Sending…' : 'Submit game'}
-              </button>
-            </form>
-          )}
-        </section>
-
-        <section aria-labelledby="faq-h" className="max-w-3xl">
-          <h2 id="faq-h" className="mb-5 font-display text-2xl font-extrabold sm:text-3xl">FAQ</h2>
-          <div className="space-y-2">
+      <section className="section" style={{ paddingTop: 0 }} aria-labelledby="faq-h">
+        <div className="wrap">
+          <div className="head"><h2 id="faq-h">FAQ</h2></div>
+          <div className="faq">
             {SELL.faq.map((f) => (
-              <details key={f.q} className="group rounded-xl border border-teks-border bg-teks-surface p-4">
-                <summary className="cursor-pointer font-semibold marker:text-teks-gold">{f.q}</summary>
-                <p className="mt-2 text-teks-muted">{f.a}</p>
+              <details key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
               </details>
             ))}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   )
 }

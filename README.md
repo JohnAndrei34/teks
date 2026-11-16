@@ -24,3 +24,7 @@ npm run dev
 Vite proxies `/api` to `http://localhost:8000`.
 
 See `SETUP.md` for the full install guide.
+
+## Credits
+
+Design by Andrea Salvanera (Dea). The teks card, colours, typography, layouts, animations and procedural card art are her design.

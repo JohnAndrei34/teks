@@ -1,5 +1,6 @@
-export const inputClass =
-  'w-full rounded-lg border border-teks-border bg-teks-surface px-3 py-2.5 placeholder:text-teks-muted aria-[invalid=true]:border-teks-primary'
+// Inputs inside <Field> are styled by .field in teks.css; `input` class is for bare inputs.
+export const inputClass = ''
+export const bareInput = 'input'
 
 export const fieldProps = (id, errors) => ({
   id,

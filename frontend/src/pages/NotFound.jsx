@@ -8,17 +8,15 @@ export default function NotFound({
 }) {
   useDocumentTitle(documentTitle)
   return (
-    <section className="mx-auto flex max-w-xl flex-col items-center gap-4 px-4 py-24 text-center">
-      <p className="font-display text-7xl font-extrabold text-teks-primary" aria-hidden="true">404</p>
-      <h1 className="font-display text-3xl font-extrabold">{title}</h1>
-      <p className="text-teks-muted">{message}</p>
-      <div className="mt-2 flex flex-wrap justify-center gap-3">
-        <Link to="/store" className="rounded-lg bg-teks-primary px-5 py-2.5 font-semibold text-white hover:bg-teks-primary-soft">
-          Browse games
-        </Link>
-        <Link to="/" className="rounded-lg border border-teks-border px-5 py-2.5 font-semibold hover:border-teks-gold">
-          Go home
-        </Link>
+    <section className="wrap section">
+      <div className="empty">
+        <p aria-hidden="true" style={{ font: '400 clamp(4rem,12vw,7rem) var(--display)', color: 'var(--red)', margin: 0, lineHeight: 1 }}>404</p>
+        <h1 style={{ fontSize: '2rem' }}>{title}</h1>
+        <p>{message}</p>
+        <div className="actions" style={{ justifyContent: 'center', marginTop: '.6rem' }}>
+          <Link className="btn" to="/store">Browse the store</Link>
+          <Link className="btn alt" to="/">Go home</Link>
+        </div>
       </div>
     </section>
   )
