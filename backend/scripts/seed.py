@@ -3,12 +3,12 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from sqlalchemy import text
 from sqlmodel import Session, SQLModel, select
 
 from app import models  # noqa: F401  (registers tables on the metadata)
 from app.database import engine
 from app.models import Developer, Game
+from scripts.migrate import migrate
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
@@ -26,17 +26,12 @@ def upsert(session: Session, model, data: dict):
 def main():
     if "--reset" in sys.argv[1:]:
         print("WARNING: --reset DROPS ALL TEKS TABLES (games, developers, orders, order_items,")
-        print("         developer_submissions, contact_messages) and recreates them.")
-        print("         All data in them, including orders and messages, will be lost.")
+        print("         developer_submissions, contact_messages, users, sessions, auth_attempts)")
+        print("         and recreates them. All accounts, orders and messages will be lost.")
         SQLModel.metadata.drop_all(engine)
 
-    SQLModel.metadata.create_all(engine)
-
-    # Block Supabase's auto-generated public API. The backend connects as the
-    # table owner, so it keeps full access.
-    with engine.begin() as conn:
-        for table in SQLModel.metadata.tables:
-            conn.execute(text(f'ALTER TABLE public."{table}" ENABLE ROW LEVEL SECURITY'))
+    # New tables, new columns on existing tables, and RLS on every table.
+    migrate()
 
     developers = json.loads((DATA_DIR / "developers.json").read_text(encoding="utf-8"))
     games = json.loads((DATA_DIR / "games.json").read_text(encoding="utf-8"))

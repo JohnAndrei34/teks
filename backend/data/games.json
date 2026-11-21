@@ -18,6 +18,7 @@
     "price": 249,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Run a night-shift sari-sari store while something outside counts your customers.",
     "description": "You inherited a corner store in a barrio that goes quiet after ten. Serve the regulars, read what they leave unsaid, and decide who gets the last pack of salt before midnight. Every customer might be exactly who they say they are.",
@@ -34,9 +35,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Switch"
     ],
-    "release_date": "2026-03-14"
+    "release_date": "2025-10-31",
+    "rating": 91,
+    "downloads": 48200
   },
   {
     "slug": "tikbalang-crossing",
@@ -57,6 +61,7 @@
     "price": 499,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Lost on a mountain trail? Turn your shirt inside out and bargain with the horse-headed trickster.",
     "description": "A turn-based RPG across a trail that rearranges itself. Wear your shirt inside out to keep your bearings, trade riddles for directions, and build a party of travellers who each remember the mountain differently.",
@@ -73,9 +78,13 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "PS5",
+      "Xbox"
     ],
-    "release_date": "2026-05-02"
+    "release_date": "2025-06-12",
+    "rating": 88,
+    "downloads": 31500
   },
   {
     "slug": "maiba-taya",
@@ -96,6 +105,7 @@
     "price": 99,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": "img/maiba-taya.webp",
     "screenshots": [],
     "short_description": "Tag the way you played it after class: one taya, one street, and nobody sits out.",
     "description": "Online tag for up to eight players. The taya changes with every touch, safe spots shrink as the round goes, and the street map is built from real barrio layouts submitted by players.",
@@ -112,9 +122,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Mobile"
     ],
-    "release_date": "2026-01-20"
+    "release_date": "2024-11-02",
+    "rating": 84,
+    "downloads": 127400
   },
   {
     "slug": "tumbang-preso",
@@ -135,6 +148,7 @@
     "price": 149,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Guard the can, throw your tsinelas, and outwit the taya.",
     "description": "A tactical take on the classic street game. Aim your throw, read the taya's patience, and time the dash to collect your slipper without getting tagged.",
@@ -151,9 +165,13 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Mobile",
+      "Switch"
     ],
-    "release_date": "2026-02-11"
+    "release_date": "2025-02-14",
+    "rating": 86,
+    "downloads": 86300
   },
   {
     "slug": "barrio-tindahan",
@@ -174,6 +192,7 @@
     "price": 299,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Stock the shelves, sell by the piece, and keep your utang notebook honest.",
     "description": "Run a sari-sari store one day at a time. Sell tingi, order from the delivery truck, and decide whether to extend credit to the neighbour who is always a little short at the end of the month.",
@@ -190,9 +209,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Switch"
     ],
-    "release_date": "2025-11-28"
+    "release_date": "2024-08-23",
+    "rating": 90,
+    "downloads": 64900
   },
   {
     "slug": "sigaw-ng-bayan",
@@ -213,6 +235,7 @@
     "price": 399,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Organise secret meetings, pass coded messages, and build a movement without being caught.",
     "description": "A slow-burn strategy game set in 1896. Recruit across towns, manage trust and suspicion, and learn how real networks of people held together under surveillance.",
@@ -229,9 +252,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "PS5"
     ],
-    "release_date": "2026-06-12"
+    "release_date": "2026-01-09",
+    "rating": 87,
+    "downloads": 22100
   },
   {
     "slug": "jeepney-diaries",
@@ -252,6 +278,7 @@
     "price": 199,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Drive your route, call out the stops, and pass the coins down the line.",
     "description": "Drive a jeepney from terminal to terminal. Pass fares along the bench, make change on the fly, and customise your ride with panels, stickers, and a very loud horn.",
@@ -268,9 +295,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Mobile"
     ],
-    "release_date": "2026-04-05"
+    "release_date": "2025-04-18",
+    "rating": 89,
+    "downloads": 71800
   },
   {
     "slug": "kapre-sa-balete",
@@ -291,6 +321,7 @@
     "price": 199,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "The smell of tobacco is the first sign. The second is that the path behind you is gone.",
     "description": "A short, tense first-person horror about a night survey in an old balete grove. Navigate by smell and sound, share a light with the thing in the tree, and decide how much you owe it to leave.",
@@ -307,9 +338,12 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Xbox"
     ],
-    "release_date": "2025-10-31"
+    "release_date": "2025-09-26",
+    "rating": 85,
+    "downloads": 39400
   },
   {
     "slug": "luksong-tinik",
@@ -330,6 +364,7 @@
     "price": 79,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "The thorns keep stacking. Time your jump and clear the hands.",
     "description": "A one-button jumping game that grows from ankle-height to over your head. Tap to launch, hold to lengthen the arc, and keep the whole team in the game.",
@@ -349,7 +384,9 @@
       "PC",
       "Mobile"
     ],
-    "release_date": "2026-01-20"
+    "release_date": "2024-05-30",
+    "rating": 82,
+    "downloads": 95600
   },
   {
     "slug": "parol-makers",
@@ -370,6 +407,7 @@
     "price": 129,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Cut bamboo, fold the paper, and wire the lights before Christmas Eve.",
     "description": "A relaxed crafting game about building parol for the neighbourhood. Fold, glue, wire, and hang your lanterns, then watch the street light up as other players' work joins yours.",
@@ -386,9 +424,13 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "Switch",
+      "Mobile"
     ],
-    "release_date": "2025-12-01"
+    "release_date": "2024-12-15",
+    "rating": 88,
+    "downloads": 58700
   },
   {
     "slug": "balangay-voyage",
@@ -409,6 +451,7 @@
     "price": 349,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "Sail between islands, trade fairly, and keep your crew fed.",
     "description": "A voyage-planning strategy game across an archipelago. Read the winds and stars, carry goods that each island wants, and grow a trade network one landing at a time.",
@@ -425,9 +468,13 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "PS5",
+      "Xbox"
     ],
-    "release_date": "2026-07-18"
+    "release_date": "2026-03-21",
+    "rating": 92,
+    "downloads": 27300
   },
   {
     "slug": "bakunawa-eclipse",
@@ -448,6 +495,7 @@
     "price": 449,
     "sale_price": null,
     "cover_image": null,
+    "hero_image": null,
     "screenshots": [],
     "short_description": "A dragon is eating the moon. Gather the village and make some noise.",
     "description": "An action RPG built around the story of the moon-eating dragon. Rally villagers, bang pots and pans to the rhythm, and chase the serpent across a sky that grows darker with every bite.",
@@ -464,8 +512,13 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC"
+      "PC",
+      "PS5",
+      "Xbox",
+      "Switch"
     ],
-    "release_date": "2026-08-22"
+    "release_date": "2026-07-04",
+    "rating": 94,
+    "downloads": 18900
   }
 ]

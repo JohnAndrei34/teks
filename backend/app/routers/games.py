@@ -6,13 +6,12 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Session, select
 
 from app.database import get_session
+from app.constants import CollectionSlug, Platform
 from app.models import Developer, Game
-from app.serializers import game_out
+from app.serializers import game_out, sales_counts
 
 router = APIRouter(tags=["games"])
 
-Collection = Literal["folklore", "traditional-games", "history", "everyday-life"]
-Platform = Literal["PC", "Mobile"]
 Sort = Literal["featured", "newest", "price_asc", "price_desc"]
 
 effective_price = func.coalesce(Game.sale_price, Game.price)
@@ -25,13 +24,15 @@ def games_with_developers(session: Session, *conditions, order_by=None, limit=No
     query = query.order_by(*(order_by if order_by is not None else (Game.title,)))
     if limit:
         query = query.limit(limit)
-    return [game_out(g, d) for g, d in session.exec(query).all()]
+    rows = session.exec(query).all()
+    sold = sales_counts(session, [g.id for g, _ in rows])
+    return [game_out(g, d, sold.get(g.id, 0)) for g, d in rows]
 
 
 @router.get("/games")
 def list_games(
     genre: str | None = None,
-    collection: Collection | None = None,
+    collection: CollectionSlug | None = None,
     platform: Platform | None = None,
     developer: str | None = Query(default=None, description="Developer slug"),
     featured: bool | None = None,
@@ -93,7 +94,8 @@ def get_game(slug: str, session: Session = Depends(get_session)):
     if game.collection:
         related_filters.append(Game.collection == game.collection)
     same_theme = games_with_developers(session, Game.id != game.id, or_(*related_filters), limit=4)
+    sold = sales_counts(session, [game.id]).get(game.id, 0)
     return {
-        **game_out(game, dev),
+        **game_out(game, dev, sold),
         "related": {"same_developer": same_developer, "same_collection_or_genre": same_theme},
     }
