@@ -1,9 +1,7 @@
-// Procedural teks-card art, ported from Dea's art.js (teks-design/public/art.js).
-// One flat-ink scene per game motif, drawn in the game's three-colour palette.
-// The drawing code below is hers, unchanged. Only the wrapper functions are new.
-const INK = '#0E1650'
+// Procedural card art: one flat-ink scene per game motif, drawn in the game's three-colour palette.
+const INK = '#1A1A1A';
 const fig = (x, y, s, c, r = 0) =>
-  `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-34" r="7" fill="${c}"/><path d="M0-26V0M0-20L-12-8M0-20L12-10M0 0L-9 20M0 0L10 18"/></g>`
+  `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-34" r="7" fill="${c}"/><path d="M0-26V0M0-20L-12-8M0-20L12-10M0 0L-9 20M0 0L10 18"/></g>`;
 
 const MOTIFS = {
   moonbat: p => `<circle cx="212" cy="72" r="42" fill="${p[2]}"/>
@@ -47,43 +45,10 @@ const MOTIFS = {
     <path d="M30 150C50 60 120 30 210 36C262 42 280 100 262 140" fill="none" stroke="${p[1]}" stroke-width="16" stroke-linecap="round"/>
     <path d="M262 140L282 126L274 154Z" fill="${p[1]}"/><circle cx="268" cy="136" r="3" fill="${p[2]}"/>
     <g fill="${p[2]}"><circle cx="60" cy="186" r="12"/><circle cx="100" cy="196" r="9"/><circle cx="240" cy="190" r="11"/></g>`,
-}
+};
 
-// ---- wrapper (not from the original) ----
-const HEX = /^#[0-9a-f]{6}$/i
-export const MOTIF_KEYS = Object.keys(MOTIFS)
-// Backgrounds are never ink, so boat and eclipse stay readable.
-const FALLBACK_PALETTES = [
-  ['#FFCF1B', '#E5322D', '#0E1650'],
-  ['#17A673', '#FFCF1B', '#E5322D'],
-  ['#2442D6', '#FFCF1B', '#E5322D'],
-  ['#FF8DB3', '#2442D6', '#FFCF1B'],
-  ['#E5322D', '#FFCF1B', '#2442D6'],
-]
-
-const hash = (s = '') => {
-  let h = 0
-  for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0
-  return h
-}
-
-// API data is not trusted: a palette must be at least three #rrggbb colours.
-export const validPalette = (p) =>
-  Array.isArray(p) && p.length >= 3 && p.slice(0, 3).every((c) => typeof c === 'string' && HEX.test(c)) ? p.slice(0, 3) : null
-
-const cache = new Map()
-
-// Returns the inner SVG markup (background rect plus motif) for a 300x220 viewBox.
-// A missing motif or palette is filled in deterministically from `seed`, so a game never renders blank.
-export function artMarkup(motif, palette, seed = '') {
-  const h = hash(seed)
-  const m = MOTIFS[motif] ? motif : MOTIF_KEYS[h % MOTIF_KEYS.length]
-  const p = validPalette(palette) ?? FALLBACK_PALETTES[h % FALLBACK_PALETTES.length]
-  const key = `${m}|${p.join()}`
-  let out = cache.get(key)
-  if (!out) {
-    out = `<rect width="300" height="220" fill="${p[0]}"/>${MOTIFS[m](p)}`
-    cache.set(key, out)
-  }
-  return out
+export function art(g) {
+  const p = g.pal;
+  const body = (MOTIFS[g.motif] || (() => ''))(p);
+  return `<svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${g.title} card art" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="220" fill="${p[0]}"/>${body}</svg>`;
 }

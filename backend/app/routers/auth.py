@@ -3,7 +3,10 @@
 Request and response shapes follow the design's server.js so its frontend works unchanged:
 success -> {token, user}; failure -> {error, field?}."""
 
+import ipaddress
+import logging
 import re
+import sys
 from datetime import timedelta
 
 from email_validator import EmailNotValidError, validate_email
@@ -33,8 +36,18 @@ from app.models import AuthAttempt, AuthSession, Game, Order, OrderItem, User
 router = APIRouter(tags=["auth"])
 
 LOGIN_LIMIT = 8  # failed logins per email per window
-SIGNUP_LIMIT = 20  # signups per client address per window (a whole class may share one address)
+SIGNUP_LIMIT = 20  # signups per real client IP per window (a whole class may share one address)
+SIGNUP_LIMIT_UNKNOWN_IP = 60  # when only the socket address is known (it may be a proxy shared by everyone)
 WINDOW = timedelta(minutes=10)
+
+# Logs which source gave the client IP, so it can be checked in the Vercel logs after deploy.
+log = logging.getLogger("teks.auth")
+if not log.handlers:
+    _handler = logging.StreamHandler(sys.stdout)
+    _handler.setFormatter(logging.Formatter("%(levelname)s %(name)s: %(message)s"))
+    log.addHandler(_handler)
+    log.setLevel(logging.INFO)
+    log.propagate = False
 
 
 class SignupIn(BaseModel):
@@ -64,9 +77,31 @@ def normal_email(value: str) -> str | None:
         return None
 
 
-def client_address(request: Request) -> str:
-    forwarded = request.headers.get("x-forwarded-for", "")
-    return forwarded.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+def _valid_ip(value: str) -> str | None:
+    try:
+        return str(ipaddress.ip_address(value.strip()))
+    except ValueError:
+        return None
+
+
+def client_ip(request: Request) -> tuple[str, str]:
+    """(ip, source). Behind Vercel (and its /api rewrite) the socket address can be a proxy shared
+    by every visitor, so the forwarding headers set by Vercel come first."""
+    real = _valid_ip(request.headers.get("x-real-ip", ""))
+    if real:
+        return real, "x-real-ip"
+    forwarded = _valid_ip(request.headers.get("x-forwarded-for", "").split(",")[0])
+    if forwarded:
+        return forwarded, "x-forwarded-for"
+    return (request.client.host if request.client else "unknown"), "socket"
+
+
+def masked(ip: str) -> str:
+    """Enough of the address to recognise a shared proxy in the logs, without logging who it is."""
+    if ":" in ip:
+        return ":".join(ip.split(":")[:2]) + ":x"
+    parts = ip.split(".")
+    return ".".join(parts[:2] + ["x", "x"]) if len(parts) == 4 else "unknown"
 
 
 def recent_attempts(session: Session, kind: str, key: str) -> int:
@@ -92,8 +127,10 @@ def signup(body: SignupIn, request: Request, session: Session = Depends(get_sess
     if not 8 <= len(body.password) <= 100:
         raise api_error(400, "Use a password of 8 to 100 characters.", "password")
 
-    address = client_address(request)
-    if recent_attempts(session, "signup", address) >= SIGNUP_LIMIT:
+    address, source = client_ip(request)
+    limit = SIGNUP_LIMIT if source != "socket" else SIGNUP_LIMIT_UNKNOWN_IP
+    log.info("signup client ip from %s (%s), limit %d per %d min", source, masked(address), limit, WINDOW.seconds // 60)
+    if recent_attempts(session, "signup", address) >= limit:
         raise api_error(429, "Too many new accounts from this network. Please wait a few minutes and try again.")
     session.add(AuthAttempt(kind="signup", key=address))
     session.commit()

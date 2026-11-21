@@ -1,0 +1,54 @@
+// TEKS local dev server. No dependencies; needs Node 20+.
+//   node frontend/dev.mjs        (or, from frontend/: node dev.mjs)
+// Serves frontend/public on http://localhost:5173 and forwards /api/* to the FastAPI backend
+// (http://localhost:8000), so the browser uses same-origin /api exactly like the deployed site,
+// where frontend/vercel.json rewrites /api/* to teks-api.
+// Options: PORT=5174, API=http://localhost:8001
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const PORT = Number(process.env.PORT) || 5173;
+const API = new URL(process.env.API || 'http://localhost:8000');
+const PUBLIC = path.join(import.meta.dirname, 'public');
+const TYPES = {
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2',
+};
+
+function send(res, status, body, type = 'text/plain; charset=utf-8') {
+  res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store' });
+  res.end(body);
+}
+
+function proxy(req, res) {
+  const client = req.socket.remoteAddress || '';
+  const headers = { ...req.headers, host: API.host, 'x-forwarded-for': client, 'x-real-ip': client };
+  const upstream = http.request(
+    { protocol: API.protocol, hostname: API.hostname, port: API.port, method: req.method, path: req.url, headers },
+    up => { res.writeHead(up.statusCode || 502, up.headers); up.pipe(res); },
+  );
+  upstream.on('error', () => {
+    if (res.headersSent) return res.destroy();
+    send(res, 502, JSON.stringify({ error: `The API is not running at ${API.origin}. In backend/, run: uvicorn app.main:app --reload` }), 'application/json');
+  });
+  req.pipe(upstream);
+}
+
+function serveStatic(req, res) {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method not allowed');
+  let rel;
+  try { rel = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); } catch { return send(res, 400, 'Bad request'); }
+  if (rel.endsWith('/')) rel += 'index.html';
+  const file = path.join(PUBLIC, path.normalize(rel));
+  if (!file.startsWith(PUBLIC + path.sep)) return send(res, 403, 'Forbidden');
+  fs.readFile(file, (err, buf) => {
+    if (err) return send(res, 404, 'Not found');
+    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+    res.end(req.method === 'HEAD' ? undefined : buf);
+  });
+}
+
+http.createServer((req, res) => (req.url.startsWith('/api/') ? proxy(req, res) : serveStatic(req, res)))
+  .listen(PORT, 'localhost', () => console.log(`TEKS frontend: http://localhost:${PORT}  (/api -> ${API.origin})`));
