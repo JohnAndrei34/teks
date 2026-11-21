@@ -51,4 +51,10 @@ function serveStatic(req, res) {
 }
 
 http.createServer((req, res) => (req.url.startsWith('/api/') ? proxy(req, res) : serveStatic(req, res)))
+  .on('error', err => {
+    if (err.code !== 'EADDRINUSE') throw err;
+    console.error(`Port ${PORT} is already in use, often by an old "npm run dev" (Vite). Stop it (Ctrl+C in its terminal),\n` +
+      `or use another port. PowerShell: $env:PORT=5174; node frontend/dev.mjs`);
+    process.exit(1);
+  })
   .listen(PORT, 'localhost', () => console.log(`TEKS frontend: http://localhost:${PORT}  (/api -> ${API.origin})`));
