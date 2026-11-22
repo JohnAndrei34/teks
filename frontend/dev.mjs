@@ -14,7 +14,7 @@ const PUBLIC = path.join(import.meta.dirname, 'public');
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2',
+  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4',
 };
 
 function send(res, status, body, type = 'text/plain; charset=utf-8') {
@@ -45,7 +45,17 @@ function serveStatic(req, res) {
   if (!file.startsWith(PUBLIC + path.sep)) return send(res, 403, 'Forbidden');
   fs.readFile(file, (err, buf) => {
     if (err) return send(res, 404, 'Not found');
-    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+    const type = TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream';
+    // Byte ranges, which browsers use to seek and loop <video> (the hero clips), as Vercel does.
+    const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+    if (range && (range[1] || range[2])) {
+      const start = range[1] ? Number(range[1]) : Math.max(0, buf.length - Number(range[2]));
+      const end = range[1] && range[2] ? Math.min(Number(range[2]), buf.length - 1) : buf.length - 1;
+      if (start > end || start >= buf.length) { res.writeHead(416, { 'Content-Range': `bytes */${buf.length}` }); return res.end(); }
+      res.writeHead(206, { 'Content-Type': type, 'Content-Range': `bytes ${start}-${end}/${buf.length}`, 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1, 'Cache-Control': 'no-cache' });
+      return res.end(req.method === 'HEAD' ? undefined : buf.subarray(start, end + 1));
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
     res.end(req.method === 'HEAD' ? undefined : buf);
   });
 }

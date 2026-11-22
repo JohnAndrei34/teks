@@ -2,7 +2,7 @@
 
 from typing import Literal, get_args
 
-Genre = Literal["RPG", "Horror", "Simulation", "Casual", "Strategy"]
+Genre = Literal["Action", "Adventure", "RPG", "Horror", "Simulation", "Casual", "Strategy"]
 Platform = Literal["PC", "Mobile", "PS5", "Xbox", "Switch"]
 CollectionSlug = Literal["folklore", "traditional-games", "history", "everyday-life"]
 DeveloperType = Literal["student", "indie", "studio"]

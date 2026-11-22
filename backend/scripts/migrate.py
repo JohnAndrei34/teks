@@ -15,6 +15,9 @@ STATEMENTS = [
     "ALTER TABLE games ADD COLUMN IF NOT EXISTS rating integer NOT NULL DEFAULT 0",
     "ALTER TABLE games ADD COLUMN IF NOT EXISTS downloads integer NOT NULL DEFAULT 0",
     "ALTER TABLE games ADD COLUMN IF NOT EXISTS hero_image varchar",
+    # games: real catalog (official page link, content note). Clip paths derive from the slug.
+    "ALTER TABLE games ADD COLUMN IF NOT EXISTS official_url varchar",
+    "ALTER TABLE games ADD COLUMN IF NOT EXISTS content_note varchar",
     # orders: which account placed it (null for guests)
     "ALTER TABLE orders ADD COLUMN IF NOT EXISTS user_id integer REFERENCES users(id)",
     "CREATE INDEX IF NOT EXISTS ix_orders_user_id ON orders (user_id)",

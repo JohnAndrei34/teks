@@ -30,7 +30,7 @@ Where: New "Pinoy Collections" row and the Top charts note
 | 4 | Mag-browse ayon sa kwentong Pinoy | Browse by Filipino story | |
 | 5 | Alamat, laro sa kalye, kasaysayan, at araw-araw na buhay. | Folklore, street games, history and everyday life. | |
 | 6 | Lahat ng koleksyon | All collections | |
-| 7 | Sample ang mga rating. Ang download ay sample na bilang, dagdag ang totoong benta sa TEKS. | Ratings are sample scores. Download counts are sample numbers plus real purchases on TEKS. | |
+| 7 | ~~Sample ang mga rating. Ang download ay sample na bilang, dagdag ang totoong benta sa TEKS.~~ (removed, see R10) | ~~Ratings are sample scores. Download counts are sample numbers plus real purchases on TEKS.~~ | |
 
 ## Game page
 
@@ -207,4 +207,55 @@ Where: bottom of every page. These live in `frontend/public/index.html` as `data
 |---|---|---|---|
 | F1 | Pinoy Collections | Pinoy Collections | |
 | F2 | Kausapin kami | Contact us | |
-| F3 | Isang school project. Sample lang ang mga laro, studio, rating at bilang ng download, at walang bayad sa checkout. | A school project. Games, studios, ratings and download counts are sample data, and checkout takes no payment. | |
+| F3 | ~~Isang school project. Sample lang ang mga laro, studio, rating at bilang ng download, at walang bayad sa checkout.~~ (replaced by F4) | ~~A school project. Games, studios, ratings and download counts are sample data, and checkout takes no payment.~~ | |
+| F4 | Ang TEKS ay isang school project. Ang mga laro at media ay pag-aari ng kanilang mga developer; hindi kaugnay ng TEKS ang mga ito at hindi sila ibinebenta ng TEKS. Demo na presyo ang mga presyo, at walang bayad sa checkout. | TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them. Prices are demo prices, and checkout takes no payment. | |
+| F5 | Pinakabago | Newest (replaces "Top rated") | |
+
+## Real games (November 2026)
+
+New strings for the real catalog: demo prices, credits, trailers, screenshots and the disclaimer. Numbered R1, R2, ... so the numbers above stay the same.
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| R1 | Ang TEKS ay isang school project. Ang mga laro at media ay pag-aari ng kanilang mga developer; hindi kaugnay ng TEKS ang mga ito at hindi sila ibinebenta ng TEKS. | TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them. | |
+| R2 | Demo na presyo | Demo price | |
+| R3 | Studio na kukumpirmahin pa | Studio to be confirmed | |
+| R4 | Studio | Studio | |
+| R5 | Ihinto | Pause | |
+| R6 | Ituloy | Play | |
+| R7 | Ihinto ang mga tampok na laro | Pause the featured games | |
+| R8 | Ituloy ang mga tampok na laro | Play the featured games | |
+| R9 | Nabili sa TEKS | Bought on TEKS | |
+| R10 | Bilang ng kopya mula sa demo checkout ng TEKS. Walang totoong bayad, at hindi ito benta ng mga developer. | Copies from TEKS demo checkouts. No real payment is taken, and these are not the developers' sales. | |
+| R11 | nabili (demo) | copy (demo) / copies (demo) | |
+| R12 | Pinakabago | Newest | |
+| R13 | Wala pang {price} (demo) | Under {price} (demo) | |
+| R14 | Pinakamataas na demo na presyo | Max demo price | |
+| R15 | I-play ang trailer ng {title} (galing YouTube) | Play the {title} trailer (loads YouTube) | |
+| R16 | I-play ang trailer · YouTube | Play trailer · YouTube | |
+| R17 | Trailer ng {title} | {title} trailer | |
+| R18 | Naunang larawan | Previous screenshot | |
+| R19 | Susunod na larawan | Next screenshot | |
+| R20 | Opisyal na pahina | Official page | |
+| R21 | Bilhin o i-download ang laro mula sa developer. | Get the game from its developer. | |
+| R22 | Paalala sa nilalaman | Content note | |
+| R23 | Mga tampok | Highlights | |
+| R24 | Saan mapupunta ang {price} (demo) | Where your {price} would go (demo) | |
+| R25 | Sa demo na ito, {studio} ay tatanggap ng {amount} at {amount} ang para sa tindahan. Walang totoong bayad. | In this demo, {studio} would receive {amount} and TEKS would keep {amount}. No real payment is taken. | |
+| R26 | Trailer at mga larawan | Trailer and screenshots | |
+| R27 | Mga larawan | Screenshots | |
+| R28 | Mula sa developer. Pindutin para lumaki. | From the developer. Select one to enlarge it. | |
+| R29 | Palakihin | Enlarge | |
+| R30 | Demo na presyo ang lahat ng presyo. Hindi ibinebenta ng TEKS ang mga larong ito; bilhin ang mga ito sa opisyal na pahina ng developer. | All prices are demo prices. TEKS does not sell these games; get them from each developer's official page. | |
+| R31 | Kabuuan (demo) | Total (demo) | |
+| R32 | Demo ito kaya hindi nakakabit ang launcher, at hindi ibinebenta ng TEKS ang larong ito. Panoorin ang trailer, o kunin ang laro sa opisyal na pahina nito. | This is a demo, so no game launcher is connected, and TEKS does not sell this game. Watch the trailer, or get the game from its official page. | |
+| R33 | Demo na presyo ang mga presyo, at walang bayad na kinukuha sa checkout. | Prices are demo prices, and checkout takes no payment. | |
+| R34 | Totoo ba ang mga laro? | Are these real games? | |
+| R35 | Oo. Mga totoong laro ito ng mga Pilipinong developer. Ang studio, paglalarawan, at media ay mula sa kanilang opisyal na pahina. Para bilhin o laruin ang isang laro, pumunta sa "Opisyal na pahina" nito. Walang rating o bilang ng download dito dahil wala kaming totoong datos para sa mga ito. | Yes. They are real games by Filipino developers. Studios, descriptions and media come from their official pages. To buy or play a game, use its "Official page" link. We show no ratings or download counts, because we have no real data for them. | |
+| R36 | Developer | Developer | |
+| R37 | Nabili sa TEKS (demo) | Bought on TEKS (demo orders) | |
+| R38 | {n} laro sa TEKS · demo na presyo lang | {n} game/games on TEKS · demo prices only | |
+| R39 | Wala pang impormasyon. | No information yet. | |
+| R40 | {n} laro sa tindahan, {n} na nabili sa demo checkout. | {n} game/games in the store, {n} copies from demo checkouts. | |
+
+Game descriptions, highlights and cultural notes come from the catalog data (`backend/data/games.json`) and are English only.
