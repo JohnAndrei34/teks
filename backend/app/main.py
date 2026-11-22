@@ -17,6 +17,7 @@ from app.routers import (
     games,
     orders,
     submissions,
+    tracker,
 )
 
 app = FastAPI(title="TEKS API")
@@ -42,5 +43,5 @@ def health(session: Session = Depends(get_session)):
     return {"ok": True, "database": "up"}
 
 
-for router in (games, collections, developers, config, auth, orders, submissions, contact, admin):
+for router in (games, collections, developers, config, auth, orders, submissions, tracker, contact, admin):
     app.include_router(router.router, prefix="/api")

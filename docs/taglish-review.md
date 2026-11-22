@@ -208,3 +208,117 @@ Where: bottom of every page. These live in `frontend/public/index.html` as `data
 | F1 | Pinoy Collections | Pinoy Collections | |
 | F2 | Kausapin kami | Contact us | |
 | F3 | Isang school project. Sample lang ang mga laro, studio, rating at bilang ng download, at walang bayad sa checkout. | A school project. Games, studios, ratings and download counts are sample data, and checkout takes no payment. | |
+
+## Developer tracker (#/tracker, developer accounts only)
+
+Where: the "Tracker" nav link and account button, and the tracker page.
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| T1 | Tracker ng studio mo | Your studio tracker | |
+| T2 | Tracker ng Sales/Download | Sales/Download tracker | |
+| T3 | Tracker ng Profit | Profit tracker | |
+| T4 | Mga pinasa kong laro | My submissions | |
+| T5 | Kabuuang download / Kopyang nabenta sa TEKS / Benta sa orihinal na presyo | Total downloads / Copies sold on TEKS / Sales at list price | |
+| T6 | Kabuuang binayad ng mga bumili / Bahagi ng TEKS (20%) / Kita mo (80%) | Total revenue / TEKS fee (20%) / Your profit (80%) | |
+| T7 | Download kada laro / Kita kada laro / Kita kada buwan / Mga nakaraang buwan | Downloads per game / Profit per game / Profit per month / Recent months | |
+| T8 | Wala pang laro ang studio na ito sa tindahan. | This studio has no games in the store yet. | |
+| T9 | Walang laro sa katalogo sa ilalim ng "{studio}". Lalabas ang benta at kita dito kapag naidagdag na ang laro mo. | We found no games in the catalog under "{studio}". Sales and profit show up here once your game is added. | |
+| T10 | Wala pang benta. / Wala ka pang kita. / Wala ka pang pinasang laro. | No sales yet. / No profit yet. / You have not submitted a game yet. | |
+| T11 | Mag-sign in para makita ang tracker | Sign in to see your tracker | |
+| T12 | Para sa developer account lang (tracker) | Developer accounts only (tracker) | |
+| T13 | Buksan ang tracker | Open tracker | |
+| T14 | Tracker (nav, para sa developer) | Tracker (nav, developers only) | |
+
+## Developer dashboard (replaces the account page for developer accounts)
+
+Where: `#/account` and the "Dashboard" nav link, developer accounts only. Tab names T2-T4 above are reused.
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| D1 | Dashboard ng studio mo | Your studio dashboard | |
+| D2 | Dashboard (nav, para sa developer) | Dashboard (nav, developers only) | |
+| D3 | Overview / Mga laro ko / Account (tab names) | Overview / My games / Account | |
+| D4 | Laro sa tindahan / Naghihintay ng review | Games in the store / Awaiting review | |
+| D5 | Pinakamaraming download / Pinakabagong pasa | Top games / Latest submissions | |
+| D6 | kita mo | your profit | |
+| D7 | Mga laro ng studio mo | Your games | |
+| D8 | Walang laro sa katalogo sa ilalim ng "{studio}" (pa). | No games in the catalog under "{studio}" yet. | |
+
+## Developer dashboard as Home (update)
+
+Where: for developer accounts, Home is the dashboard and the nav link reads "Dashboard". The earlier D2 entry applies to this link.
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| D9 | Mga bili | Purchases (tab) | |
+| D10 | Mga huling bumili / Lahat ng bili | Recent purchases / All purchases | |
+| D11 | Mga bumili ng laro mo | Purchases of your games | |
+| D12 | Binayad | Paid | |
+| D13 | Wala pang bumibili. | No purchases yet. | |
+| D14 | Ang pinakabagong 50 lang ang ipinapakita. Hindi ipinapakita ang pangalan ng bumili. | Showing the latest 50. Buyers are not identified. | |
+
+## Developer dashboard in the top bar (supersedes the tab names above)
+
+Where: for developer accounts the top bar shows these links instead of Home / Store / Collection / Sell / About, and each opens its own page (`#/dashboard/<section>`).
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| N1 | Overview / Sales/Download / Profit / Mga bili / Mga laro ko / Mga pasa / Tindahan | Overview / Sales/Download / Profit / Purchases / My games / Submissions / Store | |
+| N2 | Isang tingin sa download, kita at pasa ng studio mo. | Downloads, profit and submissions for your studio at a glance. | |
+| N3 | Ilang kopya ang na-download at nabenta, kada laro at kada buwan. | How many copies were downloaded and sold, per game and per month. | |
+| N4 | Ang kita mo at ang bahagi ng TEKS sa bawat benta. | Your earnings and the TEKS fee on every sale. | |
+| N5 | Ang pinakabagong benta, at kung magkano ang napunta sa iyo. | Your latest sales and what each one earned you. | |
+| N6 | Ang mga laro mo sa tindahan at kung gaano sila kasikat. | Your games in the store and how they are doing. | |
+| N7 | Ang status ng mga larong ipinasa mo para sa review. | The review status of the games you sent in. | |
+| N8 | Ang detalye ng account at studio mo. / Account ng developer | Your account and studio details. / Developer account | |
+| N9 | Saan napupunta ang bawat piso / Hatian ng bawat benta | Where each peso goes / How each sale is split | |
+| N10 | {n}% sa iyo ({amount}) · {m}% sa TEKS ({amount}) | {n}% to you ({amount}) · {m}% to TEKS ({amount}) | |
+| N11 | Lahat ng pasa / Mag-sign in para makita ang dashboard | All submissions / Sign in to see your dashboard | |
+| N12 | Mag-sign in bilang developer / Ang dashboard ay para sa mga developer. | Sign in as a developer / The dashboard is for developers. | |
+| N13 | {n} kopyang binayad ng mga bumili / Hindi ma-load ang pahina / Naglo-load | paid by buyers / Could not load this page / Loading | |
+
+## Demo data notice (developer dashboard, only when the backend runs with TRACKER_MOCK=1)
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| M1 | Sample / Sample data ito para sa demo. Hindi ito totoong benta. | Sample / This is sample data for the demo, not real sales. | |
+
+## Developer dashboard: My games cards, navigation and ownership
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| A1 | I-tap ang ↻ sa card para makita ang likod nito. | Use the ↻ button on a card to flip it. | |
+| A2 | Kopyang nabenta | Copies sold | |
+| A3 | Kinaroroonan (breadcrumb label) / Dashboard | Breadcrumb / Dashboard | |
+| A4 | Dashboard ng developer (nav label) | Developer dashboard (nav label) | |
+| A5 | Bumalik sa overview | Back to overview | |
+| A6 | Hawak ng ibang account ang studio na ito | This studio belongs to another account | |
+| A7 | Ang "{studio}" ay nakarehistro na sa ibang developer account, kaya hindi mo makikita ang benta nito. | "{studio}" is already registered to another developer account, so its sales are not shown here. | |
+| A8 | Kung sa iyo talaga ang studio na ito, kausapin kami. / Kausapin kami | If this studio is really yours, get in touch with us. / Contact us | |
+
+## My games: stats on click
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| S1 | Ipakita ang stats / Itago ang stats | Show stats / Hide stats | |
+| S2 | I-click ang card o ang "Ipakita ang stats" para makita ang download at kita. Ang ↻ ay pang-taob ng card. | Click a card or "Show stats" to see its downloads and profit. The ↻ button flips the card. | |
+
+## Developer dashboard redesign (layout and new strings)
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| R1 | Kita mo (80%) / Mula sa {n} kopyang nabenta at {m} download. | Your profit (80%) / From {n} copies sold and {m} downloads. | |
+| R2 | Ikaw / TEKS (legend of the split bar) | You / TEKS | |
+| R3 | Kita kada buwan / Kopyang nabenta kada buwan | Profit per month / Copies sold per month | |
+| R4 | Pinakabagong 50 benta | Latest 50 sales | |
+| R5 | Lahat ng pasa | All submissions | |
+| R6 | Laro / Binayad / Kita mo / Promo / Bayad / Petsa (purchases table headings) | Game / Paid / Your profit / Promo / Payment / Date | |
+| R7 | Talaan ng mga bili | Purchases table (screen-reader label) | |
+| R8 | Wala pang bumibili. Lalabas dito ang bawat benta ng laro mo. | No purchases yet. Every sale of your games will show up here. | |
+
+## Developer dashboard: wide layout
+
+| # | Taglish (draft) | English | Your fix |
+|---|---|---|---|
+| W1 | Ipakita lahat ({n}) / Ipakita ang mas kaunti | Show all {n} / Show fewer | |
