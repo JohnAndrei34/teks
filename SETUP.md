@@ -282,6 +282,27 @@ The admin page shows orders, game submissions, contact messages and how many acc
 
 The `ADMIN_KEY` comes from **Drei, privately**. **Never share it publicly** (group chat, pull requests, screenshots, commits). The admin page is not linked in the site menu on purpose.
 
+### Linking a developer account to a studio (Drei only)
+
+A developer account sees a studio's **sales, profit and purchases** in its dashboard only after it has been linked to that studio. Signing up with a studio's name is **not** enough: anyone can type "Ranida Games", and every studio in our catalog is a real one. Until an account is linked, its dashboard shows "Your studio is not linked yet. Contact us."
+
+**Only Drei runs this**, and only after checking the claim, for example by an email from the address on the studio's official page (Steam, itch.io or their own site).
+
+From `backend/` with the venv active:
+
+```bash
+python -m scripts.link_studio someone@studio.com ranida-games            # link the account to the studio
+python -m scripts.link_studio --unlink someone@studio.com ranida-games   # remove that link
+python -m scripts.link_studio --list                                     # show every linked studio
+```
+
+- The email is the developer account's email; the studio is its `slug` in `backend/data/developers.json`.
+- One account per studio and one studio per account. To move a studio to another account, `--unlink` it first.
+- "Studio to be confirmed" placeholders (`tbc-...`) cannot be linked.
+- It needs the `developers.owner_user_id` column. `python -m scripts.migrate` adds it (already done on the shared database). Never use `--reset`.
+
+**Demo numbers:** `TRACKER_MOCK=1` in your own `backend/.env` makes the dashboard show sample sales so you can try it without real orders. It is ignored on Vercel (whenever `VERCEL` is set), and it must never be committed or added to Vercel. Remove it from your `.env` when you are done.
+
 ---
 
 ## 11. Live site

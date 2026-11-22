@@ -1,11 +1,15 @@
 """Developer tracker: sales/downloads and profit for the signed-in developer's studio.
 
-An account is tied to the catalog only by name: `users.studio` is matched (case-insensitive)
-against `developers.name`. A studio with no catalog entry gets an empty tracker.
+Ownership: a developer account sees a studio's numbers only when the team has linked them
+(`developers.owner_user_id`, set with `python -m scripts.link_studio <email> <developer-slug>` after
+checking the claim). The studio name typed at signup is never trusted: anyone can sign up as
+"Ranida Games", and every studio in the catalog is a real one. Unlinked accounts get an empty tracker
+and a "contact us" panel in the dashboard.
 
-Demo data: with TRACKER_MOCK=1 in the environment (local `.env` only), the endpoints return
-generated sample sales instead of reading orders, so the dashboard can be shown without writing
-anything to the shared database. The numbers go through the same code as real ones."""
+Demo data: with TRACKER_MOCK=1 in the environment (local `.env` only), the endpoints return generated
+sample sales instead of reading orders, so the dashboard can be shown without writing anything to the
+shared database. The flag is ignored whenever VERCEL is set, so it can never switch on in a deployment.
+The numbers go through the same code as real ones."""
 
 import os
 import random
@@ -14,7 +18,6 @@ from datetime import datetime, timedelta, timezone
 from typing import NamedTuple
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func
 from sqlmodel import Session, select
 
 from app.auth import current_session
@@ -28,6 +31,7 @@ router = APIRouter(tags=["tracker"])
 MONTHS_SHOWN = 6
 PURCHASES_SHOWN = 50
 MOCK_PROMOS = {"TEKS10": 10, "PINOY20": 20}
+MANILA = timezone(timedelta(hours=8), "Asia/Manila")  # the Philippines has no daylight saving time
 
 
 class Sale(NamedTuple):
@@ -58,7 +62,16 @@ def cents(amount: float) -> float:
 
 
 def mock_enabled() -> bool:
-    return os.getenv("TRACKER_MOCK") == "1"
+    """Sample data for local demos only: off unless TRACKER_MOCK=1, and always off on Vercel."""
+    return os.getenv("TRACKER_MOCK") == "1" and not os.getenv("VERCEL")
+
+
+def manila_date(when: datetime) -> str:
+    """The day of a sale in Philippine time, without the time of day (YYYY-MM-DD).
+    Stored timestamps are UTC; naive ones (orders.created_at) are read as UTC."""
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    return when.astimezone(MANILA).date().isoformat()
 
 
 def paid_for(sale: Sale) -> float:
@@ -71,23 +84,13 @@ def money(paid: float) -> dict:
     return {"revenue": cents(paid), "earnings": cents(paid * share), "platform_fee": cents(paid - paid * share)}
 
 
-def find_studio(session: Session, user: User) -> tuple[Developer | None, list[Game], bool]:
-    """The catalog studio this account owns, its games, and whether another account holds it.
-
-    Several accounts can type the same studio name at signup, so a studio belongs to the first
-    developer account registered under that name. Everyone else gets nothing for it, which keeps
-    one developer from reading another developer's sales."""
-    studio = (user.studio or "").strip()
-    dev = session.exec(select(Developer).where(func.lower(Developer.name) == studio.lower())).first()
+def find_studio(session: Session, user: User) -> tuple[Developer | None, list[Game]]:
+    """The catalog studio linked to this account by the team, and its games. (None, []) when unlinked."""
+    dev = session.exec(select(Developer).where(Developer.owner_user_id == user.id).order_by(Developer.id)).first()
     if dev is None:
-        return None, [], False
-    owner_id = session.exec(
-        select(func.min(User.id)).where(User.role == "developer", func.lower(User.studio) == studio.lower())
-    ).first()
-    if owner_id != user.id:
-        return None, [], True
+        return None, []
     games = session.exec(select(Game).where(Game.developer_id == dev.id).order_by(Game.id)).all()
-    return dev, games, False
+    return dev, games
 
 
 def real_sales(session: Session, games: list[Game]) -> list[Sale]:
@@ -106,18 +109,16 @@ def real_sales(session: Session, games: list[Game]) -> list[Sale]:
     ]
 
 
-def mock_context(session: Session, user: User) -> tuple[list[Game], list[Sale], bool]:
-    """Sample games and ~40 sales, plus whether the studio is held by another account.
+def mock_context(session: Session, user: User) -> tuple[Developer | None, list[Game], list[Sale]]:
+    """Sample games and ~40 sales for a local demo.
 
-    Ownership still applies: a studio held by another account gets nothing. A studio that is not
-    in the catalog at all is shown the first catalog games as stand-ins for the demo."""
-    _, games, claimed = find_studio(session, user)
-    if claimed:
-        return [], [], True
+    A linked account sees its own games; an unlinked one sees the first catalog games as stand-ins
+    (the dashboard still shows it the "not linked yet" panel)."""
+    dev, games = find_studio(session, user)
     if not games:
         games = session.exec(select(Game).order_by(Game.id).limit(4)).all()
     if not games:
-        return [], [], False
+        return dev, [], []
     rng = random.Random(user.id or 1)
     now = datetime.now(timezone.utc)
     weights = [max(1, len(games) - i) for i in range(len(games))]  # earlier games sell better
@@ -130,12 +131,10 @@ def mock_context(session: Session, user: User) -> tuple[list[Game], list[Sale], 
         when = now - timedelta(days=rng.randint(0, 150), hours=rng.randint(0, 23), minutes=rng.randint(0, 59))
         sales.append(Sale(n + 1, g.id, g.title, g.slug, price, price, total, promo, rng.choice(["gcash", "maya", "card"]), when))
     sales.sort(key=lambda s: s.created_at, reverse=True)
-    return games, sales, False
+    return dev, games, sales
 
 
-def build_tracker(
-    studio: str, matched: bool, games: list[Game], sales: list[Sale], demo: bool = False, claimed_by_other: bool = False
-) -> dict:
+def build_tracker(studio: str, linked: bool, games: list[Game], sales: list[Sale], demo: bool = False) -> dict:
     rows = {
         g.id: {"slug": g.slug, "title": g.title, "listed": g.downloads, "sold": 0, "list_sales": 0, "paid": 0.0}
         for g in games
@@ -147,7 +146,7 @@ def build_tracker(
         r["sold"] += 1
         r["list_sales"] += s.list_price
         r["paid"] += paid
-        m = months[s.created_at.strftime("%Y-%m")]
+        m = months[manila_date(s.created_at)[:7]]
         m["sold"] += 1
         m["paid"] += paid
 
@@ -170,9 +169,9 @@ def build_tracker(
     ]
     return {
         "studio": studio,
-        "matched": matched,
+        "linked": linked,  # the team has linked this account to a catalog studio
+        "matched": bool(games),  # there are games (real or demo stand-ins) to show numbers for
         "demo": demo,
-        "claimed_by_other": claimed_by_other,
         "developer_share_percent": DEVELOPER_SHARE_PERCENT,
         "totals": {
             "downloads": sum(r["downloads"] for r in game_rows),
@@ -188,23 +187,22 @@ def build_tracker(
 @router.get("/me/tracker")
 def my_tracker(user: User = Depends(require_developer_account), session: Session = Depends(get_session)):
     if mock_enabled():
-        games, sales, claimed = mock_context(session, user)
-        return build_tracker((user.studio or "").strip(), bool(games), games, sales, demo=True, claimed_by_other=claimed)
-    dev, games, claimed = find_studio(session, user)
-    return build_tracker(
-        dev.name if dev else (user.studio or "").strip(), dev is not None, games, real_sales(session, games), claimed_by_other=claimed
-    )
+        dev, games, sales = mock_context(session, user)
+        return build_tracker(dev.name if dev else (user.studio or "").strip(), dev is not None, games, sales, demo=True)
+    dev, games = find_studio(session, user)
+    return build_tracker(dev.name if dev else (user.studio or "").strip(), dev is not None, games, real_sales(session, games))
 
 
 @router.get("/me/purchases")
 def my_purchases(user: User = Depends(require_developer_account), session: Session = Depends(get_session)):
-    """Latest sales of the signed-in studio's games, newest first.
+    """Latest sales of the linked studio's games, newest first.
 
-    Buyers are not identified and order codes are left out on purpose: an order code is the
-    only key to a customer's receipt (name, email, mobile)."""
+    Buyers are not identified, order codes are left out (an order code is the only key to a customer's
+    receipt: name, email, mobile), and only the day is given, not the time, so a studio cannot match a
+    sale to someone it knows by the minute they bought."""
     if mock_enabled():
-        sales = mock_context(session, user)[1]
-    else:  # find_studio gives no games, so no sales, to an account that does not own the studio
+        sales = mock_context(session, user)[2]
+    else:  # an unlinked account has no games, so no sales
         sales = real_sales(session, find_studio(session, user)[1])
     share = DEVELOPER_SHARE_PERCENT / 100
     return [
@@ -217,7 +215,7 @@ def my_purchases(user: User = Depends(require_developer_account), session: Sessi
             "earnings": cents(paid_for(s) * share),
             "promo_code": s.promo_code,
             "payment_method": s.payment_method,
-            "created_at": s.created_at,
+            "date": manila_date(s.created_at),
         }
         for s in sales[:PURCHASES_SHOWN]
     ]
