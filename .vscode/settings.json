@@ -1,12 +1,11 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.tabSize": 2,
+  "editor.formatOnSave": false,
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
     "editor.tabSize": 4
   },
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
-  "files.associations": { "*.css": "tailwindcss" },
   "files.exclude": { "**/__pycache__": true }
 }

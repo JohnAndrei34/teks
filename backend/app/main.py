@@ -6,8 +6,10 @@ from sqlalchemy import text
 from sqlmodel import Session
 
 from app.database import get_session
+from app.errors import install_error_handlers
 from app.routers import (
     admin,
+    auth,
     collections,
     config,
     contact,
@@ -18,6 +20,7 @@ from app.routers import (
 )
 
 app = FastAPI(title="TEKS API")
+install_error_handlers(app)
 
 origins = [
     o.strip()
@@ -39,5 +42,5 @@ def health(session: Session = Depends(get_session)):
     return {"ok": True, "database": "up"}
 
 
-for router in (games, collections, developers, config, orders, submissions, contact, admin):
+for router in (games, collections, developers, config, auth, orders, submissions, contact, admin):
     app.include_router(router.router, prefix="/api")

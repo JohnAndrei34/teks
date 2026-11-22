@@ -1,52 +1,72 @@
 [
   {
-    "slug": "tala-byte-collective",
-    "name": "Tala Byte Collective",
-    "type": "student",
-    "bio": "(placeholder) A fictional student team from the Pamantasan ng Silangang Luzon game-dev org. They build small, story-heavy games about the tales their lolas told them.",
+    "slug": "gabi-gabi-games",
+    "name": "Gabi Gabi Games",
+    "type": "indie",
+    "bio": "(placeholder) A fictional two-person indie team that makes slow, atmospheric folklore horror.",
     "location": "Quezon City",
     "website_url": null,
-    "facebook_url": "https://www.facebook.com/example-tala-byte",
-    "logo_image": "/images/developers/tala-byte-collective.webp"
+    "facebook_url": "https://www.facebook.com/example-gabi-gabi-games",
+    "logo_image": null
   },
   {
-    "slug": "sinag-dev-guild",
-    "name": "Sinag Dev Guild",
+    "slug": "lakbay-labs",
+    "name": "Lakbay Labs",
+    "type": "studio",
+    "bio": "(placeholder) A fictional small studio building story-driven RPGs and voyage games.",
+    "location": "Cebu City",
+    "website_url": null,
+    "facebook_url": "https://www.facebook.com/example-lakbay-labs",
+    "logo_image": null
+  },
+  {
+    "slug": "pitik-studio",
+    "name": "Pitik Studio",
+    "type": "indie",
+    "bio": "(placeholder) A fictional indie team reviving street games from the neighborhood as multiplayer games.",
+    "location": "Davao City",
+    "website_url": null,
+    "facebook_url": "https://www.facebook.com/example-pitik-studio",
+    "logo_image": null
+  },
+  {
+    "slug": "sari-soft",
+    "name": "Sari Soft",
     "type": "student",
-    "bio": "(placeholder) A fictional student team from the Pamantasan ng Kanlurang Visayas. They make strategy and history games as part of their capstone project.",
+    "bio": "(placeholder) A fictional student team making cozy simulation games about everyday life.",
+    "location": "Quezon City",
+    "website_url": null,
+    "facebook_url": "https://www.facebook.com/example-sari-soft",
+    "logo_image": null
+  },
+  {
+    "slug": "sulo-interactive",
+    "name": "Sulo Interactive",
+    "type": "studio",
+    "bio": "(placeholder) A fictional studio making history strategy games and relaxed crafting games.",
+    "location": "Makati City",
+    "website_url": null,
+    "facebook_url": "https://www.facebook.com/example-sulo-interactive",
+    "logo_image": null
+  },
+  {
+    "slug": "lakad-games",
+    "name": "Lakad Games",
+    "type": "student",
+    "bio": "(placeholder) A fictional student team making commuting and city-life games.",
     "location": "Iloilo City",
     "website_url": null,
-    "facebook_url": "https://www.facebook.com/example-sinag-dev-guild",
-    "logo_image": "/images/developers/sinag-dev-guild.webp"
+    "facebook_url": "https://www.facebook.com/example-lakad-games",
+    "logo_image": null
   },
   {
-    "slug": "kuya-ramon-games",
-    "name": "Kuya Ramon Games",
+    "slug": "dapithapon-digital",
+    "name": "Dapithapon Digital",
     "type": "indie",
-    "bio": "(placeholder) A fictional solo indie developer who turns childhood street games and creature tales into pixel-art adventures.",
-    "location": "Cebu City",
-    "website_url": "https://example.com/kuya-ramon",
-    "facebook_url": null,
-    "logo_image": "/images/developers/kuya-ramon-games.webp"
-  },
-  {
-    "slug": "ate-liza-pixels",
-    "name": "Ate Liza Pixels",
-    "type": "indie",
-    "bio": "(placeholder) A fictional indie developer making cozy, small-town games about neighborhood life and celebrations.",
-    "location": "Davao City",
-    "website_url": "https://example.com/ate-liza",
-    "facebook_url": "https://www.facebook.com/example-ate-liza-pixels",
-    "logo_image": "/images/developers/ate-liza-pixels.webp"
-  },
-  {
-    "slug": "bahaghari-interactive",
-    "name": "Bahaghari Interactive",
-    "type": "studio",
-    "bio": "(placeholder) A fictional small studio of eight developers, building bigger-scope games rooted in Philippine history and daily life.",
-    "location": "Makati City",
-    "website_url": "https://example.com/bahaghari",
-    "facebook_url": "https://www.facebook.com/example-bahaghari-interactive",
-    "logo_image": "/images/developers/bahaghari-interactive.webp"
+    "bio": "(placeholder) A fictional indie developer building action games out of Visayan myths.",
+    "location": "Bacolod City",
+    "website_url": null,
+    "facebook_url": "https://www.facebook.com/example-dapithapon-digital",
+    "logo_image": null
   }
 ]

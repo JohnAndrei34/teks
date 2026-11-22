@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEKS: Filipino games, all in one store</title>
+<meta name="description" content="TEKS is an online store for games made by Filipino developers. Browse by genre, buy what you like, and build your collection.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23C0392B'/%3E%3Cpath d='M7 9h18v5h-6.5v10h-5V14H7z' fill='%23F7C93B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Mono:wght@400;500&family=DotGothic16&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="additions.css">
+</head>
+<body>
+<a class="skip" href="#app" data-en="Skip to content" data-tl="Lumaktaw sa nilalaman">Skip to content</a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="#/" aria-label="TEKS home"><span class="logo-img" role="img" aria-label="TEKS"></span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="#/" data-nav="home" data-en="Home" data-tl="Simula">Home</a>
+      <a href="#/store" data-nav="store" data-en="Store" data-tl="Tindahan">Store</a>
+      <a href="#/collection" data-nav="collection" data-en="Collection" data-tl="Koleksyon">Collection</a>
+      <a href="#/developers" data-nav="developers" data-en="Sell a game" data-tl="Magbenta">Sell a game</a>
+      <a href="#/about" data-nav="about" data-en="About" data-tl="Tungkol">About</a>
+    </nav>
+    <button class="lang-btn" id="lang" type="button">EN</button>
+    <a class="acct-link" id="acct" href="#/account" data-nav="account">Sign in</a>
+    <a class="cart-link" href="#/cart" data-nav="cart" aria-label="Cart">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h3l2.4 11h10l2-8H7"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+      <span id="cart-count" class="count" hidden>0</span>
+    </a>
+  </div>
+  </header>
+<main id="app" tabindex="-1"></main>
+<footer class="site-footer">
+    <div class="wrap foot">
+    <div>
+      <span class="logo static"><span class="logo-img" role="img" aria-label="TEKS"></span></span>
+      <p data-en="Tech, Entertainment &amp; Kreative Stories. An online store for games made by Filipino developers." data-tl="Tech, Entertainment &amp; Kreative Stories. Tindahan ng mga larong gawa ng mga Pilipinong developer.">Tech, Entertainment &amp; Kreative Stories. An online store for games made by Filipino developers.</p>
+    </div>
+    <div><h4 data-en="Browse" data-tl="Mag-browse">Browse</h4><ul>
+      <li><a href="#/store" data-en="All games" data-tl="Lahat ng laro">All games</a></li>
+      <li><a href="#/pinoy" data-en="Pinoy Collections" data-tl="Pinoy Collections">Pinoy Collections</a></li>
+      <li><a href="#/store?sort=rating" data-en="Top rated" data-tl="Pinakamataas ang rating">Top rated</a></li>
+      <li><a href="#/collection" data-en="My collection" data-tl="Koleksyon ko">My collection</a></li></ul></div>
+    <div><h4 data-en="Developers" data-tl="Mga developer">Developers</h4><ul>
+      <li><a href="#/developers" data-en="Sell your game" data-tl="Ibenta ang laro mo">Sell your game</a></li>
+      <li><a href="#/about" data-en="Why TEKS" data-tl="Bakit TEKS">Why TEKS</a></li>
+      <li><a href="#/contact" data-en="Contact us" data-tl="Kausapin kami">Contact us</a></li></ul></div>
+    <p class="demo-note" data-en="A school project. Games, studios, ratings and download counts are sample data, and checkout takes no payment." data-tl="Isang school project. Sample lang ang mga laro, studio, rating at bilang ng download, at walang bayad sa checkout.">A school project. Games, studios, ratings and download counts are sample data, and checkout takes no payment.</p>
+  </div>
+</footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+<script type="module" src="app.js"></script>
+</body>
+</html>
