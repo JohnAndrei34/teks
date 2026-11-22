@@ -207,6 +207,7 @@ function autoScroll(rail, speed = 36) {
   requestAnimationFrame(tick);
 }
 function addToCart(g, anchor) {
+  if (user?.role === 'developer') return;   // developer accounts browse read-only: no cart, no checkout
   if (cart.includes(g.id) || owned.includes(g.id)) return;
   cart.push(g.id); saveCart(); toast(L(`Naidagdag sa cart ang ${g.title}`, `${g.title} added to cart`));
 }
@@ -563,6 +564,12 @@ function gameView(id) {
 
 let promo = null;   // { code, percent } once Apply has checked it; the server checks it again at checkout
 function cartView() {
+  // developer accounts sell games and browse the Store read-only, so their cart and checkout stay closed
+  if (user?.role === 'developer') return {
+    title: 'Cart | TEKS',
+    html: `<div class="wrap section"><div class="empty"><h1>${L('Walang cart ang developer account', 'Developer accounts have no cart')}</h1><p>${L('Para sa pagbebenta at sa dashboard mo ang developer account. Puwede mong tingnan ang Store, pero para bumili ng laro, gumamit ng customer account.', 'A developer account is for selling and your dashboard. You can browse the store, but to buy games, use a customer account.')}</p>
+      <div class="actions" style="justify-content:center"><a class="btn go" href="#/dashboard/overview">${L('Pumunta sa dashboard', 'Go to your dashboard')}</a><a class="btn alt" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div></div></div>`,
+  };
   const items = cart.map(byId).filter(Boolean);
   if (!items.length) return {
     title: 'Cart | TEKS',
@@ -653,7 +660,7 @@ function collectionView() {
   const ownedBlock = mine.length
     ? `<div class="cards">${mine.map(g => `<div class="owned">${teks(g)}<span class="stamp">${L('Owned', 'Owned')}</span><button class="btn small go" data-play="${g.id}" type="button">${L('Play', 'Play')} ${esc(g.title)}</button></div>`).join('')}</div>`
     : `<div class="coll-empty"><p>${L('Wala ka pang nabibiling laro.', 'You do not own any games yet.')}</p><a class="btn small go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div>`;
-  const favAction = g => owned.includes(g.id) ? `<span class="tag owned">${L('Owned', 'Owned')}</span>`
+  const favAction = g => user?.role === 'developer' ? '' : owned.includes(g.id) ? `<span class="tag owned">${L('Owned', 'Owned')}</span>`
     : cart.includes(g.id) ? `<a class="btn small" href="#/cart">${L('Nasa cart', 'In cart')}</a>`
     : `<button class="btn small go" type="button" data-favbuy="${g.id}">${L('Buy', 'Buy')} · ${peso(g.price)}</button>`;
   const favBlock = favs.length
@@ -773,7 +780,7 @@ function refreshAccountUi() {
   if (nav) {
     nav._std ??= nav.innerHTML;
     const dev = user?.role === 'developer';
-    nav.setAttribute('aria-label', dev ? L('Dashboard ng developer', 'Developer dashboard') : 'Main');
+    nav.setAttribute('aria-label', dev ? L('Developer dashboard', 'Developer dashboard') : 'Main');
     if (nav.classList.contains('dev') !== dev) {
       nav.classList.toggle('dev', dev);
       nav.innerHTML = dev
@@ -783,7 +790,8 @@ function refreshAccountUi() {
     $$('[data-en]', nav).forEach(el => { el.textContent = lang === 'en' ? el.dataset.en : el.dataset.tl; });
     const cartLink = $('.cart-link');   // developers do not shop, so no cart
     if (cartLink) cartLink.style.display = dev ? 'none' : '';
-    $$('.site-footer a[href^="#/store"], .site-footer a[href="#/collection"]').forEach(a => { (a.closest('li') || a).style.display = dev ? 'none' : ''; });
+    // developers can browse the Store read-only, so its footer links stay; they do not buy, so no "My collection"
+    $$('.site-footer a[href="#/collection"]').forEach(a => { (a.closest('li') || a).style.display = dev ? 'none' : ''; });
     // customers do not sell games, so no "Sell a game" in the top bar or the footer
     const customer = user?.role === 'customer';
     $$('.nav a[data-nav=developers], .site-footer a[href="#/developers"]').forEach(a => { (a.closest('li') || a).style.display = customer ? 'none' : ''; });
@@ -951,7 +959,7 @@ function aboutView(embedded = false) {   // embedded: shown under the sign-in sc
     [L('Totoong mga laro ba ito?', 'Are these real games?'), L('Oo. Totoong mga laro ito na gawa ng mga Pilipinong developer. Galing sa kanilang official page ang studio, description, at media. Para bilhin o laruin ang isang laro, gamitin ang "Official page" link nito. Wala kaming ipinapakitang rating o download count, dahil wala kaming totoong data para sa mga ito.', 'Yes. They are real games by Filipino developers. Studios, descriptions and media come from their official pages. To buy or play a game, use its "Official page" link. We show no ratings or download counts, because we have no real data for them.')],
     [L('Kailangan ko ba ng account para mag-browse?', 'Do I need an account to browse?'), L('Hindi. Puwede kang magpatuloy bilang guest. Kailangan lang ang account para i-save ang details mo o magbenta ng laro.', 'No. You can continue as a guest. An account is only for saving your details or selling a game.')],
     [L('Magkano ang napupunta sa developer?', 'How much do developers keep?'), L(`${pct}% ng bawat benta. Ang natitira ay pampatakbo ng store.`, `${pct}% of every sale. The rest runs the store.`)],
-    [L('Paano ako magbebenta ng laro?', 'How do I sell a game?'), L('Gumawa ng developer account, tapos i-send ang laro mo at maikling pitch mula sa Magbenta page. Ire-review namin ito at sasagot kami sa email.', 'Create a developer account, then send your game and a short pitch from the Sell a game page. We review it and reply by email.')],
+    [L('Paano ako magbebenta ng laro?', 'How do I sell a game?'), L('Hiwalay ang developer account sa customer account. Mag-sign up bilang developer, tapos i-send ang laro mo at maikling pitch mula sa <a href="#/developers">Magbenta</a> page. Ire-review namin ito at sasagot kami sa email. May customer account ka na? Makikita sa page na iyon kung paano lumipat.', 'A developer account is separate from a customer account. Sign up as a developer, then send your game and a short pitch from the <a href="#/developers">Sell a game</a> page. We review it and reply by email. Already have a customer account? That page shows you how to switch.')],
     [L('Ano ang teks?', 'What are teks?'), L('Maliliit na papel na baraha na kinokolekta, pinagpapalitan, at nilalaro ng mga batang Pilipino. Dito, bawat larong bibilhin mo ay nagiging card sa Collection mo.', 'Small paper cards Filipino kids collect, trade and play with. Here, every game you buy becomes a card in your collection.')],
   ];
   return {
@@ -1273,13 +1281,13 @@ function adminHtml(orders, subs, msgs, users) {
 
 /* ---------- developer dashboard: one page per section, linked from the top bar (developer accounts only) ---------- */
 const DASH_SECTIONS = [
-  { id: 'overview', nav: true, tl: 'Overview', en: 'Overview', h1tl: 'Dashboard ng studio mo', h1en: 'Your studio dashboard', subtl: 'Isang tingin sa download, kita at pasa ng studio mo.', suben: 'Downloads, profit and submissions for your studio at a glance.', need: ['tracker', 'subs', 'buys'] },
-  { id: 'sales', nav: true, tl: 'Sales/Download', en: 'Sales/Download', h1tl: 'Tracker ng Sales/Download', h1en: 'Sales/Download tracker', subtl: 'Ilang kopya ang na-download at nabenta, kada laro at kada buwan.', suben: 'How many copies were downloaded and sold, per game and per month.', need: ['tracker'] },
-  { id: 'profit', nav: true, tl: 'Profit', en: 'Profit', h1tl: 'Tracker ng Profit', h1en: 'Profit tracker', subtl: 'Ang kita mo at ang bahagi ng TEKS sa bawat benta.', suben: 'Your earnings and the TEKS fee on every sale.', need: ['tracker'] },
-  { id: 'purchases', nav: true, tl: 'Mga bili', en: 'Purchases', h1tl: 'Mga bumili ng laro mo', h1en: 'Purchases of your games', subtl: 'Ang pinakabagong benta, at kung magkano ang napunta sa iyo.', suben: 'Your latest sales and what each one earned you.', need: ['buys'] },
-  { id: 'games', nav: true, tl: 'Mga laro ko', en: 'My games', h1tl: 'Mga laro ng studio mo', h1en: 'Your games', subtl: 'Ang mga laro mo sa tindahan at kung gaano sila kasikat.', suben: 'Your games in the store and how they are doing.', need: ['tracker'] },
-  { id: 'submissions', nav: true, tl: 'Mga pasa', en: 'Submissions', h1tl: 'Mga pinasa kong laro', h1en: 'My submissions', subtl: 'Ang status ng mga larong ipinasa mo para sa review.', suben: 'The review status of the games you sent in.', need: ['subs'] },
-  { id: 'account', nav: false, tl: 'Account', en: 'Account', h1tl: 'Account ng developer', h1en: 'Developer account', subtl: 'Ang detalye ng account at studio mo.', suben: 'Your account and studio details.', need: [] },
+  { id: 'overview', nav: true, tl: 'Overview', en: 'Overview', h1tl: 'Dashboard ng studio mo', h1en: 'Your studio dashboard', subtl: 'Download, profit at submissions ng studio mo, sa isang tingin.', suben: 'Downloads, profit and submissions for your studio at a glance.', need: ['tracker', 'subs', 'buys'] },
+  { id: 'sales', nav: true, tl: 'Sales/Download', en: 'Sales/Download', h1tl: 'Sales/Download tracker', h1en: 'Sales/Download tracker', subtl: 'Ilang kopya ang na-download at nabenta, kada laro at kada buwan.', suben: 'How many copies were downloaded and sold, per game and per month.', need: ['tracker'] },
+  { id: 'profit', nav: true, tl: 'Profit', en: 'Profit', h1tl: 'Profit tracker', h1en: 'Profit tracker', subtl: 'Ang profit mo at ang TEKS fee sa bawat benta.', suben: 'Your earnings and the TEKS fee on every sale.', need: ['tracker'] },
+  { id: 'purchases', nav: true, tl: 'Purchases', en: 'Purchases', h1tl: 'Mga bumili ng laro mo', h1en: 'Purchases of your games', subtl: 'Ang pinakabagong benta, at kung magkano ang kinita mo sa bawat isa.', suben: 'Your latest sales and what each one earned you.', need: ['buys'] },
+  { id: 'games', nav: true, tl: 'Mga laro ko', en: 'My games', h1tl: 'Mga laro ng studio mo', h1en: 'Your games', subtl: 'Ang mga laro mo sa Store at kung kumusta sila.', suben: 'Your games in the store and how they are doing.', need: ['tracker'] },
+  { id: 'submissions', nav: true, tl: 'Submissions', en: 'Submissions', h1tl: 'Mga submission ko', h1en: 'My submissions', subtl: 'Ang review status ng mga larong na-submit mo.', suben: 'The review status of the games you sent in.', need: ['subs'] },
+  { id: 'account', nav: false, tl: 'Account', en: 'Account', h1tl: 'Developer account', h1en: 'Developer account', subtl: 'Ang details ng account at studio mo.', suben: 'Your account and studio details.', need: [] },
 ];
 const DASH_FETCH = { tracker: () => api('/api/me/tracker'), subs: () => api('/api/me/submissions'), buys: () => api('/api/me/purchases') };
 
@@ -1287,17 +1295,19 @@ function dashView(section) {
   const S = DASH_SECTIONS.find(x => x.id === section);
   if (!S) return notFound();
   const isDev = user?.role === 'developer';
-  const crumbs = S.id === 'overview' ? '' : `<nav class="dash-crumbs" aria-label="${L('Kinaroroonan', 'Breadcrumb')}"><a href="#/dashboard/overview">${L('Dashboard', 'Dashboard')}</a><span aria-hidden="true">/</span><span aria-current="page">${L(S.tl, S.en)}</span></nav>`;
-  const submitBtn = isDev && S.id !== 'account' ? `<a class="btn go" href="#/developers">${L('Ipasa ang laro', 'Submit a game')}</a>` : '';
+  const crumbs = S.id === 'overview' ? '' : `<nav class="dash-crumbs" aria-label="${L('Nasaan ka', 'Breadcrumb')}"><a href="#/dashboard/overview">${L('Dashboard', 'Dashboard')}</a><span aria-hidden="true">/</span><span aria-current="page">${L(S.tl, S.en)}</span></nav>`;
+  const submitBtn = isDev && S.id !== 'account' ? `<a class="btn go" href="#/developers">${L('Mag-submit ng laro', 'Submit a game')}</a>` : '';
   const head = `<section class="page-head dx-head"><div class="wrap">${crumbs}<div class="dx-head-row"><div><span class="eyebrow">${esc(user?.studio || L('Para sa mga developer', 'For developers'))}</span><h1>${L(S.h1tl, S.h1en)}</h1><p>${L(S.subtl, S.suben)}</p></div>${submitBtn}</div></div></section>`;
   const gate = (title, body, actions) => ({ title: L('Dashboard | TEKS', 'Dashboard | TEKS'), html: `${head}<div class="wrap section"><div class="box gate"><h2>${title}</h2><p>${body}</p><div class="actions">${actions}</div></div></div>` });
-  if (!user) return gate(L('Mag-sign in para makita ang dashboard', 'Sign in to see your dashboard'), L('Kailangan ng developer account para makita ang benta at kita ng studio mo.', 'You need a developer account to see your studio sales and profit.'),
+  if (!user) return gate(L('Mag-sign in para makita ang dashboard', 'Sign in to see your dashboard'), L('Kailangan mo ng developer account para makita ang sales at profit ng studio mo.', 'You need a developer account to see your studio sales and profit.'),
     `<a class="btn go" href="#/account?role=developer">${L('Mag-sign in bilang developer', 'Sign in as a developer')}</a>`);
-  if (!isDev) return gate(L('Para sa developer account lang', 'Developer accounts only'), L(`Naka-sign in ka bilang customer (${esc(user.name)}). Ang dashboard ay para sa mga developer.`, `You are signed in as a customer (${esc(user.name)}). The dashboard is for developers.`),
-    `<a class="btn alt" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a>`);
+  if (!isDev) return gate(L('Para lang sa developer accounts', 'Developer accounts only'), L(`Naka-sign in ka bilang customer (${esc(user.name)}). Para sa mga developer ang dashboard.`, `You are signed in as a customer (${esc(user.name)}). The dashboard is for developers.`),
+    `<a class="btn alt" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a>`);
 
   /* ---- small formatters and building blocks (all text is escaped; only constants go in style attributes) ---- */
   const dm = m => new Date(m + '-01T00:00:00').toLocaleDateString('en-PH', { month: 'short', year: '2-digit' });
+  // a sale's day (YYYY-MM-DD, already in Philippine time from the API): shown without a time on purpose
+  const day = d => /^\d{4}-\d{2}-\d{2}$/.test(d || '') ? new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { dateStyle: 'medium' }) : '';
   const short = n => { n = num(n); return n >= 10000 ? `₱${Math.round(n / 1000)}k` : n >= 1000 ? `₱${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : peso(n); };
   const AMBER = 'var(--amber)', TEAL = 'var(--teal)', ORANGE = 'var(--orange)', SKY = 'var(--sky)';
   const ROWS_SHOWN = 10;   // the purchases table starts short; a button reveals the rest
@@ -1320,14 +1330,18 @@ function dashView(section) {
     return `<ol class="dx-cols" aria-label="${label}">${months.map(m => `<li><span class="dx-cv">${fmt(num(m[key]))}</span><span class="dx-bw" aria-hidden="true"><span class="dx-bar" style="--h:${pct(num(m[key]), max, 4)}%;--c:${color}"></span></span><span class="dx-cl">${esc(dm(m.month))}</span></li>`).join('')}</ol>`;
   };
   const gameLink = g => `<a href="#/game/${esc(g.slug)}">${esc(g.title)}</a>`;
-  const paidLine = b => `${L('Binayad', 'Paid')} ${peso(num(b.paid))}${b.promo_code ? ` · ${esc(b.promo_code)}` : ''} · ${esc(PAYMENTS[b.payment_method] || b.payment_method)} · ${esc(fmtWhen(b.created_at))}`;
-  const submit = `<a class="btn go" href="#/developers">${L('Ipasa ang laro', 'Submit a game')}</a>`;
-  const noGames = empty(L('Wala pang laro ang studio na ito sa tindahan.', 'This studio has no games in the store yet.'));
-  const noSubs = empty(L('Wala ka pang pinasang laro.', 'You have not submitted a game yet.'), submit);
+  const paidLine = b => `${L('Bayad', 'Paid')} ${peso(num(b.paid))}${b.promo_code ? ` · ${esc(b.promo_code)}` : ''} · ${esc(PAYMENTS[b.payment_method] || b.payment_method)} · ${esc(day(b.date))}`;
+  const submit = `<a class="btn go" href="#/developers">${L('Mag-submit ng laro', 'Submit a game')}</a>`;
+  const noGames = empty(L('Wala pang laro ang studio na ito sa Store.', 'This studio has no games in the store yet.'));
+  const noSubs = empty(L('Wala ka pang na-submit na laro.', 'You have not submitted a game yet.'), submit);
   const noBuys = empty(L('Wala pang bumibili. Lalabas dito ang bawat benta ng laro mo.', 'No purchases yet. Every sale of your games will show up here.'));
-  const noMatch = t => t.claimed_by_other
-    ? panel(L('Hawak ng ibang account ang studio na ito', 'This studio belongs to another account'), empty(`${L(`Ang "${esc(t.studio)}" ay nakarehistro na sa ibang developer account, kaya hindi mo makikita ang benta nito.`, `"${esc(t.studio)}" is already registered to another developer account, so its sales are not shown here.`)} ${L('Kung sa iyo talaga ang studio na ito, kausapin kami.', 'If this studio is really yours, get in touch with us.')}`, `<a class="btn go" href="#/contact?type=developer">${L('Kausapin kami', 'Contact us')}</a>`))
-    : panel(L('Wala pang laro sa tindahan', 'No games in the store yet'), empty(L(`Walang laro sa katalogo sa ilalim ng "${esc(t.studio)}". Lalabas ang benta at kita dito kapag naidagdag na ang laro mo.`, `We found no games in the catalog under "${esc(t.studio)}". Sales and profit show up here once your game is added.`), submit));
+  // an account sees a studio's numbers only after the TEKS team links them (scripts/link_studio.py)
+  const notLinked = t => panel(L('Hindi pa naka-link ang studio mo', 'Your studio is not linked yet'),
+    empty(L(`Para protektado ang sales data ng bawat studio, ang TEKS team mismo ang nagli-link ng developer account sa studio nito. Kung gawa mo ang isang laro sa catalog namin, kausapin kami at ili-link namin ang "${esc(t.studio)}" sa account mo. Bago ka pa lang? I-submit muna ang laro mo.`,
+      `To protect each studio's sales data, the TEKS team links developer accounts to studios by hand. If you made a game in our catalog, contact us and we will link "${esc(t.studio)}" to your account. New here? Submit your game first.`),
+      `<a class="btn go" href="#/contact?type=developer">${L('Kausapin kami', 'Contact us')}</a>${submit.replace('btn go', 'btn alt')}`));
+  const noMatch = t => !t.linked ? notLinked(t)
+    : panel(L('Wala pang laro sa Store', 'No games in the store yet'), empty(L(`Wala pang laro sa catalog sa ilalim ng "${esc(t.studio)}". Lalabas dito ang sales at profit kapag naidagdag na ang laro mo.`, `We found no games in the catalog under "${esc(t.studio)}". Sales and profit show up here once your game is added.`), submit));
   const subRow = s => ({ main: `<span>${esc(s.game_title)}</span>`, sub: `${esc(s.genre)}${s.collection ? ` · ${esc(collTitle(s.collection) || s.collection)}` : ''} · ${esc(strs(s.platforms).join(', '))}${s.price != null ? ` · ${peso(num(s.price))}` : ''} · ${esc(fmtWhen(s.created_at))}`, value: pill(s.status) });
   const buyRow = b => ({ main: gameLink(b), sub: paidLine(b), value: peso(num(b.earnings)) });
   const perGame = (t, key, fmt, color, subFn) => {
@@ -1336,9 +1350,11 @@ function dashView(section) {
   };
   const splitBar = (t, dark) => {
     const share = num(t.developer_share_percent);
-    return `<div class="dx-split" role="img" aria-label="${L(`${share} porsyento sa iyo, ${100 - share} sa TEKS`, `${share} percent to you, ${100 - share} to TEKS`)}"><i style="width:${share}%"></i></div>
+    return `<div class="dx-split" role="img" aria-label="${L(`${share}% sa'yo, ${100 - share}% sa TEKS`, `${share} percent to you, ${100 - share} to TEKS`)}"><i style="width:${share}%"></i></div>
       <div class="dx-legend${dark ? ' dark' : ''}"><span style="--c:${TEAL}">${L('Ikaw', 'You')} ${share}% · ${peso(num(t.totals.earnings))}</span><span style="--c:${AMBER}">TEKS ${100 - share}% · ${peso(num(t.totals.platform_fee))}</span></div>`;
   };
+  // on TEKS every download is a copy sold, so one card shows both (was two cards with the same number)
+  const soldKpi = (tt, acc) => [L('Nabentang kopya', 'Copies sold'), fmtDl(num(tt.copies_sold)), L('Bawat kopya ay isang download', 'Each copy is one download'), acc];
 
   const draw = d => {
     const t = d.tracker, buys = d.buys, subs = d.subs;
@@ -1346,71 +1362,71 @@ function dashView(section) {
       case 'overview': {
         const share = num(t.developer_share_percent), tt = t.totals;
         const pending = subs.filter(s => s.status === 'pending').length;
-        const top = t.games.slice(0, 3), maxDl = Math.max(...top.map(g => num(g.downloads)), 0);
+        const top = t.games.slice(0, 3), maxSold = Math.max(...top.map(g => num(g.copies_sold)), 0);
         return `<div class="dx ov">
-          ${t.matched ? '' : noMatch(t)}
+          ${t.linked ? '' : notLinked(t)}
           <section class="dx-hero" aria-labelledby="dx-hero-h"><div>
-              <span class="dx-lab" id="dx-hero-h">${L(`Kita mo (${share}%)`, `Your profit (${share}%)`)}</span>
+              <span class="dx-lab" id="dx-hero-h">${L(`Profit mo (${share}%)`, `Your profit (${share}%)`)}</span>
               <div class="dx-digits">${peso(num(tt.earnings))}</div>
-              <p>${L(`Mula sa ${fmtDl(num(tt.copies_sold))} kopyang nabenta at ${fmtDl(num(tt.downloads))} download.`, `From ${fmtDl(num(tt.copies_sold))} copies sold and ${fmtDl(num(tt.downloads))} downloads.`)}</p>
-              <div class="actions"><a class="btn go" href="#/dashboard/profit">${L('Tracker ng Profit', 'Profit tracker')}</a><a class="btn ghost" href="#/dashboard/sales">${L('Tracker ng Sales/Download', 'Sales/Download tracker')}</a></div>
+              <p>${L(`Mula sa ${fmtDl(num(tt.copies_sold))} nabentang kopya.`, `From ${fmtDl(num(tt.copies_sold))} ${num(tt.copies_sold) === 1 ? 'copy' : 'copies'} sold.`)}</p>
+              <div class="actions"><a class="btn go" href="#/dashboard/profit">${L('Profit tracker', 'Profit tracker')}</a><a class="btn ghost" href="#/dashboard/sales">${L('Sales/Download tracker', 'Sales/Download tracker')}</a></div>
             </div>
             <div class="dx-hero-r"><span class="dx-lab">${L('Hatian ng bawat benta', 'How each sale is split')}</span>${splitBar(t, true)}</div>
           </section>
-          ${kpis([[L('Kabuuang download', 'Total downloads'), fmtDl(num(tt.downloads)), '', AMBER], [L('Kopyang nabenta', 'Copies sold'), fmtDl(num(tt.copies_sold)), '', ORANGE], [L('Laro sa tindahan', 'Games in the store'), t.games.length, '', TEAL], [L('Naghihintay ng review', 'Awaiting review'), pending, '', SKY]])}
+          ${kpis([soldKpi(tt, ORANGE), [L('Laro sa Store', 'Games in the store'), t.games.length, '', TEAL], [L('Naghihintay ng review', 'Awaiting review'), pending, '', SKY]])}
           <div class="dx-grid three">
-            ${panel(L('Mga huling bumili', 'Recent purchases'), buys.length ? list(buys.slice(0, 5).map(buyRow)) : noBuys, buys.length ? more('purchases', L('Lahat ng bili', 'All purchases')) : '')}
-            ${panel(L('Kita kada buwan', 'Profit per month'), t.monthly.length ? colsChart(t.monthly, 'earnings', short, TEAL, L('Kita kada buwan', 'Profit per month')) : empty(L('Wala ka pang kita.', 'No profit yet.')), t.monthly.length ? more('profit', L('Tracker ng Profit', 'Profit tracker')) : '')}
-            ${panel(L('Pinakamaraming download', 'Top games'), top.length ? list(top.map(g => ({ main: gameLink(g), sub: `${peso(num(g.earnings))} ${L('kita mo', 'your profit')}`, bar: track(num(g.downloads), maxDl, AMBER), value: fmtDl(num(g.downloads)) }))) : noGames, top.length ? more('games', L('Mga laro ko', 'My games')) : '')}
+            ${panel(L('Mga huling bumili', 'Recent purchases'), buys.length ? list(buys.slice(0, 5).map(buyRow)) : noBuys, buys.length ? more('purchases', L('Lahat ng purchases', 'All purchases')) : '')}
+            ${panel(L('Profit kada buwan', 'Profit per month'), t.monthly.length ? colsChart(t.monthly, 'earnings', short, TEAL, L('Profit kada buwan', 'Profit per month')) : empty(L('Wala ka pang profit.', 'No profit yet.')), t.monthly.length ? more('profit', L('Profit tracker', 'Profit tracker')) : '')}
+            ${panel(L('Top games', 'Top games'), top.length ? list(top.map(g => ({ main: gameLink(g), sub: `${peso(num(g.earnings))} ${L('profit mo', 'your profit')}`, bar: track(num(g.copies_sold), maxSold, AMBER), value: fmtDl(num(g.copies_sold)) }))) : noGames, top.length ? more('games', L('Mga laro ko', 'My games')) : '')}
           </div>
-          ${panel(L('Pinakabagong pasa', 'Latest submissions'), subs.length ? list(subs.slice(0, 3).map(subRow), 'flow') : noSubs, subs.length ? more('submissions', L('Lahat ng pasa', 'All submissions')) : '')}
+          ${panel(L('Mga bagong submission', 'Latest submissions'), subs.length ? list(subs.slice(0, 3).map(subRow), 'flow') : noSubs, subs.length ? more('submissions', L('Lahat ng submissions', 'All submissions')) : '')}
         </div>`;
       }
       case 'sales': {
         if (!t.matched) return `<div class="dx">${noMatch(t)}</div>`;
         const tt = t.totals;
         return `<div class="dx">
-          ${kpis([[L('Kabuuang download', 'Total downloads'), fmtDl(num(tt.downloads)), '', AMBER], [L('Kopyang nabenta sa TEKS', 'Copies sold on TEKS'), fmtDl(num(tt.copies_sold)), '', ORANGE], [L('Benta sa orihinal na presyo', 'Sales at list price'), peso(num(tt.list_sales)), '', TEAL]])}
+          ${kpis([soldKpi(tt, AMBER), [L('Sales sa list price', 'Sales at list price'), peso(num(tt.list_sales)), '', TEAL]])}
           <div class="dx-grid">
-            ${panel(L('Download kada laro', 'Downloads per game'), perGame(t, 'downloads', fmtDl, AMBER, g => L(`${num(g.copies_sold)} nabenta sa TEKS · ${peso(num(g.list_sales))} benta`, `${num(g.copies_sold)} sold on TEKS · ${peso(num(g.list_sales))} sales`)))}
-            ${panel(L('Kopyang nabenta kada buwan', 'Copies sold per month'), t.monthly.length ? colsChart(t.monthly, 'copies_sold', fmtDl, AMBER, L('Kopyang nabenta kada buwan', 'Copies sold per month')) : empty(L('Wala pang benta.', 'No sales yet.')))}
+            ${panel(L('Nabentang kopya kada laro', 'Copies sold per game'), perGame(t, 'copies_sold', fmtDl, AMBER, g => L(`${peso(num(g.list_sales))} na sales sa list price`, `${peso(num(g.list_sales))} sales at list price`)))}
+            ${panel(L('Nabentang kopya kada buwan', 'Copies sold per month'), t.monthly.length ? colsChart(t.monthly, 'copies_sold', fmtDl, AMBER, L('Nabentang kopya kada buwan', 'Copies sold per month')) : empty(L('Wala pang benta.', 'No sales yet.')))}
           </div></div>`;
       }
       case 'profit': {
         if (!t.matched) return `<div class="dx">${noMatch(t)}</div>`;
         const share = num(t.developer_share_percent), tt = t.totals;
         return `<div class="dx pf">
-          ${kpis([[L('Kabuuang binayad ng mga bumili', 'Total revenue'), peso(num(tt.revenue)), '', AMBER], [L(`Bahagi ng TEKS (${100 - share}%)`, `TEKS fee (${100 - share}%)`), peso(num(tt.platform_fee)), '', ORANGE], [L(`Kita mo (${share}%)`, `Your profit (${share}%)`), peso(num(tt.earnings)), '', TEAL]])}
+          ${kpis([[L('Total revenue', 'Total revenue'), peso(num(tt.revenue)), '', AMBER], [L(`TEKS fee (${100 - share}%)`, `TEKS fee (${100 - share}%)`), peso(num(tt.platform_fee)), '', ORANGE], [L(`Profit mo (${share}%)`, `Your profit (${share}%)`), peso(num(tt.earnings)), '', TEAL]])}
           ${panel(L('Hatian ng bawat benta', 'How each sale is split'), splitBar(t, false))}
           <div class="dx-grid">
-            ${panel(L('Kita kada laro', 'Profit per game'), perGame(t, 'earnings', peso, TEAL, g => L(`Binayad ${peso(num(g.revenue))} · TEKS ${peso(num(g.platform_fee))}`, `Revenue ${peso(num(g.revenue))} · TEKS fee ${peso(num(g.platform_fee))}`)))}
-            ${panel(L('Kita kada buwan', 'Profit per month'), t.monthly.length ? colsChart(t.monthly, 'earnings', short, TEAL, L('Kita kada buwan', 'Profit per month')) : empty(L('Wala ka pang kita.', 'No profit yet.')))}
+            ${panel(L('Profit kada laro', 'Profit per game'), perGame(t, 'earnings', peso, TEAL, g => L(`Revenue ${peso(num(g.revenue))} · TEKS fee ${peso(num(g.platform_fee))}`, `Revenue ${peso(num(g.revenue))} · TEKS fee ${peso(num(g.platform_fee))}`)))}
+            ${panel(L('Profit kada buwan', 'Profit per month'), t.monthly.length ? colsChart(t.monthly, 'earnings', short, TEAL, L('Profit kada buwan', 'Profit per month')) : empty(L('Wala ka pang profit.', 'No profit yet.')))}
           </div></div>`;
       }
       case 'purchases':
-        return `<div class="dx">${panel(L('Pinakabagong 50 benta', 'Latest 50 sales'), buys.length ? `<div class="dx-table-wrap" role="region" tabindex="0" aria-label="${L('Talaan ng mga bili', 'Purchases table')}"><table class="dx-table">
-            <thead><tr><th scope="col">${L('Laro', 'Game')}</th><th scope="col" class="n">${L('Binayad', 'Paid')}</th><th scope="col" class="n">${L('Kita mo', 'Your profit')}</th><th scope="col">Promo</th><th scope="col">${L('Bayad', 'Payment')}</th><th scope="col">${L('Petsa', 'Date')}</th></tr></thead>
-            <tbody>${buys.map((b, i) => `<tr${i >= ROWS_SHOWN ? ' hidden data-extra' : ''}><th scope="row">${gameLink(b)}</th><td class="n">${peso(num(b.paid))}</td><td class="n dx-good">${peso(num(b.earnings))}</td><td>${b.promo_code ? esc(b.promo_code) : '–'}</td><td>${esc(PAYMENTS[b.payment_method] || b.payment_method)}</td><td>${esc(fmtWhen(b.created_at))}</td></tr>`).join('')}</tbody></table></div>
+        return `<div class="dx">${panel(L('Huling 50 na benta', 'Latest 50 sales'), buys.length ? `<div class="dx-table-wrap" role="region" tabindex="0" aria-label="${L('Table ng purchases', 'Purchases table')}"><table class="dx-table">
+            <thead><tr><th scope="col">${L('Laro', 'Game')}</th><th scope="col" class="n">${L('Bayad', 'Paid')}</th><th scope="col" class="n">${L('Profit mo', 'Your profit')}</th><th scope="col">Promo</th><th scope="col">${L('Payment', 'Payment')}</th><th scope="col">${L('Petsa', 'Date')}</th></tr></thead>
+            <tbody>${buys.map((b, i) => `<tr${i >= ROWS_SHOWN ? ' hidden data-extra' : ''}><th scope="row">${gameLink(b)}</th><td class="n">${peso(num(b.paid))}</td><td class="n dx-good">${peso(num(b.earnings))}</td><td>${b.promo_code ? esc(b.promo_code) : '–'}</td><td>${esc(PAYMENTS[b.payment_method] || b.payment_method)}</td><td>${esc(day(b.date))}</td></tr>`).join('')}</tbody></table></div>
           ${buys.length > ROWS_SHOWN ? `<div class="actions dx-rowsbtn"><button class="btn small alt" type="button" data-rows aria-expanded="false" data-show="${L(`Ipakita lahat (${buys.length})`, `Show all ${buys.length}`)}" data-hide="${L('Ipakita ang mas kaunti', 'Show fewer')}">${L(`Ipakita lahat (${buys.length})`, `Show all ${buys.length}`)}</button></div>` : ''}
-          <p class="dx-hint">${L('Ang pinakabagong 50 lang ang ipinapakita. Hindi ipinapakita ang pangalan ng bumili.', 'Showing the latest 50. Buyers are not identified.')}</p>` : noBuys)}</div>`;
+          <p class="dx-hint">${L('Ang huling 50 lang ang nakalista. Hindi ipinapakita kung sino ang bumili, at ang araw lang ng bawat benta ang makikita (oras sa Pilipinas).', 'Showing the latest 50. Buyers are not identified, and only the day of each sale is shown (Philippine time).')}</p>` : noBuys)}</div>`;
       case 'games': {
         if (!t.matched || !t.games.length) return `<div class="dx">${noMatch(t)}</div>`;
-        const maxDl = Math.max(...t.games.map(g => num(g.downloads)), 0);
-        return `<p class="dx-hint">${L('I-click ang card o ang "Ipakita ang stats" para makita ang download at kita. Ang ↻ ay pang-taob ng card.', 'Click a card or "Show stats" to see its downloads and profit. The ↻ button flips the card.')}</p>
+        const maxSold = Math.max(...t.games.map(g => num(g.copies_sold)), 0);
+        return `<p class="dx-hint">${L('I-click ang card o ang "Ipakita ang stats" para makita ang nabentang kopya at profit nito. Pang-taob ng card ang ↻.', 'Click a card or "Show stats" to see its copies sold and profit. The ↻ button flips the card.')}</p>
           <div class="cards mine-grid">${t.games.map((g, i) => {
           const c = byId(g.slug);
-          const info = `<dl class="acct-dl"><div><dt>Download</dt><dd>${fmtDl(num(g.downloads))}</dd></div><div><dt>${L('Kopyang nabenta', 'Copies sold')}</dt><dd>${fmtDl(num(g.copies_sold))}</dd></div><div><dt>${L('Kita mo', 'Your profit')}</dt><dd>${peso(num(g.earnings))}</dd></div></dl>${track(num(g.downloads), maxDl, AMBER)}`;
+          const info = `<dl class="acct-dl"><div><dt>${L('Nabentang kopya', 'Copies sold')}</dt><dd>${fmtDl(num(g.copies_sold))}</dd></div><div><dt>${L('Profit mo', 'Your profit')}</dt><dd>${peso(num(g.earnings))}</dd></div></dl>${track(num(g.copies_sold), maxSold, AMBER)}`;
           const toggle = `<button class="btn small alt" type="button" data-stats aria-expanded="false" aria-controls="mine-${i}" data-show="${L('Ipakita ang stats', 'Show stats')}" data-hide="${L('Itago ang stats', 'Hide stats')}">${L('Ipakita ang stats', 'Show stats')}</button><div id="mine-${i}" class="mine-stats" hidden>${info}</div>`;
           return c ? `<div class="fav mine">${teks(c)}${toggle}</div>` : panel(`<a href="#/game/${esc(g.slug)}">${esc(g.title)}</a>`, info);
         }).join('')}</div>`;
       }
       case 'submissions':
-        return `<div class="dx">${panel(L('Lahat ng pasa', 'All submissions'), subs.length ? list(subs.map(subRow)) : noSubs)}</div>`;
+        return `<div class="dx">${panel(L('Lahat ng submissions', 'All submissions'), subs.length ? list(subs.map(subRow)) : noSubs)}</div>`;
       default: { // account
         const initials = (user.name || '?').split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
-        return `<div class="dx">${panel(L('Detalye ng account', 'Account details'), `<div class="dx-profile"><span class="dx-avatar" aria-hidden="true">${esc(initials)}</span>
-          <dl class="acct-dl"><div><dt>${L('Pangalan', 'Name')}</dt><dd>${esc(user.name)}</dd></div><div><dt>Email</dt><dd>${esc(user.email)}</dd></div><div><dt>${L('Uri', 'Account type')}</dt><dd>Developer</dd></div><div><dt>Studio</dt><dd>${esc(user.studio || '')}</dd></div></dl></div>
-          <div class="actions"><button class="btn alt" id="signout" type="button">${L('Mag-sign out', 'Sign out')}</button></div>`, '', 'dx-narrow')}</div>`;
+        return `<div class="dx">${panel(L('Account details', 'Account details'), `<div class="dx-profile"><span class="dx-avatar" aria-hidden="true">${esc(initials)}</span>
+          <dl class="acct-dl"><div><dt>${L('Pangalan', 'Name')}</dt><dd>${esc(user.name)}</dd></div><div><dt>Email</dt><dd>${esc(user.email)}</dd></div><div><dt>${L('Account type', 'Account type')}</dt><dd>Developer</dd></div><div><dt>Studio</dt><dd>${esc(user.studio || '')}</dd></div></dl></div>
+          <div class="actions"><button class="btn alt" id="signout" type="button">${L('Sign out', 'Sign out')}</button></div>`, '', 'dx-narrow')}</div>`;
       }
     }
   };
@@ -1460,7 +1476,7 @@ function dashView(section) {
           btn.textContent = open ? btn.dataset.hide : btn.dataset.show;
         });
       } catch (err) {
-        if (document.body.contains(el)) { el.setAttribute('aria-busy', 'false'); el.innerHTML = `<div class="dx-empty" role="alert"><p><b>${L('Hindi ma-load ang pahina', 'Could not load this page')}</b></p><p>${esc(err.message)}</p><a class="btn go" href="#/dashboard/overview">${L('Bumalik sa overview', 'Back to overview')}</a></div>`; }
+        if (document.body.contains(el)) { el.setAttribute('aria-busy', 'false'); el.innerHTML = `<div class="dx-empty" role="alert"><p><b>${L('Hindi ma-load ang page', 'Could not load this page')}</b></p><p>${esc(err.message)}</p><a class="btn go" href="#/dashboard/overview">${L('Bumalik sa overview', 'Back to overview')}</a></div>`; }
       }
     },
   };
@@ -1484,8 +1500,9 @@ function render(keepScroll = true) {
   const seg = path.split('/').filter(Boolean);
   const page = seg[0] || 'home';
   if (page === 'home' && !user && !guestMode.get()) { location.replace('#/account'); return; }
-  if (user?.role === 'customer' && page === 'developers') { location.replace('#/'); return; }   // no sell page for customer accounts
-  if (user?.role === 'developer' && (page === 'store' || page === 'cart')) { location.replace('#/'); return; }   // no store or cart for developer accounts
+  // No role redirects: a customer can still open #/developers (it explains how to switch to a developer
+  // account), and a developer can browse the Store and game pages read-only; the cart explains why it is
+  // closed to developers (cartView). "Sell a game" and the cart are hidden from the menus instead.
   const navOf = { game: 'store', pinoy: 'store', studio: 'store', order: 'cart' };
   const dashKey = user?.role === 'developer' && (page === 'home' || page === 'dashboard') ? 'dash-' + (page === 'home' ? 'overview' : seg[1] || 'overview') : '';
   $$('[data-nav]').forEach(a => a.getAttribute('data-nav') === (dashKey || navOf[page] || page) ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));

@@ -119,6 +119,9 @@ dialog.wide{max-width:min(760px,94vw);width:100%}
    shadow and hover lift. */
 .wrap.wide>.rail{padding-bottom:.6rem}
 
+/* customer account page: the "Want to sell a game?" line under Sign out */
+.acct-sell{margin:1.1rem 0 0}
+
 /* ================= developer dashboard =================
    Dea's palette, fonts and ink borders; the layout is ours. Pages are built from a few parts:
    .dx-hero (profit meter), .dx-kpi cards, .dx-panel + .dx-rows / .dx-cols / .dx-table, .dx-pill, .dx-empty. */
@@ -249,6 +252,9 @@ body.wide-mode .wrap{width:calc(100% - clamp(2rem,4vw,5rem))}
 .mine-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));justify-items:center}
 .mine-grid>.mine{width:100%;max-width:340px}
 @media (min-width:1100px){.dx.ov>.dx-kpis .dx-kpi{align-content:center}}
+/* merge: "Total downloads" and "Copies sold" became one card, so the overview has 3 cards in this 2-column
+   grid; the merged card takes the full first row instead of leaving an empty cell */
+@media (min-width:1100px){.dx.ov>.dx-kpis .dx-kpi:first-child:nth-last-child(3){grid-column:1/-1}}
 .dx-rowsbtn+.dx-hint{margin-top:.9rem}
 
 /* dashboard spacing: more air under the header and, especially, before the footer */
