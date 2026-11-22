@@ -79,6 +79,13 @@ The store now lists 19 real Filipino games from our team's media folder. All of 
 - **Footer, About FAQ, studio pages:** the disclaimer "TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them."
 - `img/maiba-taya.webp` was removed; every game's images are in `img/games/<slug>/`.
 
+## 8. Home order, store spacing and Taglish (Nov 2026)
+
+- **Home:** the dark "For developers: Sell. Keep 80%." band (with the ₱239.20 per-copy box) now sits right after **New releases**, before **Browse by genre**. The genre section got its normal top padding back, because it no longer follows another white section.
+- **Even spacing on Home:** your New releases rail keeps 1.6rem of bottom padding for a scrollbar that your later rule hides, so the space under it was 16px bigger than between the other sections. `additions.css` trims it to .6rem for that rail only (still enough for the card shadow and hover lift). Every home section is now 73px apart on desktop and 46px on phones.
+- **Store bottom gap:** the store grid is not a `.section`, so your `#app .section:last-child{padding-bottom:2.2rem}` did not reach it and the last row of cards touched the footer. `additions.css` gives `.store-layout` the same 2.2rem. Every page now ends 35–40px above the footer (About and the full cart keep your larger gaps).
+- **Taglish:** every Filipino string was rewritten to sound like PH apps (Shopee, GCash, Steam PH) instead of word-for-word translation. The nav now stays English (Home, Store, Collection, About), and "Mga sasakyan mo" is now "Cart mo". Please review [taglish-review.md](taglish-review.md), especially the 8 rows marked ⚠.
+
 ## What we need from you
 
 1. Check the Taglish in [taglish-review.md](taglish-review.md).
