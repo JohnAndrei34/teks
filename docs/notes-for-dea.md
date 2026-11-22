@@ -86,6 +86,18 @@ The store now lists 19 real Filipino games from our team's media folder. All of 
 - **Store bottom gap:** the store grid is not a `.section`, so your `#app .section:last-child{padding-bottom:2.2rem}` did not reach it and the last row of cards touched the footer. `additions.css` gives `.store-layout` the same 2.2rem. Every page now ends 35–40px above the footer (About and the full cart keep your larger gaps).
 - **Taglish:** every Filipino string was rewritten to sound like PH apps (Shopee, GCash, Steam PH) instead of word-for-word translation. The nav now stays English (Home, Store, Collection, About), and "Mga sasakyan mo" is now "Cart mo". Please review [taglish-review.md](taglish-review.md), especially the 8 rows marked ⚠.
 
+## 9. Your developer dashboard, merged into main (Nov 2026)
+
+Thank you for the dashboard: the top bar, the profit meter, the KPI cards, the column charts and the My games flip cards all stay as you built them. We merged `main` into your branch (real games, media, spacing fixes, new Taglish) and changed a few things:
+
+- **Who sees a studio's numbers (security).** Before, a studio belonged to the first developer account that typed its name. Every studio in our catalog is real and none has a TEKS account yet, so anyone could sign up as "Ranida Games" and read Bayani's sales, and the real studio would be locked out. Now the team links an account to a studio by hand (`developers.owner_user_id`, set with `python -m scripts.link_studio <email> <developer-slug>` by Drei after checking the claim). Unlinked accounts see your "contact us" panel, reworded: "Your studio is not linked yet". The "belongs to another account" case is gone.
+- **`TRACKER_MOCK`** still gives sample data locally, but it is ignored on Vercel (whenever `VERCEL` is set).
+- **Purchases** show the day of each sale in Philippine time, without the time, so a studio can't match a sale to a buyer by the minute.
+- **One card for downloads and copies sold.** On TEKS every download is a copy sold, so "Total downloads" and "Copies sold" always showed the same number. They are now one card ("Copies sold · Each copy is one download"), and the charts and My games stats use copies sold.
+- **No silent redirects.** Developers can browse the Store and game pages read-only (no Buy, no cart, and `#/cart` explains why). Customers still don't see "Sell a game" in the menus, but `#/developers` opens for them and shows the "Sign out and create a developer account" button; the account page and the About FAQ link to it.
+- **Home band and genres.** Your "hide the band for customers" now wraps main's band, which moved above Browse by genre. For customers, Genres keeps no top padding so the gap stays even.
+- **Taglish.** All your dashboard strings were rewritten with the rules in [taglish-review.md](taglish-review.md) (rows D1 to D85). A few are marked ⚠; please check those.
+
 ## What we need from you
 
 1. Check the Taglish in [taglish-review.md](taglish-review.md).

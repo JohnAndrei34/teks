@@ -427,3 +427,107 @@ All 8 were decided by the team in November 2026; no ⚠ rows remain.
 | T340 | Flip button (1291) | Flip back | Tihaya | (same) | "Tihaya" (face up) is the real teks street-game word Dea chose; keep. |
 | T341 | Startup error (1326) | Could not load the store | Hindi ma-load ang tindahan | **Hindi ma-load ang Store** | "Store" stays English. |
 | T342 | Startup error (1326) | Try again | Subukan ulit | (same) | Natural. |
+
+## Developer dashboard (Dea's branch, merged November 2026)
+
+Dea's dashboard added 64 distinct strings (103 `L()` calls) plus the section names. We rewrote them with the rules above, and added the strings that the merge decisions needed (studio linking, read-only Store for developers, merged "Copies sold" card, sale dates without the time). Rows marked **⚠** are the ones we are least sure about.
+
+### Section names and page headings (`DASH_SECTIONS`)
+
+| # | Section | English | Old Taglish | New Taglish | Why |
+|---|---|---|---|---|---|
+| D1 | Overview (nav, title) | Overview | Overview | (same) | Common app term. |
+| D2 | Overview heading | Your studio dashboard | Dashboard ng studio mo | (same) | Natural. |
+| D3 | Overview intro | Downloads, profit and submissions for your studio at a glance. | Isang tingin sa download, kita at pasa ng studio mo. | **Download, profit at submissions ng studio mo, sa isang tingin.** | "Profit", "submissions" stay English (nav names); "pasa" can mean "passed". |
+| D4 | Sales (nav) | Sales/Download | Sales/Download | (same) | Nav name. |
+| D5 | Sales heading | Sales/Download tracker | Tracker ng Sales/Download | **Sales/Download tracker** | App term, same order as the English. |
+| D6 | Sales intro | How many copies were downloaded and sold, per game and per month. | Ilang kopya ang na-download at nabenta, kada laro at kada buwan. | (same) | Natural. |
+| D7 | Profit heading | Profit tracker | Tracker ng Profit | **Profit tracker** | App term. |
+| D8 | Profit intro | Your earnings and the TEKS fee on every sale. | Ang kita mo at ang bahagi ng TEKS sa bawat benta. | **Ang profit mo at ang TEKS fee sa bawat benta.** | One word for each thing: "profit", "TEKS fee". |
+| D9 | Purchases (nav) | Purchases | Mga bili | **Purchases** | "bili" alone reads like "buy!"; Shopee-style English nav. |
+| D10 | Purchases heading | Purchases of your games | Mga bumili ng laro mo | (same) | Natural. |
+| D11 | Purchases intro | Your latest sales and what each one earned you. | Ang pinakabagong benta, at kung magkano ang napunta sa iyo. | **Ang pinakabagong benta, at kung magkano ang kinita mo sa bawat isa.** | Keeps "each one". |
+| D12 | My games (nav) | My games | Mga laro ko | (same) | Natural. |
+| D13 | My games heading | Your games | Mga laro ng studio mo | (same) | Natural. |
+| D14 | My games intro | Your games in the store and how they are doing. | Ang mga laro mo sa tindahan at kung gaano sila kasikat. | **Ang mga laro mo sa Store at kung kumusta sila.** | "Store" stays English; "kasikat" (how popular) changed the meaning. |
+| D15 | Submissions (nav) | Submissions | Mga pasa | **Submissions** | Rule: "Submit" family stays English. |
+| D16 | Submissions heading | My submissions | Mga pinasa kong laro | **Mga submission ko** | Same word as the nav. |
+| D17 | Submissions intro | The review status of the games you sent in. | Ang status ng mga larong ipinasa mo para sa review. | **Ang review status ng mga larong na-submit mo.** | Same word as the nav. |
+| D18 | Account heading | Developer account | Account ng developer | **Developer account** | App term. |
+| D19 | Account intro | Your account and studio details. | Ang detalye ng account at studio mo. | **Ang details ng account at studio mo.** | "details", like "Account details". |
+
+### Dashboard strings
+
+| # | Where | English | Old Taglish | New Taglish | Why |
+|---|---|---|---|---|---|
+| D20 | Top bar label (screen readers) | Developer dashboard | Dashboard ng developer | **Developer dashboard** | App term. |
+| D21 | ⚠ Breadcrumb label (screen readers) | Breadcrumb | Kinaroroonan | **Nasaan ka** | "Kinaroroonan" is textbook; "Nasaan ka" (where you are) is unusual for a breadcrumb but clear. |
+| D22 | Breadcrumb, page title | Dashboard / Dashboard \| TEKS | Dashboard | (same) | App term. |
+| D23 | Signed-out gate | Sign in to see your dashboard | Mag-sign in para makita ang dashboard | (same) | Natural. |
+| D24 | Signed-out gate | You need a developer account to see your studio sales and profit. | Kailangan ng developer account para makita ang benta at kita ng studio mo. | **Kailangan mo ng developer account para makita ang sales at profit ng studio mo.** | Adds "mo"; "sales", "profit" like the nav. |
+| D25 | Customer gate | You are signed in as a customer ({name}). The dashboard is for developers. | Naka-sign in ka bilang customer ({name}). Ang dashboard ay para sa mga developer. | **…Para sa mga developer ang dashboard.** | More natural word order. |
+| D26 | Buttons | Submit a game | Ipasa ang laro | **Mag-submit ng laro** | Same wording as the rest of the site. |
+| D27 | Customer gate | Browse the store | Tingnan ang tindahan | **Tingnan ang Store** | Same wording as the rest of the site. |
+| D28 | ⚠ Purchase lines, table header | Paid | Binayad | **Bayad** | "Binayad" is colloquial; ⚠ "Bayad" could be read as "payment" (the next column is "Payment"). |
+| D29 | Purchases table header | Payment | Bayad | **Payment** | Rule: "Payment method" stays English; avoids two "Bayad" columns. |
+| D30 | Empty states | This studio has no games in the store yet. | Wala pang laro ang studio na ito sa tindahan. | **…sa Store.** | "Store" stays English. |
+| D31 | Empty states | You have not submitted a game yet. | Wala ka pang pinasang laro. | **Wala ka pang na-submit na laro.** | "Submit" family. |
+| D32 | Empty states | No purchases yet. Every sale of your games will show up here. | Wala pang bumibili. Lalabas dito ang bawat benta ng laro mo. | (same) | Natural. |
+| D33 | Linked studio, no games | No games in the store yet | Wala pang laro sa tindahan | **Wala pang laro sa Store** | "Store" stays English. |
+| D34 | Linked studio, no games | We found no games in the catalog under "{studio}". Sales and profit show up here once your game is added. | Walang laro sa katalogo sa ilalim ng "{studio}". Lalabas ang benta at kita dito kapag naidagdag na ang laro mo. | **Wala pang laro sa catalog sa ilalim ng "{studio}". Lalabas dito ang sales at profit kapag naidagdag na ang laro mo.** | "catalog" (katalogo is a spelled loanword); "sales", "profit". |
+| D35 | Split bar (screen readers) | {share} percent to you, {rest} to TEKS | {share} porsyento sa iyo, {rest} sa TEKS | **{share}% sa'yo, {rest}% sa TEKS** | Shorter, natural. |
+| D36 | Split legend | You | Ikaw | (same) | Natural. |
+| D37 | Overview hero, profit cards | Your profit ({share}%) / Your profit | Kita mo | **Profit mo** | One word for profit everywhere (the nav says "Profit"). |
+| D38 | Overview buttons, links | Profit tracker / Sales/Download tracker | Tracker ng Profit / Tracker ng Sales/Download | **Profit tracker / Sales/Download tracker** | Same as the headings. |
+| D39 | Overview, Profit | How each sale is split | Hatian ng bawat benta | (same) | Natural. |
+| D40 | Cards, My games stats | Copies sold | Kopyang nabenta | **Nabentang kopya** | More natural order. |
+| D41 | Overview card | Games in the store | Laro sa tindahan | **Laro sa Store** | "Store" stays English. |
+| D42 | Overview card | Awaiting review | Naghihintay ng review | (same) | Natural. |
+| D43 | ⚠ Overview panel | Recent purchases | Mga huling bumili | (same) | "the latest buyers"; close but not word-for-word. |
+| D44 | Overview link | All purchases | Lahat ng bili | **Lahat ng purchases** | Same word as the nav. |
+| D45 | Overview, Profit | Profit per month | Kita kada buwan | **Profit kada buwan** | One word for profit. |
+| D46 | Empty state | No profit yet. | Wala ka pang kita. | **Wala ka pang profit.** | One word for profit. |
+| D47 | Overview panel | Top games | Pinakamaraming download | **Top games** | Gaming term; the old text meant "most downloads". |
+| D48 | Overview rows | your profit | kita mo | **profit mo** | One word for profit. |
+| D49 | Overview link | My games | Mga laro ko | (same) | Same as the nav. |
+| D50 | Overview panel | Latest submissions | Pinakabagong pasa | **Mga bagong submission** | Same word as the nav. |
+| D51 | Links, panel | All submissions | Lahat ng pasa | **Lahat ng submissions** | Same word as the nav. |
+| D52 | Sales card | Sales at list price | Benta sa orihinal na presyo | **Sales sa list price** | "list price" is the shop term. |
+| D53 | Sales, empty | No sales yet. | Wala pang benta. | (same) | Natural. |
+| D54 | Sales chart | Copies sold per month | Kopyang nabenta kada buwan | **Nabentang kopya kada buwan** | Same order as D40. |
+| D55 | Profit card | Total revenue | Kabuuang binayad ng mga bumili | **Total revenue** | Rule: "Total" stays English; old text was long. |
+| D56 | Profit card | TEKS fee ({rest}%) | Bahagi ng TEKS ({rest}%) | **TEKS fee ({rest}%)** | One word for the fee everywhere. |
+| D57 | Profit panel | Profit per game | Kita kada laro | **Profit kada laro** | One word for profit. |
+| D58 | Profit rows | Revenue {amount} · TEKS fee {amount} | Binayad {amount} · TEKS {amount} | **Revenue {amount} · TEKS fee {amount}** | Same words as the cards. |
+| D59 | ⚠ Purchases panel | Latest 50 sales | Pinakabagong 50 benta | **Huling 50 na benta** | ⚠ "na" after a number is common in chat but not textbook; "Huling 50 benta" is the alternative. |
+| D60 | Purchases table (screen readers) | Purchases table | Talaan ng mga bili | **Table ng purchases** | "Talaan" is textbook. |
+| D61 | Purchases table header | Game | Laro | (same) | Natural. |
+| D62 | Purchases table header | Date | Petsa | (same) | Natural. |
+| D63 | Purchases button | Show all {n} | Ipakita lahat ({n}) | (same) | Natural. |
+| D64 | ⚠ Purchases button | Show fewer | Ipakita ang mas kaunti | (same) | Correct, but a bit long for a button. |
+| D65 | My games button | Show stats / Hide stats | Ipakita ang stats / Itago ang stats | (same) | Natural. |
+| D66 | Page title | {section} \| TEKS | {section} \| TEKS | (same) | Uses the section names above. |
+| D67 | Loading | Loading | Naglo-load | (same) | Natural. |
+| D68 | Demo banner | Sample / This is sample data for the demo, not real sales. | Sample / Sample data ito para sa demo. Hindi ito totoong benta. | (same) | Natural. |
+| D69 | Error | Could not load this page | Hindi ma-load ang pahina | **Hindi ma-load ang page** | "page", like the rest of the site. |
+| D70 | Error button | Back to overview | Bumalik sa overview | (same) | Natural. |
+| D71 | Account panel | Account details / Account type / Sign out | Detalye ng account / Uri / Mag-sign out | **Account details / Account type / Sign out** | Same as the customer account page. |
+
+### Strings that changed with the merge decisions
+
+| # | Where | English (new or changed) | Old Taglish (Dea) | New Taglish | Why |
+|---|---|---|---|---|---|
+| D72 | Unlinked account panel (replaces "This studio belongs to another account") | Your studio is not linked yet | Hawak ng ibang account ang studio na ito | **Hindi pa naka-link ang studio mo** | Studios are now linked by the team, not "first account wins". |
+| D73 | Unlinked account panel | To protect each studio's sales data, the TEKS team links developer accounts to studios by hand. If you made a game in our catalog, contact us and we will link "{studio}" to your account. New here? Submit your game first. | (was: "{studio}" is already registered to another developer account… If this studio is really yours, get in touch with us.) | **Para protektado ang sales data ng bawat studio, ang TEKS team mismo ang nagli-link ng developer account sa studio nito. Kung gawa mo ang isang laro sa catalog namin, kausapin kami at ili-link namin ang "{studio}" sa account mo. Bago ka pa lang? I-submit muna ang laro mo.** | New text for the new rule. |
+| D74 | Overview hero | From {n} copies sold. | (was: Mula sa {n} kopyang nabenta at {m} download.) | **Mula sa {n} nabentang kopya.** | Downloads and copies sold are the same number on TEKS. |
+| D75 | Merged card note | Each copy is one download | (new; replaces the "Total downloads" card: Kabuuang download) | **Bawat kopya ay isang download** | One card instead of two with the same number. |
+| D76 | Sales panel (was "Downloads per game") | Copies sold per game | Download kada laro | **Nabentang kopya kada laro** | Same reason. |
+| D77 | Sales rows (was "{n} sold on TEKS · {amount} sales") | {amount} sales at list price | {n} nabenta sa TEKS · {amount} benta | **{amount} na sales sa list price** | The number of copies is now the bar value. |
+| D78 | Purchases hint | Showing the latest 50. Buyers are not identified, and only the day of each sale is shown (Philippine time). | Ang pinakabagong 50 lang ang ipinapakita. Hindi ipinapakita ang pangalan ng bumili. | **Ang huling 50 lang ang nakalista. Hindi ipinapakita kung sino ang bumili, at ang araw lang ng bawat benta ang makikita (oras sa Pilipinas).** | Sales now show the day only, in Manila time. |
+| D79 | My games hint | Click a card or "Show stats" to see its copies sold and profit. The ↻ button flips the card. | I-click ang card o ang "Ipakita ang stats" para makita ang download at kita. Ang ↻ ay pang-taob ng card. | **I-click ang card o ang "Ipakita ang stats" para makita ang nabentang kopya at profit nito. Pang-taob ng card ang ↻.** | Matches the merged numbers. |
+| D80 | Cart, developer account | Developer accounts have no cart | (new) | **Walang cart ang developer account** | Replaces the silent redirect. |
+| D81 | Cart, developer account | A developer account is for selling and your dashboard. You can browse the store, but to buy games, use a customer account. | (new) | **Para sa pagbebenta at sa dashboard mo ang developer account. Puwede mong tingnan ang Store, pero para bumili ng laro, gumamit ng customer account.** | Explains the closed cart. |
+| D82 | Cart, developer account | Go to your dashboard | (new) | **Pumunta sa dashboard** | Natural. |
+| D83 | Customer account page | Want to sell a game? You need a separate developer account. | (new) | **Gusto mo bang magbenta ng laro? Kailangan mo ng hiwalay na developer account.** | Path for customers who want to sell. |
+| D84 | Customer account page | How to become a developer | (new) | **Paano maging developer** | Link to the Sell a game page. |
+| D85 | About FAQ answer (changed English) | A developer account is separate from a customer account. Sign up as a developer, then send your game and a short pitch from the Sell a game page. We review it and reply by email. Already have a customer account? That page shows you how to switch. | Gumawa ng developer account, tapos i-send ang laro mo at maikling pitch mula sa Magbenta page. Ire-review namin ito at sasagot kami sa email. | **Hiwalay ang developer account sa customer account. Mag-sign up bilang developer, tapos i-send ang laro mo at maikling pitch mula sa Magbenta page. Ire-review namin ito at sasagot kami sa email. May customer account ka na? Makikita sa page na iyon kung paano lumipat.** | Customers no longer see "Sell a game" in the menu, so the FAQ links to it and explains the switch. |
