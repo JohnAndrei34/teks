@@ -1,76 +1,161 @@
 [
   {
-    "slug": "aswang-hours",
-    "title": "Aswang Hours",
-    "developer": "gabi-gabi-games",
+    "slug": "agimat-and-the-world-beyond",
+    "title": "Agimat and the World Beyond",
+    "developer": "boom-brain-studio",
     "card_no": 1,
-    "genre": "Horror",
+    "genre": "Action",
     "collection": "folklore",
-    "cultural_note": "The aswang is a shape-shifter in Philippine folklore, often said to pass as an ordinary neighbor by day. Salt and garlic are among the traditional protections.",
+    "cultural_note": "An agimat is an amulet or talisman in Filipino folk belief, said to protect or empower the person who carries it.",
     "tags": [
-      "horror",
-      "co-op",
-      "aswang"
+      "platformer",
+      "mythology"
     ],
-    "featured": true,
+    "featured": false,
     "is_new": false,
     "trailer_url": null,
-    "price": 249,
+    "official_url": null,
+    "content_note": null,
+    "price": 299,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Run a night-shift sari-sari store while something outside counts your customers.",
-    "description": "You inherited a corner store in a barrio that goes quiet after ten. Serve the regulars, read what they leave unsaid, and decide who gets the last pack of salt before midnight. Every customer might be exactly who they say they are.",
-    "highlights": [
-      "Eight nights, each with its own set of regulars",
-      "Folk remedies and warding rituals you can actually use",
-      "Local co-op: one person tends the store, one watches the street"
+    "cover_image": "img/games/agimat-and-the-world-beyond/cover.webp",
+    "hero_image": "img/games/agimat-and-the-world-beyond/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/agimat-and-the-world-beyond/shot-1.webp",
+        "alt": "Two small heroes face a row of giant shadow creatures with glowing red eyes"
+      },
+      {
+        "src": "img/games/agimat-and-the-world-beyond/shot-2.webp",
+        "alt": "A blue dragon rises out of the darkness"
+      }
     ],
-    "motif": "moonbat",
+    "short_description": "A 2D platformer adventure built on creatures from Philippine mythology.",
+    "description": "Agimat and the World Beyond is a 2D platformer based on Philippine mythology from Laguna-based Boom Brain Studio. Its devlog introduces two heroes, Lukas and Lily, who travel to a world called Atycia. The game was launched on Kickstarter in August 2020 as a pandemic project.",
+    "highlights": [
+      "2D platforming based on Philippine mythology",
+      "Two heroes, Lukas and Lily"
+    ],
+    "motif": "eclipse",
     "palette": [
       "#0E1650",
       "#2442D6",
       "#FFCF1B"
     ],
     "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Switch"
-    ],
-    "release_date": "2025-10-31",
-    "rating": 91,
-    "downloads": 48200
+    "platforms": [],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "tikbalang-crossing",
-    "title": "Tikbalang Crossing",
-    "developer": "lakbay-labs",
+    "slug": "agnostiko-origins",
+    "title": "Agnostiko ORIGINS",
+    "developer": "singles-alliance",
     "card_no": 2,
-    "genre": "RPG",
+    "genre": "Action",
     "collection": "folklore",
-    "cultural_note": "The tikbalang is a tall, horse-headed creature said to lead travelers astray in the mountains. Folk belief says wearing your shirt inside out breaks its spell.",
+    "cultural_note": "The aswang and the kapre are two of the best-known creatures of Philippine folklore: a shape-shifter that preys at night, and a tall tree giant said to smoke a cigar.",
     "tags": [
-      "rpg",
-      "adventure",
-      "tikbalang"
+      "metroidvania",
+      "pixel-art",
+      "mythology"
     ],
     "featured": true,
     "is_new": false,
-    "trailer_url": null,
-    "price": 499,
+    "trailer_url": "https://www.youtube.com/watch?v=fR7eQrQChb4",
+    "official_url": "https://www.nintendo.com/us/store/products/agnostiko-origins-switch/",
+    "content_note": null,
+    "price": 399,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Lost on a mountain trail? Turn your shirt inside out and bargain with the horse-headed trickster.",
-    "description": "A turn-based RPG across a trail that rearranges itself. Wear your shirt inside out to keep your bearings, trade riddles for directions, and build a party of travellers who each remember the mountain differently.",
-    "highlights": [
-      "Riddle-and-bargain combat instead of pure damage races",
-      "A trail that reshuffles every run",
-      "Voiced in Tagalog, Cebuano, and Ilocano with English subtitles"
+    "cover_image": "img/games/agnostiko-origins/cover.webp",
+    "hero_image": "img/games/agnostiko-origins/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/agnostiko-origins/shot-1.webp",
+        "alt": "The hero rides a platform inside a clock tower full of gears"
+      },
+      {
+        "src": "img/games/agnostiko-origins/shot-2.webp",
+        "alt": "The hero fights a winged, horse-bodied creature in a hall with red curtains"
+      },
+      {
+        "src": "img/games/agnostiko-origins/shot-3.webp",
+        "alt": "Map of Mr. Plague's Mansion"
+      },
+      {
+        "src": "img/games/agnostiko-origins/shot-4.webp",
+        "alt": "The hero battles a hulking creature under a crescent moon"
+      }
     ],
-    "motif": "crossroad",
+    "short_description": "A 16-bit style Metroidvania set in a steampunk 1890s Manila full of mythological monsters.",
+    "description": "Agnostiko ORIGINS is a 2D Metroidvania by solo developer Leoned Andrew Tumbaga under the Singles Alliance name. It is set in a steampunk Philippines of the 1890s, where monsters drawn from Philippine mythology roam Manila. It was released for Nintendo Switch on June 14, 2024.",
+    "highlights": [
+      "Metroidvania exploration in 16-bit style pixel art",
+      "Monsters from Philippine mythology, such as the aswang and kapre",
+      "Steampunk 1890s Manila"
+    ],
+    "motif": "moonbat",
+    "palette": [
+      "#0E1650",
+      "#E5322D",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "Switch"
+    ],
+    "release_date": "2024-06-14",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "anito-defend-a-land-enraged",
+    "title": "Anito: Defend a Land Enraged",
+    "developer": "anino-entertainment",
+    "card_no": 3,
+    "genre": "RPG",
+    "collection": "folklore",
+    "cultural_note": "Anito are the ancestor and nature spirits of pre-colonial Philippine belief. The word was also used for carved figures that represented them.",
+    "tags": [
+      "rpg",
+      "mythology",
+      "classic"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": null,
+    "content_note": null,
+    "price": 149,
+    "sale_price": null,
+    "cover_image": "img/games/anito-defend-a-land-enraged/cover.webp",
+    "hero_image": "img/games/anito-defend-a-land-enraged/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/anito-defend-a-land-enraged/shot-1.webp",
+        "alt": "Title art: three characters above the words Anito, Defend a Land Enraged"
+      },
+      {
+        "src": "img/games/anito-defend-a-land-enraged/shot-2.webp",
+        "alt": "Isometric view of a furnished room with a staircase and a woven rug"
+      },
+      {
+        "src": "img/games/anito-defend-a-land-enraged/shot-3.webp",
+        "alt": "Isometric view of a busy village market"
+      },
+      {
+        "src": "img/games/anito-defend-a-land-enraged/shot-4.webp",
+        "alt": "A burning field seen from above"
+      }
+    ],
+    "short_description": "A 2003 role-playing game based on Filipino mythology and folklore.",
+    "description": "Anito: Defend a Land Enraged is a role-playing game for Windows by Manila studio Anino Entertainment, released in 2003. It is often described as the first video game produced and designed entirely by a team of Filipino developers. It won the Innovation in Audio award at the 2004 Independent Games Festival.",
+    "highlights": [
+      "Role-playing game based on Filipino mythology and folklore",
+      "Innovation in Audio award, Independent Games Festival 2004"
+    ],
+    "motif": "boat",
     "palette": [
       "#17A673",
       "#0E1650",
@@ -78,171 +163,122 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC",
-      "PS5",
-      "Xbox"
+      "PC"
     ],
-    "release_date": "2025-06-12",
-    "rating": 88,
-    "downloads": 31500
+    "release_date": "2003-11-22",
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "maiba-taya",
-    "title": "Maiba-Taya",
-    "developer": "pitik-studio",
-    "card_no": 3,
-    "genre": "Casual",
-    "collection": "traditional-games",
-    "cultural_note": "Maiba-taya is a street tag game where whoever is tagged becomes the new taya, or 'it'. It is played in neighborhoods and schoolyards across the country.",
-    "tags": [
-      "casual",
-      "multiplayer",
-      "tag"
-    ],
-    "featured": false,
-    "is_new": false,
-    "trailer_url": null,
-    "price": 99,
-    "sale_price": null,
-    "cover_image": null,
-    "hero_image": "img/maiba-taya.webp",
-    "screenshots": [],
-    "short_description": "Tag the way you played it after class: one taya, one street, and nobody sits out.",
-    "description": "Online tag for up to eight players. The taya changes with every touch, safe spots shrink as the round goes, and the street map is built from real barrio layouts submitted by players.",
-    "highlights": [
-      "Rounds of two to four minutes",
-      "Up to eight players online or against bots",
-      "Player-submitted street maps"
-    ],
-    "motif": "chase",
-    "palette": [
-      "#FFCF1B",
-      "#E5322D",
-      "#0E1650"
-    ],
-    "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Mobile"
-    ],
-    "release_date": "2024-11-02",
-    "rating": 84,
-    "downloads": 127400
-  },
-  {
-    "slug": "tumbang-preso",
-    "title": "Tumbang Preso",
-    "developer": "pitik-studio",
+    "slug": "aswang-hunter",
+    "title": "Aswang Hunter",
+    "developer": "neuroticfly-games",
     "card_no": 4,
-    "genre": "Strategy",
-    "collection": "traditional-games",
-    "cultural_note": "Tumbang preso is a street game where players throw slippers to knock a can off its spot while the taya guards it. It is played in neighborhoods all over the country.",
+    "genre": "Horror",
+    "collection": "folklore",
+    "cultural_note": "The aswang is a shape-shifter in Philippine folklore, often said to pass as an ordinary neighbour by day. Salt and garlic are among the traditional protections.",
     "tags": [
-      "strategy",
-      "puzzle",
-      "street-game"
+      "horror",
+      "aswang",
+      "house-defense"
     ],
     "featured": false,
     "is_new": false,
-    "trailer_url": null,
-    "price": 149,
+    "trailer_url": "https://www.youtube.com/watch?v=pvBThRVaBTw",
+    "official_url": "https://store.steampowered.com/app/4692760/",
+    "content_note": "Contains horror / blood",
+    "price": 199,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Guard the can, throw your tsinelas, and outwit the taya.",
-    "description": "A tactical take on the classic street game. Aim your throw, read the taya's patience, and time the dash to collect your slipper without getting tagged.",
-    "highlights": [
-      "Physics-based throws with wind and slope",
-      "Short puzzle-like rounds you can finish on a break",
-      "Ranked ladder and local hot-seat mode"
+    "cover_image": "img/games/aswang-hunter/cover.webp",
+    "hero_image": "img/games/aswang-hunter/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/aswang-hunter/shot-1.webp",
+        "alt": "First-person view: the player raises a bolo as a winged Wakwak attacks"
+      },
+      {
+        "src": "img/games/aswang-hunter/shot-2.webp",
+        "alt": "A dark room with the choices Talk, Give weapon and Hide above a sleeping man"
+      },
+      {
+        "src": "img/games/aswang-hunter/shot-3.webp",
+        "alt": "First-person view: the player swings a hammer at a creature labelled Sigbin"
+      },
+      {
+        "src": "img/games/aswang-hunter/shot-4.webp",
+        "alt": "A pregnant woman sits bleeding on a toilet in a dim bathroom"
+      }
     ],
-    "motif": "can",
+    "short_description": "A real-time horror battler about protecting families from an aswang outbreak until dawn.",
+    "description": "Aswang Hunter mixes real-time horror combat with house defence. As a rogue hunter you explore vulnerable homes, watch the silhouettes in the windows, and protect families from an aswang outbreak, scavenging bolos and spears and controlling each arm separately. It is coming to Steam; the release date has not been announced.",
+    "highlights": [
+      "Real-time battles combined with house defence",
+      "Scavenge bolos and spears, and control each arm",
+      "Monsters from Philippine folklore"
+    ],
+    "motif": "moonbat",
     "palette": [
+      "#0E1650",
       "#E5322D",
-      "#FFCF1B",
-      "#0E1650"
+      "#FF8DB3"
     ],
     "promo_caption": null,
     "platforms": [
-      "PC",
-      "Mobile",
-      "Switch"
+      "PC"
     ],
-    "release_date": "2025-02-14",
-    "rating": 86,
-    "downloads": 86300
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "barrio-tindahan",
-    "title": "Barrio Tindahan",
-    "developer": "sari-soft",
+    "slug": "bayani",
+    "title": "Bayani",
+    "developer": "ranida-games",
     "card_no": 5,
-    "genre": "Simulation",
-    "collection": "everyday-life",
-    "cultural_note": "A sari-sari store is a small neighborhood shop that sells goods by the piece (tingi) and often on credit (utang). Many are run from the front of a family home.",
+    "genre": "Action",
+    "collection": "history",
+    "cultural_note": "Bayani means hero. Some of the game's fighters are inspired by figures from Philippine history, such as Apolinario Mabini.",
     "tags": [
-      "simulation",
-      "management",
-      "cozy"
+      "fighting",
+      "history"
     ],
     "featured": true,
     "is_new": false,
-    "trailer_url": null,
-    "price": 299,
+    "trailer_url": "https://www.youtube.com/watch?v=xh0prFVUams",
+    "official_url": "https://store.steampowered.com/app/941020/",
+    "content_note": null,
+    "price": 499,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Stock the shelves, sell by the piece, and keep your utang notebook honest.",
-    "description": "Run a sari-sari store one day at a time. Sell tingi, order from the delivery truck, and decide whether to extend credit to the neighbour who is always a little short at the end of the month.",
+    "cover_image": "img/games/bayani/cover.webp",
+    "hero_image": "img/games/bayani/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/bayani/shot-1.webp",
+        "alt": "Joe fights Fernando on a stage with a monument and city towers"
+      },
+      {
+        "src": "img/games/bayani/shot-2.webp",
+        "alt": "Rio fights Oria in a burst of hit sparks"
+      },
+      {
+        "src": "img/games/bayani/shot-3.webp",
+        "alt": "Dre fights Leon on a ruined city stage"
+      },
+      {
+        "src": "img/games/bayani/shot-4.webp",
+        "alt": "Tonio, a bandaged brawler, squares up to Oria"
+      },
+      {
+        "src": "img/games/bayani/shot-5.webp",
+        "alt": "Joe lands a seven-hit combo on Dre"
+      }
+    ],
+    "short_description": "A 1-on-1 fighting game inspired by Philippine history, culture and mythology.",
+    "description": "BAYANI is a 1-on-1 indie fighting game by Ranida Games, heavily inspired by the Philippines' history, culture and mythology. It combines 2D fighting with full 3D graphics, and uses simplified six-button controls for fast-paced play. Its Steam page calls it the first commercial fighting game developed in the Philippines.",
     "highlights": [
-      "Hundreds of stocked items, from sachets to softdrinks in plastic",
-      "A neighbourhood that remembers how you treat people",
-      "Seasonal events from Undas to Noche Buena"
-    ],
-    "motif": "store",
-    "palette": [
-      "#FF8DB3",
-      "#2442D6",
-      "#FFCF1B"
-    ],
-    "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Switch"
-    ],
-    "release_date": "2024-08-23",
-    "rating": 90,
-    "downloads": 64900
-  },
-  {
-    "slug": "sigaw-ng-bayan",
-    "title": "Sigaw ng Bayan",
-    "developer": "sulo-interactive",
-    "card_no": 6,
-    "genre": "Strategy",
-    "collection": "history",
-    "cultural_note": "The Katipunan was a secret society founded in 1892 to win independence from Spain. The 'Cry' of 1896 is traditionally taken as the start of the Philippine Revolution.",
-    "tags": [
-      "strategy",
-      "history",
-      "puzzle"
-    ],
-    "featured": false,
-    "is_new": true,
-    "trailer_url": null,
-    "price": 399,
-    "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Organise secret meetings, pass coded messages, and build a movement without being caught.",
-    "description": "A slow-burn strategy game set in 1896. Recruit across towns, manage trust and suspicion, and learn how real networks of people held together under surveillance.",
-    "highlights": [
-      "Built with reference to published historical accounts",
-      "Message-passing puzzles with period ciphers",
-      "Codex entries that separate documented history from dramatisation"
+      "2D fighting with full 3D graphics",
+      "Simplified six-button controls",
+      "Full controller support"
     ],
     "motif": "sun",
     "palette": [
@@ -252,40 +288,248 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC",
-      "PS5"
+      "PC"
     ],
-    "release_date": "2026-01-09",
-    "rating": 87,
-    "downloads": 22100
+    "release_date": "2019-06-11",
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "jeepney-diaries",
-    "title": "Jeepney Diaries",
-    "developer": "lakad-games",
-    "card_no": 7,
+    "slug": "breadwinner",
+    "title": "Breadwinner",
+    "developer": "tbc-breadwinner",
+    "card_no": 6,
     "genre": "Simulation",
     "collection": "everyday-life",
-    "cultural_note": "Jeepneys, first built from leftover US military jeeps, are one of the most iconic forms of public transport in the Philippines. Their bright paint and slogans make each one unique.",
+    "cultural_note": "In many Filipino families one member, the breadwinner, supports parents and siblings from a single salary.",
     "tags": [
-      "simulation",
-      "driving",
-      "cozy"
+      "budget",
+      "family"
     ],
     "featured": false,
     "is_new": false,
     "trailer_url": null,
+    "official_url": null,
+    "content_note": null,
+    "price": 99,
+    "sale_price": null,
+    "cover_image": "img/games/breadwinner/cover.webp",
+    "hero_image": "img/games/breadwinner/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/breadwinner/shot-1.webp",
+        "alt": "A hooded young man looks at his phone on a dark street between parked vehicles"
+      },
+      {
+        "src": "img/games/breadwinner/shot-2.webp",
+        "alt": "A phone screen listing planned payments for the month: food, Nanay's medicine and fare"
+      },
+      {
+        "src": "img/games/breadwinner/shot-3.webp",
+        "alt": "The young man walks past a wall covered in posters at night"
+      },
+      {
+        "src": "img/games/breadwinner/shot-4.webp",
+        "alt": "Tatay on the sofa says: No money for me again, huh?"
+      },
+      {
+        "src": "img/games/breadwinner/shot-5.webp",
+        "alt": "A child draws at a table lit by a candle"
+      },
+      {
+        "src": "img/games/breadwinner/shot-6.webp",
+        "alt": "A social media feed on the phone, with a cash-advance ad"
+      }
+    ],
+    "short_description": "Split one salary across your family. The money is never enough for it all.",
+    "description": "Breadwinner is a game about supporting a family on one salary. On a phone screen you plan the month's payments, such as food for the house, Nanay's medicine and the fare to work, and deal with what the family asks of you. The studio and the official page are still to be confirmed.",
+    "highlights": [],
+    "motif": "store",
+    "palette": [
+      "#FF8DB3",
+      "#0E1650",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "eskinita",
+    "title": "Eskinita",
+    "developer": "machu",
+    "card_no": 7,
+    "genre": "Horror",
+    "collection": "everyday-life",
+    "cultural_note": "An eskinita is a narrow alley between houses. A lugawan is a small stall that sells lugaw, a rice porridge often eaten late at night.",
+    "tags": [
+      "horror",
+      "short"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://store.steampowered.com/app/4840880/",
+    "content_note": null,
+    "price": 149,
+    "sale_price": null,
+    "cover_image": "img/games/eskinita/cover.webp",
+    "hero_image": "img/games/eskinita/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/eskinita/shot-1.webp",
+        "alt": "Three customers wait at the lugaw stall counter at night"
+      },
+      {
+        "src": "img/games/eskinita/shot-2.webp",
+        "alt": "The Gola-Gola lugawan stall at the end of a dark alley"
+      },
+      {
+        "src": "img/games/eskinita/shot-3.webp",
+        "alt": "A customer eats lugaw at the counter"
+      },
+      {
+        "src": "img/games/eskinita/shot-4.webp",
+        "alt": "A parked van on a dim street lit by one lamp"
+      },
+      {
+        "src": "img/games/eskinita/shot-5.webp",
+        "alt": "A small bedroom with a striped bed and an electric fan"
+      },
+      {
+        "src": "img/games/eskinita/shot-6.webp",
+        "alt": "A dark alley with graffiti on the walls"
+      }
+    ],
+    "short_description": "Close up a neighbourhood lugawan late at night, then survive the walk home.",
+    "description": "ESKINITA is a short, atmospheric Filipino-inspired suspense horror game about working late nights in a small neighbourhood lugawan and surviving the walk home through dark alleys. At first it is only little things, until one night they start following you.",
+    "highlights": [
+      "Two endings",
+      "About 20 to 30 minutes to finish"
+    ],
+    "motif": "store",
+    "palette": [
+      "#0E1650",
+      "#E5322D",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": "2026-06-28",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "hapunan",
+    "title": "Hapunan",
+    "developer": "yikon-games",
+    "card_no": 8,
+    "genre": "Horror",
+    "collection": "folklore",
+    "cultural_note": "Hapunan means dinner. Balut, a boiled fertilised duck egg, is a street food often sold at night by vendors calling out in the neighbourhood.",
+    "tags": [
+      "horror",
+      "balut",
+      "story"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": "https://www.youtube.com/watch?v=k8a9v9MBBq8",
+    "official_url": "https://store.steampowered.com/app/4750540/",
+    "content_note": null,
     "price": 199,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Drive your route, call out the stops, and pass the coins down the line.",
-    "description": "Drive a jeepney from terminal to terminal. Pass fares along the bench, make change on the fly, and customise your ride with panels, stickers, and a very loud horn.",
+    "cover_image": "img/games/hapunan/cover.webp",
+    "hero_image": "img/games/hapunan/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/hapunan/shot-1.webp",
+        "alt": "Passengers ride inside a jeepney through the countryside"
+      },
+      {
+        "src": "img/games/hapunan/shot-2.webp",
+        "alt": "A man in a suit sits behind trays of eggs lit by a lamp"
+      },
+      {
+        "src": "img/games/hapunan/shot-3.webp",
+        "alt": "Inventory screen showing a balut, a fertilised duck egg"
+      }
+    ],
+    "short_description": "A teenager and his father turn to late-night street vending, and dark secrets uncoil behind the trade.",
+    "description": "Hapunan is a story-driven psychological horror game steeped in Filipino urban legends. Facing eviction, a teenager and his father turn to late-night street vending to survive, selling balut. As dark secrets uncoil behind the trade, every choice decides who eats and who survives. It was first released on itch.io for Windows and Android.",
     "highlights": [
-      "Relay fares hand to hand with 'bayad po'",
-      "Customisable body panels and paint",
-      "Routes inspired by real cities, with fictional street names"
+      "Story-driven psychological horror",
+      "Around 30 to 40 minutes to finish"
+    ],
+    "motif": "tree",
+    "palette": [
+      "#0E1650",
+      "#FFCF1B",
+      "#E5322D"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "release_date": "2026-08-25",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "jeepney-simulator",
+    "title": "Jeepney Simulator",
+    "developer": "spacezero-interactive",
+    "card_no": 9,
+    "genre": "Simulation",
+    "collection": "everyday-life",
+    "cultural_note": "Jeepneys, first built from leftover US military jeeps, are one of the best-known forms of public transport in the Philippines. Their bright paint and slogans make each one different.",
+    "tags": [
+      "driving",
+      "simulation",
+      "jeepney"
+    ],
+    "featured": true,
+    "is_new": false,
+    "trailer_url": "https://www.youtube.com/watch?v=ty2Y-EnXas4",
+    "official_url": "https://store.steampowered.com/app/2489990/",
+    "content_note": null,
+    "price": 199,
+    "sale_price": null,
+    "cover_image": "img/games/jeepney-simulator/cover.webp",
+    "hero_image": "img/games/jeepney-simulator/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/jeepney-simulator/shot-1.webp",
+        "alt": "First-person view from the driver's seat at a city intersection at dusk"
+      },
+      {
+        "src": "img/games/jeepney-simulator/shot-2.webp",
+        "alt": "A jeepney parked at a gas station"
+      },
+      {
+        "src": "img/games/jeepney-simulator/shot-3.webp",
+        "alt": "Top-down view of traffic with fuel trucks and a jeepney"
+      },
+      {
+        "src": "img/games/jeepney-simulator/shot-4.webp",
+        "alt": "Inside a jeepney full of passengers, heading to Breeze Mall"
+      },
+      {
+        "src": "img/games/jeepney-simulator/shot-5.webp",
+        "alt": "A jeepney passes a lit-up HIRAYA sign at night"
+      }
+    ],
+    "short_description": "Pick up passengers, calculate change, and weave through traffic in a Filipino-made driving game.",
+    "description": "Jeepney Simulator puts you behind the wheel of a jeepney. Pick up passengers, calculate their change, and weave through traffic. Feed your family, customise your jeepneys, and unlock more rides. It mixes a casual driving sim with resource management, and left Early Access on Steam in September 2023.",
+    "highlights": [
+      "Pick up passengers and make change",
+      "Customise your jeepneys",
+      "Refuel and manage your earnings"
     ],
     "motif": "jeepney",
     "palette": [
@@ -295,230 +539,645 @@
     ],
     "promo_caption": null,
     "platforms": [
-      "PC",
-      "Mobile"
+      "PC"
     ],
-    "release_date": "2025-04-18",
-    "rating": 89,
-    "downloads": 71800
+    "release_date": "2023-09-16",
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "kapre-sa-balete",
-    "title": "Kapre sa Balete",
-    "developer": "gabi-gabi-games",
-    "card_no": 8,
-    "genre": "Horror",
-    "collection": "folklore",
-    "cultural_note": "The kapre is a tall tree giant in Philippine folklore, said to live in old trees such as the balete and to smoke a large cigar. The smell of tobacco is the traditional sign of its presence.",
+    "slug": "kalayaan-road",
+    "title": "Kalayaan Road: The Story of Kuya Jesse",
+    "developer": "tbc-kalayaan-road",
+    "card_no": 10,
+    "genre": "Adventure",
+    "collection": "everyday-life",
+    "cultural_note": "Kalayaan means freedom. Pares, braised beef served with garlic rice and broth, is a staple of roadside stalls.",
     "tags": [
-      "horror",
-      "first-person",
-      "kapre"
+      "story",
+      "chapters"
     ],
     "featured": false,
     "is_new": false,
     "trailer_url": null,
-    "price": 199,
+    "official_url": null,
+    "content_note": null,
+    "price": 149,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "The smell of tobacco is the first sign. The second is that the path behind you is gone.",
-    "description": "A short, tense first-person horror about a night survey in an old balete grove. Navigate by smell and sound, share a light with the thing in the tree, and decide how much you owe it to leave.",
-    "highlights": [
-      "Around two hours, designed for a single sitting",
-      "Audio-led horror: play best with headphones",
-      "Branching ending based on what you offer"
+    "cover_image": "img/games/kalayaan-road/cover.webp",
+    "hero_image": "img/games/kalayaan-road/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/kalayaan-road/shot-1.webp",
+        "alt": "A food stall shelf with baskets of onions and garlic and a cut of raw beef"
+      },
+      {
+        "src": "img/games/kalayaan-road/shot-2.webp",
+        "alt": "A police officer at a desk with Evidence and Cases binders"
+      },
+      {
+        "src": "img/games/kalayaan-road/shot-3.webp",
+        "alt": "A city street with a 'Pabahay ni Makisig' billboard and road barriers"
+      },
+      {
+        "src": "img/games/kalayaan-road/shot-4.webp",
+        "alt": "A hospital waiting area with children and a grandmother on the benches"
+      },
+      {
+        "src": "img/games/kalayaan-road/shot-5.webp",
+        "alt": "Kuya Jesse at his pares cart at night"
+      }
     ],
-    "motif": "tree",
+    "short_description": "The story of Kuya Jesse, a pares vendor, told in chapters.",
+    "description": "Kalayaan Road: The Story of Kuya Jesse follows Kuya Jesse through chapters of city life: cooking and selling pares from his cart, filing a report at a police station, and waiting at a hospital. The studio and the official page are still to be confirmed.",
+    "highlights": [],
+    "motif": "sun",
     "palette": [
       "#0E1650",
-      "#17A673",
-      "#FF8DB3"
-    ],
-    "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Xbox"
-    ],
-    "release_date": "2025-09-26",
-    "rating": 85,
-    "downloads": 39400
-  },
-  {
-    "slug": "luksong-tinik",
-    "title": "Luksong Tinik",
-    "developer": "pitik-studio",
-    "card_no": 9,
-    "genre": "Casual",
-    "collection": "traditional-games",
-    "cultural_note": "Luksong tinik ('jump over the thorns') is a traditional game where players leap over a barrier made from teammates' hands and feet, stacked higher each round.",
-    "tags": [
-      "casual",
-      "co-op",
-      "rhythm"
-    ],
-    "featured": false,
-    "is_new": false,
-    "trailer_url": null,
-    "price": 79,
-    "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "The thorns keep stacking. Time your jump and clear the hands.",
-    "description": "A one-button jumping game that grows from ankle-height to over your head. Tap to launch, hold to lengthen the arc, and keep the whole team in the game.",
-    "highlights": [
-      "One-button rhythm jumping",
-      "Co-op mode where a missed jump costs the team",
-      "Plays well on low-end phones and laptops"
-    ],
-    "motif": "jump",
-    "palette": [
-      "#17A673",
       "#FFCF1B",
-      "#0E1650"
+      "#17A673"
     ],
     "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Mobile"
-    ],
-    "release_date": "2024-05-30",
-    "rating": 82,
-    "downloads": 95600
+    "platforms": [],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "parol-makers",
-    "title": "Parol Makers",
-    "developer": "sulo-interactive",
-    "card_no": 10,
+    "slug": "karinderya-ni-mark",
+    "title": "Karinderya ni Mark",
+    "developer": "mark-the-panda",
+    "card_no": 11,
     "genre": "Casual",
     "collection": "everyday-life",
-    "cultural_note": "The parol is a star-shaped Christmas lantern traditionally made of bamboo and paper. San Fernando, Pampanga is famous for its giant lantern festival.",
+    "cultural_note": "A karinderya is a small eatery that serves home-style ulam (viands) from pots on display.",
     "tags": [
-      "casual",
-      "crafting",
-      "cozy"
+      "cooking",
+      "pixel-art",
+      "fast-paced"
     ],
     "featured": false,
     "is_new": false,
     "trailer_url": null,
-    "price": 129,
+    "official_url": "https://mark-the-panda.itch.io/karinderya-ni-mark",
+    "content_note": null,
+    "price": 99,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Cut bamboo, fold the paper, and wire the lights before Christmas Eve.",
-    "description": "A relaxed crafting game about building parol for the neighbourhood. Fold, glue, wire, and hang your lanterns, then watch the street light up as other players' work joins yours.",
-    "highlights": [
-      "Dozens of lantern frames and patterns",
-      "A shared street that fills with player creations",
-      "No timers, no fail states"
+    "cover_image": "img/games/karinderya-ni-mark/cover.webp",
+    "hero_image": "img/games/karinderya-ni-mark/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/karinderya-ni-mark/shot-1.webp",
+        "alt": "Five customers wait by the beach above trays of Filipino dishes"
+      },
+      {
+        "src": "img/games/karinderya-ni-mark/shot-2.webp",
+        "alt": "Title menu with Play, Exit and Select buttons"
+      },
+      {
+        "src": "img/games/karinderya-ni-mark/shot-3.webp",
+        "alt": "Customers order at the counter of viands"
+      }
     ],
-    "motif": "parol",
+    "short_description": "Run a Filipino eatery and serve every customer the right dish, fast.",
+    "description": "Karinderya ni Mark is a fast-paced pixel-art cooking game about running a Filipino eatery. Serve customers quickly: wrong dishes or drinks lower the shop's rating, and a rating of zero closes the karinderya. It is available in English and Tagalog.",
+    "highlights": [
+      "Score-attack cooking in pixel art",
+      "English and Tagalog",
+      "Windows, Linux, Android and browser"
+    ],
+    "motif": "store",
     "palette": [
+      "#FFCF1B",
       "#E5322D",
-      "#FFCF1B",
-      "#2442D6"
-    ],
-    "promo_caption": null,
-    "platforms": [
-      "PC",
-      "Switch",
-      "Mobile"
-    ],
-    "release_date": "2024-12-15",
-    "rating": 88,
-    "downloads": 58700
-  },
-  {
-    "slug": "balangay-voyage",
-    "title": "Balangay Voyage",
-    "developer": "lakbay-labs",
-    "card_no": 11,
-    "genre": "Strategy",
-    "collection": "history",
-    "cultural_note": "The balangay is an ancient plank-built wooden boat used for sea voyages and trade between islands. Surviving examples found in Butuan are more than a thousand years old.",
-    "tags": [
-      "strategy",
-      "trade",
-      "history"
-    ],
-    "featured": false,
-    "is_new": true,
-    "trailer_url": null,
-    "price": 349,
-    "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "Sail between islands, trade fairly, and keep your crew fed.",
-    "description": "A voyage-planning strategy game across an archipelago. Read the winds and stars, carry goods that each island wants, and grow a trade network one landing at a time.",
-    "highlights": [
-      "Star-and-wind navigation instead of a minimap",
-      "Barter economy with island-specific demand",
-      "Educator notes on the history behind each route"
-    ],
-    "motif": "boat",
-    "palette": [
-      "#2442D6",
-      "#FFCF1B",
       "#17A673"
     ],
     "promo_caption": null,
     "platforms": [
       "PC",
-      "PS5",
-      "Xbox"
+      "Mobile"
     ],
-    "release_date": "2026-03-21",
-    "rating": 92,
-    "downloads": 27300
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
   },
   {
-    "slug": "bakunawa-eclipse",
-    "title": "Bakunawa Eclipse",
-    "developer": "dapithapon-digital",
+    "slug": "lola-maria",
+    "title": "Lola Maria",
+    "developer": "kallim-studio",
     "card_no": 12,
-    "genre": "RPG",
+    "genre": "Horror",
     "collection": "folklore",
-    "cultural_note": "The Bakunawa is a giant serpent in Visayan mythology said to swallow the moon and cause eclipses. People once banged pots and pans to scare it away.",
+    "cultural_note": "Lola means grandmother. Many Filipino households are multigenerational, with grandparents living with their children and grandchildren.",
     "tags": [
-      "rpg",
-      "action",
-      "rhythm"
+      "horror",
+      "psychological",
+      "first-person"
     ],
     "featured": false,
-    "is_new": true,
-    "trailer_url": null,
-    "price": 449,
+    "is_new": false,
+    "trailer_url": "https://www.youtube.com/watch?v=nRUbL8SOQEs",
+    "official_url": "https://store.steampowered.com/app/4042190/",
+    "content_note": null,
+    "price": 249,
     "sale_price": null,
-    "cover_image": null,
-    "hero_image": null,
-    "screenshots": [],
-    "short_description": "A dragon is eating the moon. Gather the village and make some noise.",
-    "description": "An action RPG built around the story of the moon-eating dragon. Rally villagers, bang pots and pans to the rhythm, and chase the serpent across a sky that grows darker with every bite.",
-    "highlights": [
-      "Rhythm-driven combat using everyday kitchen percussion",
-      "Village-building between eclipses",
-      "Original soundtrack with kulintang and gong ensembles"
+    "cover_image": "img/games/lola-maria/cover.webp",
+    "hero_image": "img/games/lola-maria/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/lola-maria/shot-1.webp",
+        "alt": "A handwritten note read by flashlight"
+      },
+      {
+        "src": "img/games/lola-maria/shot-2.webp",
+        "alt": "A dark living room with old furniture"
+      },
+      {
+        "src": "img/games/lola-maria/shot-3.webp",
+        "alt": "A kitchen counter with a gas stove in a wooden house"
+      },
+      {
+        "src": "img/games/lola-maria/shot-4.webp",
+        "alt": "Lola Maria in a checked dress stands in a dim wooden room"
+      },
+      {
+        "src": "img/games/lola-maria/shot-5.webp",
+        "alt": "A blue tabo, a water dipper, on a bathroom floor"
+      }
     ],
-    "motif": "eclipse",
+    "short_description": "Live with your grandmother, and watch everyday chores take a disturbing turn.",
+    "description": "Lola Maria is a first-person psychological horror game where everyday tasks take a disturbing turn. Living with your grandmother, you water the plants, look for missing notes and talk with Lola, and uncover unsettling secrets as the line between family, memory and the supernatural begins to blur.",
+    "highlights": [
+      "First-person psychological horror",
+      "Inspired by Filipino traditions and fears"
+    ],
+    "motif": "tree",
     "palette": [
       "#0E1650",
-      "#E5322D",
+      "#FF8DB3",
       "#FFCF1B"
     ],
     "promo_caption": null,
     "platforms": [
-      "PC",
-      "PS5",
-      "Xbox",
-      "Switch"
+      "PC"
     ],
-    "release_date": "2026-07-04",
-    "rating": 94,
-    "downloads": 18900
+    "release_date": "2025-10-11",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "mahika",
+    "title": "Mahika",
+    "developer": "candy-cabinets-studio",
+    "card_no": 13,
+    "genre": "RPG",
+    "collection": "folklore",
+    "cultural_note": "Mahika means magic.",
+    "tags": [
+      "rpg",
+      "pixel-art",
+      "magic"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://store.steampowered.com/app/1778690/",
+    "content_note": null,
+    "price": 249,
+    "sale_price": null,
+    "cover_image": "img/games/mahika/cover.webp",
+    "hero_image": "img/games/mahika/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/mahika/shot-1.webp",
+        "alt": "A pixel-art girl walks a stone path in a blue forest"
+      },
+      {
+        "src": "img/games/mahika/shot-2.webp",
+        "alt": "The girl stands on a dirt road between pine trees, with an item bar below"
+      },
+      {
+        "src": "img/games/mahika/shot-3.webp",
+        "alt": "The girl casts a glowing spell in the forest"
+      },
+      {
+        "src": "img/games/mahika/shot-4.webp",
+        "alt": "Top-down view of a café with cats, bookshelves and bean bags"
+      },
+      {
+        "src": "img/games/mahika/shot-5.webp",
+        "alt": "A pixel-art bakery kitchen with cakes on display"
+      }
+    ],
+    "short_description": "A pixel-art, top-down RPG magic adventure with roguelike elements.",
+    "description": "Mahika is an action-packed, top-down RPG magic adventure in pixel art, with roguelike elements and a sprinkle of mystery. Its world draws on Filipino and other world cultures and mythologies. It is coming soon to Steam.",
+    "highlights": [
+      "Top-down pixel-art action RPG",
+      "Roguelike elements",
+      "Customisable avatar and a farming system"
+    ],
+    "motif": "parol",
+    "palette": [
+      "#2442D6",
+      "#FF8DB3",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "maiba-taya",
+    "title": "Maiba Taya",
+    "developer": "solitary-studios",
+    "card_no": 14,
+    "genre": "Casual",
+    "collection": "traditional-games",
+    "cultural_note": "'Maiba taya' is the chant used to pick who will be 'it' (the taya) before a street game such as tag or hide-and-seek.",
+    "tags": [
+      "co-op",
+      "multiplayer",
+      "street-games"
+    ],
+    "featured": true,
+    "is_new": false,
+    "trailer_url": "https://www.youtube.com/watch?v=uCQzNtoauAE",
+    "official_url": "https://store.steampowered.com/app/5179520/",
+    "content_note": null,
+    "price": 199,
+    "sale_price": null,
+    "cover_image": "img/games/maiba-taya/cover.webp",
+    "hero_image": "img/games/maiba-taya/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/maiba-taya/shot-1.webp",
+        "alt": "First-person view of kids playing around a big tree"
+      },
+      {
+        "src": "img/games/maiba-taya/shot-2.webp",
+        "alt": "Kids sit on a ledge watching the sunset over the jungle"
+      },
+      {
+        "src": "img/games/maiba-taya/shot-3.webp",
+        "alt": "Hider mode: kids run through the plants while the taya searches"
+      },
+      {
+        "src": "img/games/maiba-taya/shot-4.webp",
+        "alt": "A small sari-sari store in the village"
+      },
+      {
+        "src": "img/games/maiba-taya/shot-5.webp",
+        "alt": "Wooden houses with laundry hanging out to dry"
+      },
+      {
+        "src": "img/games/maiba-taya/shot-6.webp",
+        "alt": "Survivor mode at night: a monster closes in during wave 8"
+      }
+    ],
+    "short_description": "Co-op survival PvP inspired by classic neighbourhood street games.",
+    "description": "MAIBA TAYA is a co-op survival PvP game for 3 to 8 players, inspired by classic neighbourhood street games. Run outside until nightfall, compete across chaotic game modes, earn rewards and customise your kid. It is in Early Access on Steam, published by Neuroticfly Games.",
+    "highlights": [
+      "3 to 8 players, co-op and PvP",
+      "Game modes based on street games",
+      "Customise your kid"
+    ],
+    "motif": "chase",
+    "palette": [
+      "#FFCF1B",
+      "#E5322D",
+      "#0E1650"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": "2026-10-08",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "mandato",
+    "title": "Mandato",
+    "developer": "nest-games",
+    "card_no": 15,
+    "genre": "Horror",
+    "collection": "everyday-life",
+    "cultural_note": "Mandato means mandate: the authority voters give an elected official.",
+    "tags": [
+      "horror",
+      "story",
+      "politics"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://store.steampowered.com/app/4897340/",
+    "content_note": null,
+    "price": 149,
+    "sale_price": null,
+    "cover_image": "img/games/mandato/cover.webp",
+    "hero_image": "img/games/mandato/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/mandato/shot-1.webp",
+        "alt": "First-person view in an alley, holding a phone with a chat open"
+      },
+      {
+        "src": "img/games/mandato/shot-2.webp",
+        "alt": "A woman eats breakfast at a table under a Last Supper painting"
+      },
+      {
+        "src": "img/games/mandato/shot-3.webp",
+        "alt": "Washing a plate in the sink"
+      },
+      {
+        "src": "img/games/mandato/shot-4.webp",
+        "alt": "Sitting down to a breakfast of rice, egg and hotdog"
+      },
+      {
+        "src": "img/games/mandato/shot-5.webp",
+        "alt": "Taking a photo with the phone in a small room"
+      }
+    ],
+    "short_description": "A short first-person horror story about a beloved mayor and the town's crimes.",
+    "description": "MANDATO is a short, first-person horror narrative set in the Philippines. While your journalist wife investigates town hall, you start uncovering brutal secrets that tie your beloved mayor to local crime. Published by Solitary Studios; coming soon to Steam.",
+    "highlights": [
+      "Short, story-driven first-person horror",
+      "About 35 to 45 minutes to finish"
+    ],
+    "motif": "sun",
+    "palette": [
+      "#E5322D",
+      "#0E1650",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "patintero",
+    "title": "Patintero",
+    "developer": "dream-illustration",
+    "card_no": 16,
+    "genre": "Horror",
+    "collection": "traditional-games",
+    "cultural_note": "Patintero is a street game where the taya guard lines drawn on the ground while the other team tries to cross without being tagged.",
+    "tags": [
+      "horror",
+      "first-person",
+      "nostalgia"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://dreamillustration.itch.io/patintero",
+    "content_note": null,
+    "price": 199,
+    "sale_price": null,
+    "cover_image": "img/games/patintero/cover.webp",
+    "hero_image": "img/games/patintero/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/patintero/shot-1.webp",
+        "alt": "A store window with canned sardines and an egg on the counter"
+      },
+      {
+        "src": "img/games/patintero/shot-2.webp",
+        "alt": "A balut vendor's box lit by a candle"
+      },
+      {
+        "src": "img/games/patintero/shot-3.webp",
+        "alt": "Picking up a brick game handheld from a crate"
+      },
+      {
+        "src": "img/games/patintero/shot-4.webp",
+        "alt": "A flashlight finds a Rambo heavy duty slipper in the grass"
+      },
+      {
+        "src": "img/games/patintero/shot-5.webp",
+        "alt": "A candle at a small roadside shrine"
+      },
+      {
+        "src": "img/games/patintero/shot-6.webp",
+        "alt": "A figure stands in thick fog"
+      }
+    ],
+    "short_description": "Atmospheric first-person horror with Batang 90s childhood nostalgia.",
+    "description": "Patintero is an atmospheric first-person horror game that blends in 'Batang 90s' childhood nostalgia, named after the traditional Filipino street game. It is available for Windows on itch.io.",
+    "highlights": [
+      "First-person atmospheric horror",
+      "Batang 90s nostalgia"
+    ],
+    "motif": "jump",
+    "palette": [
+      "#0E1650",
+      "#FFCF1B",
+      "#E5322D"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": null,
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "sabado",
+    "title": "Sabado",
+    "developer": "kiwi-dreams",
+    "card_no": 17,
+    "genre": "Horror",
+    "collection": "everyday-life",
+    "cultural_note": "Sabado means Saturday.",
+    "tags": [
+      "horror",
+      "anime",
+      "school"
+    ],
+    "featured": false,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://store.steampowered.com/app/4986750/",
+    "content_note": null,
+    "price": 249,
+    "sale_price": null,
+    "cover_image": "img/games/sabado/cover.webp",
+    "hero_image": "img/games/sabado/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/sabado/shot-1.webp",
+        "alt": "A student stands by a basketball court at sunset"
+      },
+      {
+        "src": "img/games/sabado/shot-2.webp",
+        "alt": "Chesa smiles in a hallway lit red"
+      },
+      {
+        "src": "img/games/sabado/shot-3.webp",
+        "alt": "Chesa stands in a classroom"
+      },
+      {
+        "src": "img/games/sabado/shot-4.webp",
+        "alt": "An empty classroom with evening light on the desks"
+      },
+      {
+        "src": "img/games/sabado/shot-5.webp",
+        "alt": "A long hallway that ends in red light"
+      },
+      {
+        "src": "img/games/sabado/shot-6.webp",
+        "alt": "A school library with bookshelves"
+      }
+    ],
+    "short_description": "Reunite with a cheerful classmate in a shifting maze of high school memories.",
+    "description": "Sabado is a horror game about reuniting with your favourite classmate. Wander through a nostalgic, shifting maze of old high school memories with a cheerful friend named Chesa, while the exits vanish, the hallways warp, and a silent observer tracks your every step. Published on Steam by Neuroticfly Games.",
+    "highlights": [
+      "A school that changes as you play",
+      "Anime-style psychological horror"
+    ],
+    "motif": "crossroad",
+    "palette": [
+      "#2442D6",
+      "#FF8DB3",
+      "#FFCF1B"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": "2026-11-02",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "taguan",
+    "title": "Taguan",
+    "developer": "murushii-studios",
+    "card_no": 18,
+    "genre": "Horror",
+    "collection": "traditional-games",
+    "cultural_note": "Taguan is the Filipino name for hide-and-seek, from tago, 'to hide'.",
+    "tags": [
+      "horror",
+      "slow-burn"
+    ],
+    "featured": true,
+    "is_new": false,
+    "trailer_url": "https://www.youtube.com/watch?v=slyJr4iJH6Y",
+    "official_url": "https://store.steampowered.com/app/4186430/",
+    "content_note": null,
+    "price": 249,
+    "sale_price": null,
+    "cover_image": "img/games/taguan/cover.webp",
+    "hero_image": "img/games/taguan/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/taguan/shot-1.webp",
+        "alt": "Construction workers by a 'This is where your taxes go' flood-control sign"
+      },
+      {
+        "src": "img/games/taguan/shot-2.webp",
+        "alt": "Neighbours chat by a wall on a sunny street"
+      },
+      {
+        "src": "img/games/taguan/shot-3.webp",
+        "alt": "An office with cubicles"
+      },
+      {
+        "src": "img/games/taguan/shot-4.webp",
+        "alt": "A man sits slumped against an alley wall marked 'Bawal umihi dito'"
+      },
+      {
+        "src": "img/games/taguan/shot-5.webp",
+        "alt": "A room with a broom, a bench and a table"
+      },
+      {
+        "src": "img/games/taguan/shot-6.webp",
+        "alt": "A dark hallway with a fridge and an electric fan"
+      }
+    ],
+    "short_description": "A mysterious figure is making people disappear, and the footsteps are getting closer.",
+    "description": "Taguan is a slow-burn Filipino societal horror game. David Lagani is an ordinary Filipino worker whose quiet life turns to dread when a mysterious figure starts breaking into homes and making people disappear. Each night feels longer and every sound closer. It takes about an hour to finish.",
+    "highlights": [
+      "Slow-burn psychological horror",
+      "About one hour to finish"
+    ],
+    "motif": "chase",
+    "palette": [
+      "#0E1650",
+      "#FFCF1B",
+      "#E5322D"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": "2025-12-24",
+    "rating": 0,
+    "downloads": 0
+  },
+  {
+    "slug": "water-delivery",
+    "title": "Water Delivery",
+    "developer": "frozen-lake-software",
+    "card_no": 19,
+    "genre": "Horror",
+    "collection": "everyday-life",
+    "cultural_note": "In many Philippine towns, drinking water is delivered to homes in refillable five-gallon jugs.",
+    "tags": [
+      "horror",
+      "first-person"
+    ],
+    "featured": true,
+    "is_new": false,
+    "trailer_url": null,
+    "official_url": "https://store.steampowered.com/app/3077670/",
+    "content_note": null,
+    "price": 199,
+    "sale_price": null,
+    "cover_image": "img/games/water-delivery/cover.webp",
+    "hero_image": "img/games/water-delivery/hero.webp",
+    "screenshots": [
+      {
+        "src": "img/games/water-delivery/shot-1.webp",
+        "alt": "A five-gallon water jug on a table, ready to pick up"
+      },
+      {
+        "src": "img/games/water-delivery/shot-2.webp",
+        "alt": "The delivery truck on a road at dusk"
+      },
+      {
+        "src": "img/games/water-delivery/shot-3.webp",
+        "alt": "A small store at night"
+      }
+    ],
+    "short_description": "Ride the delivery truck on your last route of the evening. Deliver the jugs. Collect the payments.",
+    "description": "Water Delivery is a first-person horror game where you play a water delivery worker on the final route of the evening. Ride along in the delivery truck from house to house, deliver filled jugs, find and return the empty ones, and collect every payment.",
+    "highlights": [
+      "Multiple endings, based on your choices and what you discover"
+    ],
+    "motif": "can",
+    "palette": [
+      "#0E1650",
+      "#2442D6",
+      "#E5322D"
+    ],
+    "promo_caption": null,
+    "platforms": [
+      "PC"
+    ],
+    "release_date": "2024-09-18",
+    "rating": 0,
+    "downloads": 0
   }
 ]

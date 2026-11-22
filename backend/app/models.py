@@ -43,14 +43,18 @@ class Game(SQLModel, table=True):
     tags: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     featured: bool = False
     is_new: bool = False
-    trailer_url: str | None = None
-    price: int
+    trailer_url: str | None = None  # the studio's own YouTube upload; embedded via youtube-nocookie on click
+    official_url: str | None = None  # the game's official page (Steam, itch.io, eShop, studio site)
+    content_note: str | None = None  # short content warning shown on the game page, e.g. "Contains horror / blood"
+    price: int  # sample demo price in whole pesos (TEKS does not sell these games)
     sale_price: int | None = None
-    cover_image: str | None = None  # optional; the procedural card art is used when absent
-    hero_image: str | None = None  # optional full-screen artwork for the home hero (frontend path)
-    motif: str | None = None  # card art motif key
+    # Frontend paths under img/games/<slug>/. A muted hero clip, when there is one, is always
+    # img/games/<slug>/clip.mp4 (derived from the slug, not stored).
+    cover_image: str | None = None  # card art; the procedural card art is used when absent
+    hero_image: str | None = None  # 16:9 artwork for the home hero and the trailer poster
+    motif: str | None = None  # card art motif key (fallback art)
     palette: list[str] = Field(default_factory=list, sa_column=Column(JSON))  # 3 hex colours
-    screenshots: list[str] = Field(default_factory=list, sa_column=Column(JSON))
+    screenshots: list[dict] = Field(default_factory=list, sa_column=Column(JSON))  # [{src, alt}]
     short_description: str
     description: str
     highlights: list[str] = Field(default_factory=list, sa_column=Column(JSON))

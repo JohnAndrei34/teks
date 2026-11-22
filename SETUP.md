@@ -228,7 +228,7 @@ frontend/
     app.js             all pages, the router and every call to the backend
     art.js             Dea's card art drawings. Don't edit
     logo.png
-    img/               images, e.g. img/maiba-taya.webp (the home hero)
+    img/games/<slug>/  each game's cover, hero, screenshots (and some hero clips)
 backend/
   app/
     routers/           API endpoints (games, auth, orders, submissions, ...)
