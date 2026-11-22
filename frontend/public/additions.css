@@ -58,6 +58,67 @@ a.tag[style]{background:var(--route);color:var(--route-ink)}
 .al-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .admin-none{color:var(--muted);margin:0}
 
+/* ---------- real catalog media ---------- */
+/* cover photos sit inside the design's card art frame (and its other art boxes) exactly like the procedural SVG */
+.teks .art img.cover,.cat-art img,.line-item .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.cat-art img{position:absolute;inset:0}
+.teks .art img.cover{filter:saturate(1.05)}
+
+/* demo price label above the card price */
+.price-wrap{display:flex;flex-direction:column;align-items:flex-end;line-height:1.05}
+.demo-tag{font:500 .62rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+
+/* six genre tiles: two even rows of three (the design's .cats is laid out for five) */
+.cats.six .cat,.cats.six .cat:nth-child(n+4){grid-column:span 2}
+@media (max-width:760px){.cats.six .cat,.cats.six .cat:first-child,.cats.six .cat:nth-child(n+4){grid-column:span 1}}
+
+/* hero: pause / play for the slideshow and clip (the design's round .arrow, widened for a word) */
+.hero-ctrl .arrow{width:auto;padding:0 1rem;border-radius:999px;font-size:.85rem}
+
+/* game page: official link, content note, disclaimer */
+.official{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin:0 0 1rem}
+.official small{font:400 .82rem var(--mono);color:var(--muted)}
+.content-note{display:inline-block;margin:0 0 1rem;padding:.35rem .75rem;border:2px solid var(--ink);border-left:6px solid var(--rose);border-radius:8px;background:#fff;font:500 .86rem var(--mono)}
+.disclaimer{font:400 .8rem/1.5 var(--mono);color:var(--muted);margin:1.2rem 0 0;max-width:62ch}
+
+/* trailer: poster button, replaced by a youtube-nocookie iframe on click */
+.trailer{position:relative;aspect-ratio:16/9;max-width:960px;border:3px solid var(--ink);border-radius:var(--r);overflow:hidden;background:var(--ink);box-shadow:4px 4px 0 var(--ink);margin-bottom:2rem}
+.trailer iframe,.trailer-play{position:absolute;inset:0;width:100%;height:100%;border:0}
+.trailer-play{padding:0;cursor:pointer;background:var(--ink);color:#fff}
+.trailer-play img,.trailer-play svg{width:100%;height:100%;object-fit:cover;display:block;opacity:.8;transition:opacity .15s}
+.trailer-play:hover img,.trailer-play:focus-visible img{opacity:1}
+.trailer-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:4.4rem;height:4.4rem;display:grid;place-items:center;padding-left:.3rem;font-size:1.6rem;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);border-radius:50%;box-shadow:4px 4px 0 var(--ink)}
+.trailer-note{position:absolute;left:.8rem;bottom:.8rem;font:500 .78rem var(--mono);background:rgba(15,27,45,.85);padding:.2rem .6rem;border-radius:6px}
+dialog .trailer{margin:1rem 0;box-shadow:none}
+
+/* screenshots: lazy thumbnails, select to enlarge */
+.shots{list-style:none;margin:0 0 1rem;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.shot{display:block;width:100%;padding:0;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--ink);cursor:zoom-in;box-shadow:3px 3px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.shot img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.shot:hover,.shot:focus-visible{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+@media (max-width:460px){.shots{grid-template-columns:1fr 1fr;gap:.6rem}}
+
+/* lightbox and wide dialogs (the shared <dialog id="dlg">) */
+dialog.lightbox{max-width:min(1200px,94vw);width:100%;padding:1rem}
+dialog.wide{max-width:min(760px,94vw);width:100%}
+.lb-fig{margin:0}
+.lb-fig img{display:block;width:100%;max-height:76vh;object-fit:contain;background:var(--ink);border-radius:8px}
+.lb-fig figcaption{display:flex;justify-content:space-between;gap:1rem;margin-top:.6rem;font-size:.92rem}
+.lb-fig figcaption .mono{color:var(--muted);flex:none}
+.lb-nav{display:flex;justify-content:flex-end;align-items:center;gap:.5rem;margin-top:.8rem}
+.lb-nav form{margin:0}
+@media (prefers-reduced-motion:reduce){.shot,.trailer-play img{transition:none}}
+
+/* store: the same gap above the footer as every other page. The design ends its pages with
+   #app .section:last-child{padding-bottom:2.2rem}, but the store grid is not a .section, so its last
+   row of cards (or the "No games match" box) sat on the footer. */
+.store-layout{padding-bottom:2.2rem}
+
+/* home: the New releases rail kept 1.6rem of bottom padding for a scrollbar the design later hides, which
+   made the space under it 16px bigger than between the other home sections. .6rem still clears the cards'
+   shadow and hover lift. */
+.wrap.wide>.rail{padding-bottom:.6rem}
+
 /* ================= developer dashboard =================
    Dea's palette, fonts and ink borders; the layout is ours. Pages are built from a few parts:
    .dx-hero (profit meter), .dx-kpi cards, .dx-panel + .dx-rows / .dx-cols / .dx-table, .dx-pill, .dx-empty. */

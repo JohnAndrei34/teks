@@ -61,9 +61,30 @@ All of these reuse your classes (`page-head`, `section`, `head`, `cards`/`teks`,
 
 ## 6. Other
 
-- The Maiba-Taya hero image is now `img/maiba-taya.webp` (179 KB instead of 848 KB, same size and look).
+- Game images are WebP files in `img/games/<slug>/` (see section 7).
 - The Anton font is still loaded, because your CSS uses it for card titles, prices and the hero.
 - Your files use Windows (CRLF) line endings. We kept them.
+
+## 7. Real games instead of the 12 sample games (Nov 2026)
+
+The store now lists 19 real Filipino games from our team's media folder. All of it uses your design; nothing in `styles.css` or `art.js` changed.
+
+- **Cards keep your frame, with the real cover inside it.** The cover photo sits in your `.art` box, under the Series badge and rarity tag, with the same stats, flip and back. Your procedural `art()` scene is still the fallback: a game with no cover, or an image that fails to load, shows your art. The same cover is used in the hero thumbnails, genre and collection tiles, the cart and the order receipt. The sign-in screen's background grid still uses your art (it is decorative, and real covers there would load 38 images).
+- **"Demo price" label** above every card price, on the game page price box and in the cart, because TEKS does not sell these games.
+- **No ratings or download counts**, because we have no real data. Rating filters and sorts are gone; "Top charts" became "Bought on TEKS (demo orders)" and only shows once someone checks out.
+- **Two new genres, Action and Adventure**, for fighting, platformer and story games. Colours: Action uses the logo red `#C0392B` (white text), Adventure the green `#17A673` from your card palettes (ink text). With 6 genres the genre tiles are two rows of three (`.cats.six` in additions.css).
+- **Game page:** an "Official page ↗" button (your `.btn alt small`) under the studio, a content note box where needed, a Trailer block (poster with a yellow play button; YouTube loads only on click) and a Screenshots grid that opens a lightbox in your `<dialog>`. The text below the price says the 80/20 split is a demo. A small disclaimer closes the column.
+- **Home hero:** real 16:9 artwork. On desktop, 4 games play a short muted clip behind the text (not on phones, with reduced motion or with Save-Data). Your `.hero-ctrl` styles now hold a Pause/Play button. On phones the game title is always shown as text, because the cropped artwork cuts it off.
+- **Play modal** (Collection): shows the trailer and the official page link.
+- **Footer, About FAQ, studio pages:** the disclaimer "TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them."
+- `img/maiba-taya.webp` was removed; every game's images are in `img/games/<slug>/`.
+
+## 8. Home order, store spacing and Taglish (Nov 2026)
+
+- **Home:** the dark "For developers: Sell. Keep 80%." band (with the ₱239.20 per-copy box) now sits right after **New releases**, before **Browse by genre**. The genre section got its normal top padding back, because it no longer follows another white section.
+- **Even spacing on Home:** your New releases rail keeps 1.6rem of bottom padding for a scrollbar that your later rule hides, so the space under it was 16px bigger than between the other sections. `additions.css` trims it to .6rem for that rail only (still enough for the card shadow and hover lift). Every home section is now 73px apart on desktop and 46px on phones.
+- **Store bottom gap:** the store grid is not a `.section`, so your `#app .section:last-child{padding-bottom:2.2rem}` did not reach it and the last row of cards touched the footer. `additions.css` gives `.store-layout` the same 2.2rem. Every page now ends 35–40px above the footer (About and the full cart keep your larger gaps).
+- **Taglish:** every Filipino string was rewritten to sound like PH apps (Shopee, GCash, Steam PH) instead of word-for-word translation. The nav now stays English (Home, Store, Collection, About), and "Mga sasakyan mo" is now "Cart mo". Please review [taglish-review.md](taglish-review.md), especially the 8 rows marked ⚠.
 
 ## What we need from you
 
