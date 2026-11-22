@@ -118,3 +118,149 @@ dialog.wide{max-width:min(760px,94vw);width:100%}
    made the space under it 16px bigger than between the other home sections. .6rem still clears the cards'
    shadow and hover lift. */
 .wrap.wide>.rail{padding-bottom:.6rem}
+
+/* customer account page: the "Want to sell a game?" line under Sign out */
+.acct-sell{margin:1.1rem 0 0}
+
+/* ================= developer dashboard =================
+   Dea's palette, fonts and ink borders; the layout is ours. Pages are built from a few parts:
+   .dx-hero (profit meter), .dx-kpi cards, .dx-panel + .dx-rows / .dx-cols / .dx-table, .dx-pill, .dx-empty. */
+
+/* top bar: the developer's sections replace the shopper links */
+.nav.dev{min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav.dev a{padding:.45rem .7rem;font-size:.88rem}
+@media (max-width:1100px){.nav.dev{order:3;width:100%;margin:0;padding-bottom:.25rem}}
+
+/* page header */
+.dash-crumbs{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:0 0 .8rem;font:500 .82rem var(--mono);color:var(--muted)}
+.dash-crumbs a{color:var(--ink);padding:.3rem 0;text-underline-offset:3px}
+.dash-crumbs [aria-current]{color:var(--ink);font-weight:700}
+.dx-head-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem 2rem}
+.dx-head h1{font-size:clamp(2rem,4vw,3rem)}
+.dx-head p{margin:.5rem 0 0}
+
+/* layout */
+#dash-body.section{padding-top:clamp(1.4rem,3vw,2rem)}
+.dx{display:grid;gap:1.6rem}
+.dx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.6rem;align-items:stretch}
+.dx-narrow{max-width:620px}
+@media (max-width:900px){.dx-grid{grid-template-columns:minmax(0,1fr)}}
+.dx-hint{font:500 .82rem var(--mono);color:var(--muted);margin:0 0 1rem;max-width:none}
+.dx-demo{display:flex;flex-wrap:wrap;gap:.3rem .7rem;align-items:center;margin:0 0 1.4rem;font:500 .82rem var(--mono);color:var(--muted);background:var(--wash);border:1px dashed var(--line);border-radius:10px;padding:.55rem .8rem;max-width:none}
+
+/* hero: the profit "fare meter" */
+.dx-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:1.6rem 2.6rem;align-items:center;background:var(--board);color:#fff;border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--ink);padding:clamp(1.4rem,3vw,2.3rem)}
+.dx-lab{display:block;font:500 .74rem var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--led-dim)}
+.dx-digits{font:400 clamp(2.9rem,7vw,4.8rem)/1.05 'Anton','Impact',sans-serif;letter-spacing:.04em;color:var(--amber);margin:.3rem 0 .5rem}
+.dx-hero p{color:#D5E0F5;margin:0 0 1.3rem}
+.dx-hero-r{background:#08111f;border:2px solid #223656;border-radius:14px;padding:1.2rem 1.3rem}
+@media (max-width:820px){.dx-hero{grid-template-columns:minmax(0,1fr)}}
+
+/* the 80/20 split bar */
+.dx-split{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--amber);margin:.8rem 0}
+.dx-split i{display:block;background:var(--teal)}
+.dx-legend{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;font:500 .82rem var(--mono)}
+.dx-legend span::before{content:'';display:inline-block;width:.7rem;height:.7rem;border-radius:3px;background:var(--c);margin-right:.45rem}
+.dx-legend.dark{color:#D5E0F5}
+
+/* KPI cards */
+.dx-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1.2rem}
+.dx-kpi{display:grid;gap:.2rem;align-content:start;background:var(--card);border:2px solid var(--ink);border-top:7px solid var(--acc,var(--amber));border-radius:var(--r);box-shadow:4px 4px 0 var(--ink);padding:1rem 1.2rem 1.1rem}
+.dx-kpi .k{font:500 .72rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.dx-kpi b{font:400 clamp(2rem,3vw,2.7rem)/1.05 'Anton','Impact',sans-serif;letter-spacing:.02em}
+.dx-kpi small{font:500 .78rem var(--mono);color:var(--muted)}
+
+/* panels */
+.dx-panel{display:flex;flex-direction:column;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.4rem 1.5rem 1.5rem}
+.dx-panel>header{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem 1rem;flex-wrap:wrap;margin-bottom:.6rem}
+.dx-panel h2{font-size:1.3rem;margin:0}
+.dx-more{font:600 .88rem var(--display);text-underline-offset:3px;white-space:nowrap}
+
+/* ranked rows: name | bar | value */
+.dx-rows{list-style:none;margin:0;padding:0}
+.dx-row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(60px,1fr) 7.5rem;gap:.2rem 1rem;align-items:center;padding:.85rem 0;border-top:1px solid var(--line)}
+.dx-row:first-child{border-top:0}
+.dx-row.nobar{grid-template-columns:minmax(0,1fr) auto}
+.dx-main{display:grid;min-width:0}
+.dx-main a,.dx-main>:first-child{font-weight:800;text-decoration:none;overflow-wrap:anywhere}
+.dx-main a:hover{text-decoration:underline;text-underline-offset:3px}
+.dx-sub{font:500 .78rem var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.dx-val{font:400 1.3rem 'Anton','Impact',sans-serif;letter-spacing:.02em;text-align:right;white-space:nowrap}
+.dx-track{display:block;height:9px;border-radius:5px;background:var(--wash);overflow:hidden}
+.dx-track i{display:block;height:100%;background:var(--c,var(--amber));border-radius:5px}
+@media (max-width:560px){.dx-row{grid-template-columns:minmax(0,1fr) auto}.dx-row .dx-track{grid-column:1/-1;order:3}}
+
+/* month column chart */
+.dx-cols{list-style:none;margin:.8rem 0 0;padding:0;display:flex;align-items:stretch;gap:.7rem;height:230px}
+.dx-cols li{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.dx-bw{flex:1;min-height:0;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.dx-bar{display:block;width:100%;max-width:54px;height:var(--h);background:var(--c,var(--amber));border:2px solid var(--ink);border-radius:6px 6px 0 0}
+.dx-cv{font:500 .74rem var(--mono);color:var(--muted);white-space:nowrap}
+.dx-cl{font:500 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em}
+
+/* purchases table */
+.dx-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.dx-table{width:100%;min-width:640px;border-collapse:collapse;font-size:.95rem}
+.dx-table th,.dx-table td{padding:.8rem 1rem;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+.dx-table thead th{border-top:0;background:var(--wash);font:500 .72rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.dx-table tbody th{font-weight:800}
+.dx-table tbody th a{text-decoration:none}
+.dx-table tbody th a:hover{text-decoration:underline;text-underline-offset:3px}
+.dx-table .n{text-align:right;font-variant-numeric:tabular-nums}
+.dx-table tbody tr:hover{background:var(--paper)}
+.dx-good{font-weight:800;color:var(--teal)}
+.dx-table-wrap+.dx-hint{margin:1rem 0 0}
+
+/* status pill */
+.dx-pill{display:inline-block;font:500 .74rem var(--mono);text-transform:uppercase;letter-spacing:.06em;border:1.5px solid var(--ink);border-radius:999px;padding:.15rem .75rem;background:var(--wash);color:var(--ink)}
+.dx-pill.pending{background:var(--yellow)}
+.dx-pill.approved{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* empty state */
+.dx-empty{display:grid;gap:.8rem;justify-items:start;border:2px dashed var(--line);border-radius:12px;padding:1.3rem 1.4rem;color:var(--muted)}
+.dx-empty p{margin:0}
+
+/* account */
+.dx-profile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.2rem 1.6rem;align-items:center;margin-bottom:1.4rem}
+.dx-avatar{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--amber);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font:400 2rem 'Anton','Impact',sans-serif;letter-spacing:.04em}
+.dx-profile .acct-dl{margin:0}
+@media (max-width:520px){.dx-profile{grid-template-columns:minmax(0,1fr)}}
+
+/* My games: flip cards with stats that open on click */
+.mine>.btn{align-self:flex-start}
+.mine-stats[hidden]{display:none}
+.mine .tk{display:flex;flex-direction:column}
+.mine .tk-in{flex:1}
+
+/* wide layout: dashboard pages fill the screen, with panels side by side so there is less to scroll */
+body.wide-mode .wrap{width:calc(100% - clamp(2rem,4vw,5rem))}
+.dx-table th,.dx-table td{padding:.62rem 1rem}
+.dx-rowsbtn{margin-top:1rem}
+.dx-rows.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:.8rem 1.2rem}
+.dx-rows.flow .dx-row,.dx-rows.flow .dx-row:first-child{border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;background:var(--paper)}
+@media (min-width:1100px){
+  .dx.ov,.dx.pf{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .dx.ov>*,.dx.pf>*{grid-column:1/-1}
+  .dx.ov>.dx-hero{grid-column:span 7;grid-template-columns:minmax(0,1fr)}
+  .dx.ov>.dx-kpis{grid-column:span 5;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr}
+  .dx.pf>.dx-kpis{grid-column:span 8}
+  .dx.pf>.dx-panel{grid-column:span 4}
+  .dx-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dx-grid.three .dx-row{grid-template-columns:minmax(0,1fr) auto}
+  .dx-grid.three .dx-row .dx-track{grid-column:1/-1;order:3}
+}
+.mine-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));justify-items:center}
+.mine-grid>.mine{width:100%;max-width:340px}
+@media (min-width:1100px){.dx.ov>.dx-kpis .dx-kpi{align-content:center}}
+/* merge: "Total downloads" and "Copies sold" became one card, so the overview has 3 cards in this 2-column
+   grid; the merged card takes the full first row instead of leaving an empty cell */
+@media (min-width:1100px){.dx.ov>.dx-kpis .dx-kpi:first-child:nth-last-child(3){grid-column:1/-1}}
+.dx-rowsbtn+.dx-hint{margin-top:.9rem}
+
+/* dashboard spacing: more air under the header and, especially, before the footer */
+.dx-head.page-head{padding-block:clamp(2.2rem,4vw,3.2rem) clamp(1.8rem,3vw,2.4rem)}
+#app #dash-body.section{padding-top:clamp(2.2rem,4vw,3.2rem);padding-bottom:clamp(4rem,9vw,7rem)}   /* beats "#app .section:last-child" in styles.css */
+.dx{gap:2rem}
+.dx-grid{gap:2rem}
+.dx-kpis{gap:1.4rem}
+.dx-demo{margin-bottom:2rem}

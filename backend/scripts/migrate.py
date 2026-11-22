@@ -25,6 +25,8 @@ STATEMENTS = [
     "ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS price integer",
     "ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS user_id integer REFERENCES users(id)",
     "CREATE INDEX IF NOT EXISTS ix_developer_submissions_user_id ON developer_submissions (user_id)",
+    # developers: the account that may see the studio's tracker (set by scripts/link_studio.py only)
+    "ALTER TABLE developers ADD COLUMN IF NOT EXISTS owner_user_id integer REFERENCES users(id)",
 ]
 
 

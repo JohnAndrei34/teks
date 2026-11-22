@@ -11,7 +11,7 @@ Online store for Filipino indie games (players buy; Filipino devs submit games).
 ## Layout
 - `frontend/public/`: `index.html`, `styles.css` (Dea's, unchanged), `additions.css` (our extra rules), `app.js` (router, views, API calls), `art.js` (Dea's card art, unchanged), `logo.png`, `img/`
 - `frontend/dev.mjs`: local dev server (static files + `/api` proxy)
-- `backend/app/{main,database,models,constants,auth,errors,collections,serializers}.py`, `backend/app/routers/`, `backend/scripts/{seed,migrate,media,replace_catalog}.py`, `backend/data/{developers,games}.json`
+- `backend/app/{main,database,models,constants,auth,errors,collections,serializers}.py`, `backend/app/routers/`, `backend/scripts/{seed,migrate,media,replace_catalog,link_studio}.py`, `backend/data/{developers,games}.json`
 - `frontend/public/img/games/<slug>/`: `cover.webp`, `hero.webp`, `shot-N.webp` + `shot-N-sm.webp`, and for 4 games `clip.mp4`
 - `docs/taglish-review.md` (new UI strings for Dea to check), `docs/notes-for-dea.md` (what we changed in her design), `docs/catalog-sources.md` (source of every catalog fact + the team's to-do checklist), `docs/game-media-inventory.md`
 
@@ -23,7 +23,7 @@ Online store for Filipino indie games (players buy; Filipino devs submit games).
 - No frontend build, lint or tests. Check syntax with `node --check frontend/public/app.js`.
 
 ## Data model (backend/app/models.py)
-- `developers`: slug, name, type (student|indie|studio), bio, location, website_url, facebook_url, logo_image, created_at
+- `developers`: slug, name, type (student|indie|studio), bio, location, website_url, facebook_url, logo_image, owner_user_id (the developer account linked by the team with `python -m scripts.link_studio`; see SETUP.md, Drei only), created_at
 - `games`: slug, title, developer_id (FK), card_no (the "Series 01" on the card), motif, palette (JSON, 3 hex colours), highlights (JSON list), genre (Action|Adventure|RPG|Horror|Simulation|Casual|Strategy), collection (folklore|traditional-games|history|everyday-life|null), cultural_note, tags, featured (the 6 home hero slides), is_new, trailer_url (the studio's own YouTube upload), official_url, content_note, price (sample demo price), sale_price, cover_image / hero_image (frontend paths like `img/games/<slug>/cover.webp`), screenshots (JSON `[{src, alt}]`), short_description, description, promo_caption, platforms (PC|Mobile|PS5|Xbox|Switch), release_date (null if unknown), rating (0, unused), downloads (0; the API adds TEKS demo sales)
 - `users`: role (customer|developer), name, email (unique, lower-case), studio (developers), password_hash (scrypt), created_at
 - `sessions`: token_hash (sha256 of the browser's token), user_id, ttl_seconds, expires_at. `auth_attempts`: kind (login_failed|signup), key (email or client IP), created_at
@@ -49,10 +49,12 @@ Online store for Filipino indie games (players buy; Filipino devs submit games).
 - Accounts: `POST /auth/signup` and `POST /auth/login` -> `{token, user}`; `GET /auth/me`; `POST /auth/logout`; `GET /me/library` -> `{games:[slug]}`. Token goes in `Authorization: Bearer <token>`. Sessions last 30 days ("Remember me") or 1 day, sliding. Limits: 8 failed logins per email / 10 min; 20 signups per client IP / 10 min (60 when only the socket address is known). Signups log which header gave the IP (`teks.auth`).
 - `GET /promo/{code}`; `POST /orders` (customer_name, email, mobile, payment_method gcash|maya|card, promo_code?, game_ids; optional Bearer) -> `{code}`; `GET /orders/{code}` adds items, developer_share and payouts per studio
 - `POST /contact`; `POST /submissions` (needs a developer session: 401 signed out, 403 customer)
+- Developer dashboard (developer session; 401/403 otherwise): `GET /me/tracker` (totals, per game, per month; `linked` false until the team links the account), `GET /me/purchases` (latest 50 sales: no buyer, no order code, Manila date only), `GET /me/submissions` (own only). A studio's numbers go only to its `owner_user_id` account; never match accounts to studios by the typed name. `TRACKER_MOCK=1` (local `.env` only) returns sample data and is ignored when `VERCEL` is set.
 - `GET /admin/{orders,submissions,messages,users}` need the `X-Admin-Key` header (`users` returns counts only)
 
 ## Frontend (frontend/public/app.js)
-- Routes: `#/` (home; sends visitors to `#/account` unless signed in or "Continue as guest"), `#/store`, `#/game/{slug}`, `#/cart`, `#/order/{code}`, `#/collection`, `#/developers`, `#/about`, `#/account`, `#/pinoy`, `#/pinoy/{slug}`, `#/studio/{slug}`, `#/contact`, `#/admin` (not linked).
+- Routes: `#/` (home; sends visitors to `#/account` unless signed in or "Continue as guest"), `#/store`, `#/game/{slug}`, `#/cart`, `#/order/{code}`, `#/collection`, `#/developers`, `#/about`, `#/account`, `#/pinoy`, `#/pinoy/{slug}`, `#/studio/{slug}`, `#/contact`, `#/admin` (not linked), `#/dashboard/{overview|sales|profit|purchases|games|submissions|account}` (Dea's developer dashboard).
+- Roles: developers get the dashboard sections in the top bar, Home = their overview, and browse Store/game pages read-only (no Buy, no cart; `#/cart` explains why). Customers don't see "Sell a game" in the menus, but `#/developers` still opens and explains how to switch to a developer account. No silent role redirects.
 - A view returns `{title, html, mount}`; `html` is a template string. `normalizeGame()` turns API games into the shape the design uses (`id` = slug, `dbId` = numeric id for orders, `studio`, `pal`, `blurb`, `released`, `theme` = collection title, `hero`).
 - Form errors: inputs are named like the API fields and wrapped in `.field` with id `f-<field>`, so `err.field` finds them.
 - Browser storage: `teks.cart`, `teks.owned` (guest purchases), `teks.likes` (favorites), `teks.lang`, `teks.token` (localStorage with "Remember me", else sessionStorage), `teks.guest` and `teks.adminKey` (sessionStorage). Signed in, owned games come from `GET /me/library`.

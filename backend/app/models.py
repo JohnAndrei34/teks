@@ -25,6 +25,9 @@ class Developer(SQLModel, table=True):
     website_url: str | None = None
     facebook_url: str | None = None
     logo_image: str | None = None
+    # The developer account that may see this studio's tracker and purchases. Set only by the team with
+    # `python -m scripts.link_studio` after checking the claim; never by signup (studio names are not proof).
+    owner_user_id: int | None = Field(default=None, foreign_key="users.id")
     created_at: datetime = Field(default_factory=utcnow)
 
 
