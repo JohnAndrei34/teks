@@ -108,3 +108,13 @@ dialog.wide{max-width:min(760px,94vw);width:100%}
 .lb-nav{display:flex;justify-content:flex-end;align-items:center;gap:.5rem;margin-top:.8rem}
 .lb-nav form{margin:0}
 @media (prefers-reduced-motion:reduce){.shot,.trailer-play img{transition:none}}
+
+/* store: the same gap above the footer as every other page. The design ends its pages with
+   #app .section:last-child{padding-bottom:2.2rem}, but the store grid is not a .section, so its last
+   row of cards (or the "No games match" box) sat on the footer. */
+.store-layout{padding-bottom:2.2rem}
+
+/* home: the New releases rail kept 1.6rem of bottom padding for a scrollbar the design later hides, which
+   made the space under it 16px bigger than between the other home sections. .6rem still clears the cards'
+   shadow and hover lift. */
+.wrap.wide>.rail{padding-bottom:.6rem}

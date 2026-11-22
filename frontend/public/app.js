@@ -38,7 +38,7 @@ async function api(path, opts = {}) {
   const init = { method: opts.method || 'GET', headers };
   if (opts.body !== undefined) { headers['Content-Type'] = 'application/json'; init.body = JSON.stringify(opts.body); }
   let res;
-  try { res = await fetch(path, init); } catch { throw new Error(L('Hindi maabot ang TEKS. Tingnan ang koneksyon mo at subukan ulit.', 'Could not reach TEKS. Check your connection and try again.')); }
+  try { res = await fetch(path, init); } catch { throw new Error(L('Hindi makakonekta sa TEKS. I-check ang connection mo at subukan ulit.', 'Could not reach TEKS. Check your connection and try again.')); }
   const data = await res.json().catch(() => ({}));
   if (res.status === 401 && token && !/^\/api\/(auth\/(login|signup)|admin\/)/.test(path)) sessionEnded();
   if (!res.ok) throw Object.assign(new Error(data.error || (typeof data.detail === 'string' && data.detail) || L('May nangyaring mali. Subukan ulit.', 'Something went wrong. Try again.')), { field: data.field, status: res.status });
@@ -88,11 +88,11 @@ const clipSrc = g => `img/games/${g.id}/clip.mp4`;
 const ytId = u => (/^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})(?:[&?#].*)?$/.exec(u || '') || [])[1] || '';
 const safeUrl = u => (/^https?:\/\/[^\s"'<>]+$/i.test(u || '') ? u : '');
 const byFeatured = (a, b) => (b.featured - a.featured) || a.title.localeCompare(b.title);
-const DISCLAIMER = () => L('Ang TEKS ay isang school project. Ang mga laro at media ay pag-aari ng kanilang mga developer; hindi kaugnay ng TEKS ang mga ito at hindi sila ibinebenta ng TEKS.', 'TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them.');
-const demoPrice = () => L('Demo na presyo', 'Demo price');
+const DISCLAIMER = () => L('Ang TEKS ay isang school project. Pag-aari ng mga developer ang mga laro at media; hindi konektado ang TEKS sa kanila at hindi ibinebenta ng TEKS ang mga larong ito.', 'TEKS is a school project. Games and media belong to their developers; TEKS is not affiliated with them and does not sell them.');
+const demoPrice = () => L('Demo price', 'Demo price');
 const COLL_ROUTES = { folklore: ['#D6336C', '#FFFFFF'], 'traditional-games': ['#FFC93C', '#14213D'], history: ['#2F6FED', '#FFFFFF'], 'everyday-life': ['#0E7C7B', '#FFFFFF'] };
 const collStyle = slug => { const [c, i] = COLL_ROUTES[slug] || ['#14213D', '#FFFFFF']; return `--route:${c};--route-ink:${i}`; };
-const devTypeLabel = t => ({ student: L('Grupo ng estudyante', 'Student team'), indie: L('Indie developer', 'Indie developer'), studio: 'Studio' }[t] || '');
+const devTypeLabel = t => ({ student: L('Student team', 'Student team'), indie: L('Indie developer', 'Indie developer'), studio: 'Studio' }[t] || '');
 const PAYMENTS = { gcash: 'GCash', maya: 'Maya', card: 'Card' };
 const fmtWhen = iso => { const d = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(iso || '') ? iso : (iso || '') + 'Z'); return isNaN(d) ? '' : d.toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short' }); };
 
@@ -119,7 +119,7 @@ function applyLang() {
   $$('[data-en]').forEach(el => { el.textContent = lang === 'en' ? el.dataset.en : el.dataset.tl; });
   const b = $('#lang');
   b.textContent = lang === 'en' ? 'EN' : 'TL';
-  b.setAttribute('aria-label', lang === 'en' ? 'Language: English. Switch to Taglish.' : 'Wika: Taglish. Lipat sa English.');
+  b.setAttribute('aria-label', lang === 'en' ? 'Language: English. Switch to Taglish.' : 'Language: Taglish. I-switch sa English.');
   refreshAccountUi();
 }
 
@@ -134,20 +134,20 @@ const platChips = g => `<div class="plats">${(g.platforms || []).map(p => `<span
 const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
 const shortDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '';
 
-const studioName = g => g.tbc ? L('Studio na kukumpirmahin pa', 'Studio to be confirmed') : g.studio;
+const studioName = g => g.tbc ? L('Studio: TBC', 'Studio to be confirmed') : g.studio;
 const studioLink = g => g.studioSlug && !g.tbc ? `<a href="#/studio/${g.studioSlug}">${esc(g.studio)}</a>` : esc(studioName(g));
 /* teks card: framed collectible with Power / Rarity / Series stats; flips to a printed back */
 const power = g => 50 + [...g.id].reduce((s, c) => s + c.charCodeAt(0), 0) % 50;
-const rarity = g => g.price >= 350 ? [L('PAMBIHIRA', 'EPIC'), 'r-super', 3] : g.price >= 150 ? [L('BIHIRA', 'RARE'), 'r-rare', 2] : [L('KARANIWAN', 'COMMON'), '', 1];
+const rarity = g => g.price >= 350 ? [L('EPIC', 'EPIC'), 'r-super', 3] : g.price >= 150 ? [L('RARE', 'RARE'), 'r-rare', 2] : [L('COMMON', 'COMMON'), '', 1];
 const serye = g => String(g.no).padStart(2, '0');
 function cardFace(g, as = 'a', extra = '') {
   const [rLabel, rClass, rLevel] = rarity(g), pw = power(g);
   const open = as === 'a' ? `<a class="teks${extra}" style="--mat:${g.pal[1]};${routeStyle(g)}" href="#/game/${g.id}">` : `<div class="teks" style="--mat:${g.pal[1]};${routeStyle(g)}">`;
   return `${open}
-    <div class="art">${cover(g)}<span class="no">${L('Serye', 'Series')} ${serye(g)}</span><span class="rar ${rClass}">${rLabel}</span></div>
+    <div class="art">${cover(g)}<span class="no">${L('Series', 'Series')} ${serye(g)}</span><span class="rar ${rClass}">${rLabel}</span></div>
     <div class="info"><h3>${esc(g.title)}</h3><p class="studio">${esc(studioName(g))}</p>
-    <dl class="stats"><div><dt>Power</dt><dd>${pw}</dd><div class="pips" aria-hidden="true">${[1, 2, 3, 4, 5].map(i => `<i class="${pw >= 40 + i * 10 ? 'on' : ''}"></i>`).join('')}</div></div><div><dt>${L('Pambihira', 'Rarity')}</dt><dd>${'★'.repeat(rLevel)}${'☆'.repeat(3 - rLevel)}</dd></div><div><dt>${L('Serye', 'Series')}</dt><dd>#${serye(g)}</dd></div></dl>
-    <div class="meta"><span class="tag route">${esc(g.genre)}</span>${owned.includes(g.id) ? `<span class="tag owned">${L('Pag-aari mo na', 'Owned')}</span>` : `<span class="price-wrap"><small class="demo-tag">${demoPrice()}</small><span class="price">${peso(g.price)}</span></span>`}</div></div>
+    <dl class="stats"><div><dt>Power</dt><dd>${pw}</dd><div class="pips" aria-hidden="true">${[1, 2, 3, 4, 5].map(i => `<i class="${pw >= 40 + i * 10 ? 'on' : ''}"></i>`).join('')}</div></div><div><dt>${L('Rarity', 'Rarity')}</dt><dd>${'★'.repeat(rLevel)}${'☆'.repeat(3 - rLevel)}</dd></div><div><dt>${L('Series', 'Series')}</dt><dd>#${serye(g)}</dd></div></dl>
+    <div class="meta"><span class="tag route">${esc(g.genre)}</span>${owned.includes(g.id) ? `<span class="tag owned">${L('Owned', 'Owned')}</span>` : `<span class="price-wrap"><small class="demo-tag">${demoPrice()}</small><span class="price">${peso(g.price)}</span></span>`}</div></div>
   ${as === 'a' ? '</a>' : '</div>'}`;
 }
 /* grid card: tihaya (face up) / taob (face down) flip */
@@ -159,9 +159,9 @@ function teks(g) {
   </div><button class="flipbtn" type="button" aria-pressed="false" data-title="${esc(g.title)}" aria-label="${L('Taob', 'Flip')} ${esc(g.title)}">↻</button></div>`;
 }
 const bigCard = g => `<div class="big-card" style="--mat:${g.pal[1]}">${cardFace(g, 'div')}</div>`;
-const buyBtn = g => owned.includes(g.id) ? `<a class="btn" href="#/collection">${L('Nasa koleksyon mo na', 'In your collection')}</a>`
-  : cart.includes(g.id) ? `<a class="btn" href="#/cart">${L('Nasa cart. Mag-checkout', 'In cart. Check out')}</a>`
-  : `<button class="btn go" type="button" data-buy="${g.id}">${L('Bilhin', 'Buy')} · ${peso(g.price)}</button>`;
+const buyBtn = g => owned.includes(g.id) ? `<a class="btn" href="#/collection">${L('Nasa Collection mo na', 'In your collection')}</a>`
+  : cart.includes(g.id) ? `<a class="btn" href="#/cart">${L('Nasa cart na. Mag-checkout', 'In cart. Check out')}</a>`
+  : `<button class="btn go" type="button" data-buy="${g.id}">${L('Buy', 'Buy')} · ${peso(g.price)}</button>`;
 
 /* click-and-drag scrolling for rails (mouse; touch and wheel scroll natively) */
 function dragScroll(el) {
@@ -208,7 +208,7 @@ function autoScroll(rail, speed = 36) {
 }
 function addToCart(g, anchor) {
   if (cart.includes(g.id) || owned.includes(g.id)) return;
-  cart.push(g.id); saveCart(); toast(L(`${g.title} ay nasa cart na`, `${g.title} added to cart`));
+  cart.push(g.id); saveCart(); toast(L(`Naidagdag sa cart ang ${g.title}`, `${g.title} added to cart`));
 }
 
 /* ---------- views ---------- */
@@ -226,16 +226,16 @@ function heroCopy(g) {
   const logo = !!g.hero && !playClip(g) && matchMedia('(min-width: 761px)').matches;
   const facts = [
     [L('Studio', 'Studio'), esc(studioName(g))],
-    g.released && [L('Petsa ng labas', 'Release date'), fmtDate(g.released)],
+    g.released && [L('Release date', 'Release date'), fmtDate(g.released)],
     [L('Genre', 'Genre'), esc(g.genre)],
-    g.platforms.length && [L('Plataporma', 'Platform'), esc(platLine(g))],
+    g.platforms.length && [L('Platform', 'Platform'), esc(platLine(g))],
   ].filter(Boolean);
   return `<div class="hero-copy${logo ? ' has-logo' : ''}" style="${routeStyle(g)}">
-      <p class="led-label">${L('Tampok na laro', 'Featured game')}</p>
+      <p class="led-label">${L('Featured game', 'Featured game')}</p>
       <h1 class="${logo ? 'sr' : 'led'}">${esc(g.title)}</h1>
       <p class="hero-desc">${esc(g.blurb)}</p>
       <dl class="facts">${facts.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>
-      <div class="actions">${buyBtn(g)}<a class="btn ghost" href="#/game/${g.id}">${L('Detalye', 'Details')}</a></div>
+      <div class="actions">${buyBtn(g)}<a class="btn ghost" href="#/game/${g.id}">${L('Details', 'Details')}</a></div>
     </div>`;
 }
 
@@ -246,13 +246,13 @@ function chartRows() {
   const list = games.filter(g => g.downloads > 0).sort((a, b) => (b.downloads - a.downloads) || a.title.localeCompare(b.title));
   const max = Math.max(...list.map(g => g.downloads), 1);
   return list.slice(0, 8).map((g, i) => `<li class="chart-row" style="${routeStyle(g)}">
-    <span class="rank-n r${i + 1}" aria-label="${L('Ranggo', 'Rank')} ${i + 1}">${i + 1}</span>
+    <span class="rank-n r${i + 1}" aria-label="${L('Rank', 'Rank')} ${i + 1}">${i + 1}</span>
     <a class="c-art" href="#/game/${g.id}" aria-label="${esc(g.title)}">${cover(g)}</a>
     <div class="c-title"><a href="#/game/${g.id}">${esc(g.title)}</a><span class="studio">${esc(studioName(g))}</span><span class="tag route">${esc(g.genre)}</span></div>
     <div class="c-dl"><b>${fmtDl(g.downloads)}</b><small>${L('nabili (demo)', g.downloads === 1 ? 'copy (demo)' : 'copies (demo)')}</small><span class="meter-bar" aria-hidden="true"><i style="width:${Math.max(4, Math.round(g.downloads / max * 100))}%"></i></span></div>
     <div class="c-rate"><small>${esc(platLine(g))}</small></div>
     <span class="c-price">${peso(g.price)}</span>
-    <div class="c-buy">${owned.includes(g.id) ? `<span class="tag owned">${L('Pag-aari', 'Owned')}</span>` : cart.includes(g.id) ? `<a class="btn small" href="#/cart">${L('Sa cart', 'In cart')}</a>` : `<button class="btn small go" type="button" data-chartbuy="${g.id}">${L('Bilhin', 'Buy')}</button>`}</div>
+    <div class="c-buy">${owned.includes(g.id) ? `<span class="tag owned">${L('Owned', 'Owned')}</span>` : cart.includes(g.id) ? `<a class="btn small" href="#/cart">${L('Nasa cart', 'In cart')}</a>` : `<button class="btn small go" type="button" data-chartbuy="${g.id}">${L('Buy', 'Buy')}</button>`}</div>
   </li>`).join('');
 }
 
@@ -261,53 +261,53 @@ function home() {
   const slides = [...games.filter(g => g.featured && g.hero), ...[...games].sort(byFeatured).filter(g => !(g.featured && g.hero))].slice(0, 6);
   const charted = chartRows();
   const pct = Math.round(config.devShare * 100);
-  const arrows = target => `<div class="arrows"><button class="arrow" type="button" data-rail="-1" data-target="${target}" aria-label="${L('Pakaliwa', 'Scroll left')}">←</button><button class="arrow" type="button" data-rail="1" data-target="${target}" aria-label="${L('Pakanan', 'Scroll right')}">→</button></div>`;
+  const arrows = target => `<div class="arrows"><button class="arrow" type="button" data-rail="-1" data-target="${target}" aria-label="${L('Mag-scroll pakaliwa', 'Scroll left')}">←</button><button class="arrow" type="button" data-rail="1" data-target="${target}" aria-label="${L('Mag-scroll pakanan', 'Scroll right')}">→</button></div>`;
   const genreList = config.genres.map(gn => [gn, games.filter(g => g.genre === gn).sort(byFeatured)]).filter(([, gg]) => gg.length);
   const genreTiles = genreList.map(([gn, gg]) => `<a class="cat" style="${routeStyle(gn)}" href="#/store?genre=${encodeURIComponent(gn)}"><div class="cat-art">${cover(gg[0])}</div><span class="cat-name">${esc(gn)}</span><span class="n">${gg.length} ${L('laro', gg.length === 1 ? 'game' : 'games')}</span></a>`).join('');
   const collTiles = collectionTiles();
   return {
     title: 'TEKS: Filipino games, all in one store',
     html: `
-    <section class="hero-full" id="hero" role="region" aria-roledescription="carousel" aria-label="${L('Mga tampok na laro', 'Featured games')}">
+    <section class="hero-full" id="hero" role="region" aria-roledescription="carousel" aria-label="${L('Featured games', 'Featured games')}">
       <div class="hero-bg" id="hero-bg">${heroBg(slides[0], true)}</div>
       <div class="hero-shade"></div>
       <div class="wrap hero-body" id="hero-body" aria-live="polite">${heroCopy(slides[0])}</div>
       <div class="wrap hero-foot">
         <ol class="hero-thumbs">${slides.map((g, i) => `<li><button class="hthumb" type="button" data-dep="${i}" aria-pressed="${i === 0}" aria-label="${esc(g.title)}">
           <span class="th-art">${cover(g)}</span><span class="th-t">${esc(g.title)}</span><span class="th-p">${peso(g.price)}</span></button></li>`).join('')}</ol>
-        <div class="hero-ctrl"><button class="arrow" type="button" id="hero-pause" aria-pressed="false">${L('Ihinto', 'Pause')}</button></div>
+        <div class="hero-ctrl"><button class="arrow" type="button" id="hero-pause" aria-pressed="false">${L('I-pause', 'Pause')}</button></div>
       </div>
     </section>
 
     <section class="section"><div class="wrap wide">
-      <div class="head"><div><span class="eyebrow">${L('Bagong dating', 'New arrivals')}</span><h2>${L('Bagong labas', 'New releases')}</h2><p>${L('Pinakabagong laro sa tindahan.', 'The newest games in the store.')}</p></div>
-        <div class="head-r"><a class="btn alt small" href="#/store">${L(`Lahat ng ${games.length} laro`, `See all ${games.length} games`)}</a>${arrows('rail-new')}</div></div>
-      <div class="rail" id="rail-new" tabindex="0" aria-label="${L('Bagong laro. Mag-scroll pagilid.', 'New games. Scroll sideways.')}">${newest.map(teks).join('')}</div>
+      <div class="head"><div><span class="eyebrow">${L('Bagong dating', 'New arrivals')}</span><h2>${L('New releases', 'New releases')}</h2><p>${L('Ang mga pinakabagong laro sa Store.', 'The newest games in the store.')}</p></div>
+        <div class="head-r"><a class="btn alt small" href="#/store">${L(`Tingnan lahat ng ${games.length} laro`, `See all ${games.length} games`)}</a>${arrows('rail-new')}</div></div>
+      <div class="rail" id="rail-new" tabindex="0" aria-label="${L('Mga bagong laro. Mag-scroll patagilid.', 'New games. Scroll sideways.')}">${newest.map(teks).join('')}</div>
     </div></section>
 
-    <section class="section" style="padding-top:0"><div class="wrap">
-      <div class="head"><div><span class="eyebrow">${L('Mga genre', 'Genres')}</span><h2>${L('Mag-browse ayon sa genre', 'Browse by genre')}</h2><p>${L('Pumili ng uri ng laro na gusto mong laruin.', 'Jump straight to the kind of game you want to play.')}</p></div></div>
+    <section class="band"><div class="wrap">
+      <div>
+        <span class="eyebrow" style="color:var(--yellow)">${L('Para sa mga developer', 'For developers')}</span>
+        <h2>${L(`Magbenta. Sa'yo ang ${pct}%.`, `Sell. Keep ${pct}%.`)}</h2>
+        <p>${L('I-send ang laro mo kasama ang maikling pitch. Ire-review namin ito at sasagot kami sa email. Kapag may bumili, sa\'yo ang malaking bahagi ng benta.', 'Send your game and a short pitch. We review it and reply by email. When someone buys it, most of the sale is yours.')}</p>
+        <div class="actions"><a class="btn go" href="#/developers">${L('Mag-submit ng laro', 'Submit a game')}</a><a class="btn ghost" href="#/about">${L('Bakit TEKS', 'Why TEKS')}</a></div>
+      </div>
+      <div class="meter" aria-hidden="true"><div class="lab">${L('Kikitain mo sa bawat ₱299 na kopya', 'You receive per ₱299 copy')}</div><div class="digits">${peso(Math.round(299 * config.devShare * 100) / 100)}</div></div>
+    </div></section>
+
+    <section class="section"><div class="wrap">
+      <div class="head"><div><span class="eyebrow">${L('Genres', 'Genres')}</span><h2>${L('Mag-browse ayon sa genre', 'Browse by genre')}</h2><p>${L('Diretso na sa klase ng laro na gusto mong laruin.', 'Jump straight to the kind of game you want to play.')}</p></div></div>
       <div class="cats${genreList.length === 6 ? ' six' : ''}">${genreTiles}</div>
     </div></section>
 
     ${collTiles ? `<section class="section" style="padding-top:0"><div class="wrap">
       <div class="head"><div><span class="eyebrow">Pinoy Collections</span><h2>${L('Mag-browse ayon sa kwentong Pinoy', 'Browse by Filipino story')}</h2><p>${L('Alamat, laro sa kalye, kasaysayan, at araw-araw na buhay.', 'Folklore, street games, history and everyday life.')}</p></div>
-        <div class="head-r"><a class="btn alt small" href="#/pinoy">${L('Lahat ng koleksyon', 'All collections')}</a></div></div>
+        <div class="head-r"><a class="btn alt small" href="#/pinoy">${L('Lahat ng collection', 'All collections')}</a></div></div>
       <div class="cats four">${collTiles}</div>
     </div></section>` : ''}
 
-    <section class="band"><div class="wrap">
-      <div>
-        <span class="eyebrow" style="color:var(--yellow)">${L('Para sa mga developer', 'For developers')}</span>
-        <h2>${L(`Magbenta. Itago ang ${pct}%.`, `Sell. Keep ${pct}%.`)}</h2>
-        <p>${L('Ipadala ang laro mo at maikling pitch. Susuriin namin at sasagot sa email. Kapag may bumili, sa iyo ang malaking bahagi.', 'Send your game and a short pitch. We review it and reply by email. When someone buys it, most of the sale is yours.')}</p>
-        <div class="actions"><a class="btn go" href="#/developers">${L('Ipasa ang laro', 'Submit a game')}</a><a class="btn ghost" href="#/about">${L('Bakit TEKS', 'Why TEKS')}</a></div>
-      </div>
-      <div class="meter" aria-hidden="true"><div class="lab">${L('Kita sa bawat kopya ng ₱299', 'You receive per ₱299 copy')}</div><div class="digits">${peso(Math.round(299 * config.devShare * 100) / 100)}</div></div>
-    </div></section>
-
     ${charted ? `<section class="section"><div class="wrap">
-      <div class="head"><div><span class="eyebrow">${L('Ranggo', 'Rankings')}</span><h2>${L('Nabili sa TEKS', 'Bought on TEKS')}</h2><p>${L('Bilang ng kopya mula sa demo checkout ng TEKS. Walang totoong bayad, at hindi ito benta ng mga developer.', 'Copies from TEKS demo checkouts. No real payment is taken, and these are not the developers’ sales.')}</p></div></div>
+      <div class="head"><div><span class="eyebrow">${L('Rankings', 'Rankings')}</span><h2>${L('Nabili sa TEKS', 'Bought on TEKS')}</h2><p>${L('Bilang ng kopya mula sa demo checkout ng TEKS. Walang totoong bayad, at hindi ito benta ng mga developer.', 'Copies from TEKS demo checkouts. No real payment is taken, and these are not the developers’ sales.')}</p></div></div>
       <ol class="chart" id="chart">${charted}</ol>
     </div></section>` : ''}`,
     mount() {
@@ -318,8 +318,8 @@ function home() {
       const setPauseUi = () => {
         root.classList.toggle('paused', userPaused || hold);
         pauseBtn.setAttribute('aria-pressed', userPaused);
-        pauseBtn.textContent = userPaused ? L('Ituloy', 'Play') : L('Ihinto', 'Pause');
-        pauseBtn.setAttribute('aria-label', userPaused ? L('Ituloy ang mga tampok na laro', 'Play the featured games') : L('Ihinto ang mga tampok na laro', 'Pause the featured games'));
+        pauseBtn.textContent = userPaused ? L('I-play', 'Play') : L('I-pause', 'Pause');
+        pauseBtn.setAttribute('aria-label', userPaused ? L('I-play ang featured games', 'Play the featured games') : L('I-pause ang featured games', 'Pause the featured games'));
         const v = $('video', bg); if (v) { if (userPaused) v.pause(); else v.play().catch(() => {}); }
       };
       pauseBtn.addEventListener('click', () => { userPaused = !userPaused; setPauseUi(); });
@@ -345,7 +345,7 @@ $$('[data-rail]').forEach(b => b.addEventListener('click', () => { const r = $('
       $('#chart')?.addEventListener('click', e => {
         const b = e.target.closest('[data-chartbuy]'); if (!b) return;
         addToCart(byId(b.dataset.chartbuy));
-        b.replaceWith(Object.assign(document.createElement('a'), { className: 'btn small', href: '#/cart', textContent: L('Sa cart', 'In cart') }));
+        b.replaceWith(Object.assign(document.createElement('a'), { className: 'btn small', href: '#/cart', textContent: L('Nasa cart', 'In cart') }));
       });
     },
   };
@@ -361,35 +361,35 @@ function storeView(params) {
   const countOf = (key, val) => games.filter(g => key === 'platform' ? (g.platforms || []).includes(val) : g[key] === val).length;
   const group = (key, label, list, route) => `<fieldset class="fgroup"><legend>${label}</legend>${list.map(v =>
     `<label class="check"><input type="checkbox" data-f="${key}" value="${esc(v)}" ${st[key].includes(v) ? 'checked' : ''}>${route ? `<i class="gdot" style="${routeStyle(v)}"></i>` : ''}<span class="lbl">${esc(v)}</span><small>${countOf(key, v)}</small></label>`).join('')}</fieldset>`;
-  const sorts = [['featured', L('Tampok', 'Featured')], ['newest', L('Pinakabago', 'Newest')], ['price-asc', L('Presyo: mababa muna', 'Price: low to high')], ['price-desc', L('Presyo: mataas muna', 'Price: high to low')], ['title', L('Pamagat: A-Z', 'Title: A to Z')]];
+  const sorts = [['featured', L('Featured', 'Featured')], ['newest', L('Pinakabago', 'Newest')], ['price-asc', L('Price: mababa hanggang mataas', 'Price: low to high')], ['price-desc', L('Price: mataas hanggang mababa', 'Price: high to low')], ['title', L('Title: A hanggang Z', 'Title: A to Z')]];
   const html = `
     <section class="store-head"><div class="wide-wrap">
-      <div class="sh-top"><div><span class="eyebrow">${L('Mga laro', 'Games')}</span><h1>${L('Tindahan', 'Store')}</h1></div><p class="sh-count" id="count" aria-live="polite"></p></div>
+      <div class="sh-top"><div><span class="eyebrow">${L('Mga laro', 'Games')}</span><h1>${L('Store', 'Store')}</h1></div><p class="sh-count" id="count" aria-live="polite"></p></div>
       <div class="searchbar" role="search">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-        <input id="q" type="search" autocomplete="off" aria-label="${L('Maghanap ng laro', 'Search games')}" placeholder="${L('Hanapin ang laro, studio, o nilalang...', 'Search games, studios, or creatures...')}" value="${esc(st.q)}">
-        <button type="button" id="q-clear" class="q-clear" aria-label="${L('Burahin ang hinahanap', 'Clear search')}" hidden>×</button>
+        <input id="q" type="search" autocomplete="off" aria-label="${L('Mag-search ng laro', 'Search games')}" placeholder="${L('Mag-search ng laro, studio, o nilalang...', 'Search games, studios, or creatures...')}" value="${esc(st.q)}">
+        <button type="button" id="q-clear" class="q-clear" aria-label="${L('I-clear ang search', 'Clear search')}" hidden>×</button>
         <kbd aria-hidden="true">/</kbd>
       </div>
-      <div class="quick" role="group" aria-label="${L('Mabilis na filter', 'Quick filters')}">
-        <button type="button" class="chip" data-quick="all">${L('Lahat', 'All games')}</button>
+      <div class="quick" role="group" aria-label="${L('Quick filters', 'Quick filters')}">
+        <button type="button" class="chip" data-quick="all">${L('Lahat ng laro', 'All games')}</button>
         <button type="button" class="chip" data-quick="newest">${L('Pinakabago', 'Newest')}</button>
-        <button type="button" class="chip" data-quick="cheap">${L(`Wala pang ${peso(CHEAP)} (demo)`, `Under ${peso(CHEAP)} (demo)`)}</button>
+        <button type="button" class="chip" data-quick="cheap">${L(`${peso(CHEAP)} pababa (demo)`, `${peso(CHEAP)} and below (demo)`)}</button>
       </div>
     </div></section>
     <div class="wide-wrap store-layout">
-      <aside class="store-side" id="side" aria-label="${L('Mga filter', 'Filters')}">
-        <div class="side-head"><h2>${L('Mga filter', 'Filters')}</h2><button type="button" class="linkish" id="clear-all">${L('I-clear lahat', 'Clear all')}</button></div>
+      <aside class="store-side" id="side" aria-label="${L('Filters', 'Filters')}">
+        <div class="side-head"><h2>${L('Filters', 'Filters')}</h2><button type="button" class="linkish" id="clear-all">${L('I-clear lahat', 'Clear all')}</button></div>
         ${group('genre', 'Genre', config.genres, true)}
-        ${group('theme', L('Koleksyon', 'Collection'), config.themes)}
-        ${group('platform', L('Plataporma', 'Platform'), PLATS)}
-        <div class="fgroup"><label class="range-lab" for="price">${L('Pinakamataas na demo na presyo', 'Max demo price')}<b id="price-v"></b></label><input type="range" id="price" min="0" max="${maxP}" step="10" value="${st.price}"></div>
+        ${group('theme', L('Collection', 'Collection'), config.themes)}
+        ${group('platform', L('Platform', 'Platform'), PLATS)}
+        <div class="fgroup"><label class="range-lab" for="price">${L('Pinakamataas na demo price', 'Max demo price')}<b id="price-v"></b></label><input type="range" id="price" min="0" max="${maxP}" step="10" value="${st.price}"></div>
       </aside>
       <div class="store-main">
         <div class="results-bar">
-          <button type="button" class="btn alt small filters-toggle" id="ft" aria-expanded="false" aria-controls="side">${L('Mga filter', 'Filters')}</button>
+          <button type="button" class="btn alt small filters-toggle" id="ft" aria-expanded="false" aria-controls="side">${L('Filters', 'Filters')}</button>
           <div class="active" id="active" aria-live="polite"></div>
-          <label class="sortbox">${L('Ayusin', 'Sort')}<select id="sort">${sorts.map(([v, l]) => `<option value="${v}" ${st.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+          <label class="sortbox">${L('Sort', 'Sort')}<select id="sort">${sorts.map(([v, l]) => `<option value="${v}" ${st.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
         </div>
         <div id="results"></div>
         
@@ -425,10 +425,10 @@ function storeView(params) {
       else list.sort(byFeatured);
       $('#count').textContent = L(`${list.length} sa ${games.length} laro`, `${list.length} of ${games.length} games`);
       $('#results').innerHTML = list.length ? `<div class="cards store-cards">${list.map(teks).join('')}</div>`
-        : `<div class="empty"><h2>${L('Walang tumama', 'No games match')}</h2><p>${L('Subukan ang ibang salita, o alisin ang ilang filter.', 'Try a different word, or remove a few filters.')}</p><button class="btn go" id="clear" type="button">${L('I-clear lahat ng filter', 'Clear all filters')}</button></div>`;
+        : `<div class="empty"><h2>${L('Walang tugmang laro', 'No games match')}</h2><p>${L('Subukan ang ibang salita, o tanggalin ang ilang filter.', 'Try a different word, or remove a few filters.')}</p><button class="btn go" id="clear" type="button">${L('I-clear lahat ng filter', 'Clear all filters')}</button></div>`;
       $('#clear')?.addEventListener('click', () => { reset(); sync(); paint(); });
       const chips = activeChips();
-      $('#active').innerHTML = chips.map(([k, v, label]) => `<button type="button" class="achip" data-rm-k="${k}" data-rm-v="${esc(v)}" aria-label="${L('Alisin ang filter', 'Remove filter')}: ${esc(label)}">${esc(label)} <span aria-hidden="true">×</span></button>`).join('');
+      $('#active').innerHTML = chips.map(([k, v, label]) => `<button type="button" class="achip" data-rm-k="${k}" data-rm-v="${esc(v)}" aria-label="${L('Tanggalin ang filter', 'Remove filter')}: ${esc(label)}">${esc(label)} <span aria-hidden="true">×</span></button>`).join('');
       $('#q-clear').hidden = !st.q;
       $('#price-v').textContent = st.price >= maxP ? L('Kahit magkano', 'Any') : peso(st.price);
       $$('[data-quick]').forEach(b => {
@@ -468,12 +468,12 @@ function storeView(params) {
     $('#ft').addEventListener('click', () => { const open = side.classList.toggle('open'); $('#ft').setAttribute('aria-expanded', open); });
     paint();
   };
-  return { title: L('Tindahan | TEKS', 'Store | TEKS'), html, mount };
+  return { title: L('Store | TEKS', 'Store | TEKS'), html, mount };
 }
 
 /* trailer: a poster button that loads the studio's YouTube upload (youtube-nocookie) only when clicked */
 const trailerBox = g => g.trailer ? `<div class="trailer">
-    <button class="trailer-play" type="button" data-yt="${g.trailer}" data-title="${esc(g.title)}" aria-label="${L(`I-play ang trailer ng ${esc(g.title)} (galing YouTube)`, `Play the ${esc(g.title)} trailer (loads YouTube)`)}">
+    <button class="trailer-play" type="button" data-yt="${g.trailer}" data-title="${esc(g.title)}" aria-label="${L(`I-play ang trailer ng ${esc(g.title)} (maglo-load ang YouTube)`, `Play the ${esc(g.title)} trailer (loads YouTube)`)}">
       ${g.hero ? `<img src="${esc(g.hero)}" alt="" loading="lazy" decoding="async" width="1920" height="1080">` : art(g)}
       <span class="trailer-icon" aria-hidden="true">▶</span><span class="trailer-note">${L('I-play ang trailer · YouTube', 'Play trailer · YouTube')}</span>
     </button></div>` : '';
@@ -493,7 +493,7 @@ function openShot(g, i, opener) {
   const draw = () => {
     const s = g.shots[i];
     d.innerHTML = `<figure class="lb-fig"><img src="${esc(s.src)}" alt="${esc(s.alt)}"><figcaption>${esc(s.alt)} <span class="mono">${i + 1} / ${n}</span></figcaption></figure>
-      <div class="lb-nav">${n > 1 ? `<button class="btn small alt" type="button" data-lb="-1" aria-label="${L('Naunang larawan', 'Previous screenshot')}">←</button><button class="btn small alt" type="button" data-lb="1" aria-label="${L('Susunod na larawan', 'Next screenshot')}">→</button>` : ''}
+      <div class="lb-nav">${n > 1 ? `<button class="btn small alt" type="button" data-lb="-1" aria-label="${L('Nakaraang screenshot', 'Previous screenshot')}">←</button><button class="btn small alt" type="button" data-lb="1" aria-label="${L('Susunod na screenshot', 'Next screenshot')}">→</button>` : ''}
       <form method="dialog"><button class="btn small" type="submit">${L('Isara', 'Close')}</button></form></div>`;
     $$('[data-lb]', d).forEach(b => b.addEventListener('click', () => step(+b.dataset.lb)));
   };
@@ -513,36 +513,36 @@ function gameView(id) {
   const same = games.filter(x => x.id !== g.id && related(x) > 0).sort((a, b) => related(b) - related(a) || byFeatured(a, b)).slice(0, 4);
   const liked = likes.includes(g.id);
   const facts = [
-    g.released && [L('Petsa ng labas', 'Release date'), fmtDate(g.released)],
-    g.platforms.length && [L('Plataporma', 'Platform'), esc(platLine(g))],
+    g.released && [L('Release date', 'Release date'), fmtDate(g.released)],
+    g.platforms.length && [L('Platform', 'Platform'), esc(platLine(g))],
   ].filter(Boolean);
   return {
     title: `${g.title} | TEKS`,
     html: `<div class="wrap" style="${routeStyle(g)}">
-      <p class="crumbs"><a href="#/store">${L('Tindahan', 'Store')}</a> / <a href="#/store?genre=${encodeURIComponent(g.genre)}">${esc(g.genre)}</a> / ${esc(g.title)}</p>
+      <p class="crumbs"><a href="#/store">${L('Store', 'Store')}</a> / <a href="#/store?genre=${encodeURIComponent(g.genre)}">${esc(g.genre)}</a> / ${esc(g.title)}</p>
       <div class="game">
         ${bigCard(g)}
         <div>
           <span class="tag route">${esc(g.genre)}</span> ${g.collection ? `<a class="tag" style="${collStyle(g.collection)}" href="#/pinoy/${g.collection}">${esc(g.theme)}</a>` : ''}
           <h1>${esc(g.title)}</h1>
-          <p class="by">${L('mula sa', 'by')} ${studioLink(g)}</p>
-          ${g.official ? `<p class="official"><a class="btn alt small" href="${esc(g.official)}" target="_blank" rel="noopener noreferrer">${L('Opisyal na pahina', 'Official page')} <span aria-hidden="true">↗</span></a> <small>${L('Bilhin o i-download ang laro mula sa developer.', 'Get the game from its developer.')}</small></p>` : ''}
-          ${g.contentNote ? `<p class="content-note" role="note"><b>${L('Paalala sa nilalaman', 'Content note')}:</b> ${esc(g.contentNote)}</p>` : ''}
+          <p class="by">${L('gawa ng', 'by')} ${studioLink(g)}</p>
+          ${g.official ? `<p class="official"><a class="btn alt small" href="${esc(g.official)}" target="_blank" rel="noopener noreferrer">${L('Official page', 'Official page')} <span aria-hidden="true">↗</span></a> <small>${L('Kunin ang laro sa developer nito.', 'Get the game from its developer.')}</small></p>` : ''}
+          ${g.contentNote ? `<p class="content-note" role="note"><b>${L('Content note', 'Content note')}:</b> ${esc(g.contentNote)}</p>` : ''}
           ${facts.length ? `<dl class="gfacts">${facts.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>` : ''}
           <p>${esc(g.description)}</p>
           <div class="buy"><span class="amount"><small>${demoPrice()}</small>${peso(g.price)}</span>${buyBtn(g)}
-            <button class="btn alt small${liked ? ' liked' : ''}" id="like" type="button" aria-pressed="${liked}">${liked ? L('♥ Gusto ko!', '♥ Liked') : L('♡ Gusto ko', '♡ Like')}</button></div>
-          ${g.highlights.length ? `<h3>${L('Mga tampok', 'Highlights')}</h3><ul class="list">${g.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
+            <button class="btn alt small${liked ? ' liked' : ''}" id="like" type="button" aria-pressed="${liked}">${liked ? L('♥ Liked', '♥ Liked') : L('♡ Like', '♡ Like')}</button></div>
+          ${g.highlights.length ? `<h3>${L('Highlights', 'Highlights')}</h3><ul class="list">${g.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
           ${g.culturalNote ? `<div class="culture"><h3>${L('Tala sa kultura', 'Cultural note')}</h3><p>${esc(g.culturalNote)}</p></div>` : ''}
-          <h3>${L(`Saan mapupunta ang ${peso(g.price)} (demo)`, `Where your ${peso(g.price)} would go (demo)`)}</h3>
+          <h3>${L(`Saan mapupunta ang ${peso(g.price)} mo (demo)`, `Where your ${peso(g.price)} would go (demo)`)}</h3>
           <div class="bar-split" role="img" aria-label="${Math.round(config.devShare * 100)} percent to the developer"><i style="width:${config.devShare * 100}%"></i></div>
-          <p class="split">${L(`Sa demo na ito, ${esc(studioName(g))} ay tatanggap ng ${peso(Math.round(dev * 100) / 100)} at ${peso(Math.round((g.price - dev) * 100) / 100)} ang para sa tindahan. Walang totoong bayad.`, `In this demo, ${esc(studioName(g))} would receive ${peso(Math.round(dev * 100) / 100)} and TEKS would keep ${peso(Math.round((g.price - dev) * 100) / 100)}. No real payment is taken.`)}</p>
+          <p class="split">${L(`Sa demo na ito, makakatanggap ang ${esc(studioName(g))} ng ${peso(Math.round(dev * 100) / 100)}, at ${peso(Math.round((g.price - dev) * 100) / 100)} ang mapupunta sa TEKS. Walang totoong bayad.`, `In this demo, ${esc(studioName(g))} would receive ${peso(Math.round(dev * 100) / 100)} and TEKS would keep ${peso(Math.round((g.price - dev) * 100) / 100)}. No real payment is taken.`)}</p>
           <p class="disclaimer">${DISCLAIMER()}</p>
         </div>
       </div>
-      ${g.trailer || g.shots.length ? `<section class="section media" style="padding-top:0" aria-label="${L('Trailer at mga larawan', 'Trailer and screenshots')}">
+      ${g.trailer || g.shots.length ? `<section class="section media" style="padding-top:0" aria-label="${L('Trailer at screenshots', 'Trailer and screenshots')}">
         ${g.trailer ? `<div class="head"><h2>Trailer</h2></div>${trailerBox(g)}` : ''}
-        ${g.shots.length ? `<div class="head"><h2>${L('Mga larawan', 'Screenshots')}</h2><p>${L('Mula sa developer. Pindutin para lumaki.', 'From the developer. Select one to enlarge it.')}</p></div>
+        ${g.shots.length ? `<div class="head"><h2>${L('Screenshots', 'Screenshots')}</h2><p>${L('Galing sa developer. Pumili ng isa para palakihin.', 'From the developer. Select one to enlarge it.')}</p></div>
           <ul class="shots">${g.shots.map((s, i) => `<li><button type="button" class="shot" data-shot="${i}" aria-label="${L('Palakihin', 'Enlarge')}: ${esc(s.alt)}"><img src="${esc(s.sm)}" alt="${esc(s.alt)}" loading="lazy" decoding="async" width="480" height="270"></button></li>`).join('')}</ul>` : ''}
       </section>` : ''}
       ${same.length ? `<div class="section" style="padding-top:1rem"><div class="head"><h2>${L('Baka magustuhan mo rin', 'You might also like')}</h2></div><div class="cards">${same.map(teks).join('')}</div></div>` : ''}
@@ -554,8 +554,8 @@ function gameView(id) {
       $('#like').addEventListener('click', e => {
         const b = e.currentTarget, on = !likes.includes(g.id);
         likes = on ? [...likes, g.id] : likes.filter(x => x !== g.id); store.set('teks.likes', likes);
-        b.classList.toggle('liked', on); b.setAttribute('aria-pressed', on); b.textContent = on ? L('♥ Gusto ko!', '♥ Liked') : L('♡ Gusto ko', '♡ Like');
-        if (on) toast(L('Nilagay sa paborito', 'Saved to your favorites'));
+        b.classList.toggle('liked', on); b.setAttribute('aria-pressed', on); b.textContent = on ? L('♥ Liked', '♥ Liked') : L('♡ Like', '♡ Like');
+        if (on) toast(L('Na-save sa Favorites mo', 'Saved to your favorites'));
       });
     },
   };
@@ -566,7 +566,7 @@ function cartView() {
   const items = cart.map(byId).filter(Boolean);
   if (!items.length) return {
     title: 'Cart | TEKS',
-    html: `<div class="wrap section"><div class="empty"><h1>${L('Walang laman ang cart', 'Your cart is empty')}</h1><p>${L('Pumili ng laro sa tindahan at lalabas ito dito.', 'Pick a game from the store and it will show up here.')}</p><a class="btn go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div></div>`,
+    html: `<div class="wrap section"><div class="empty"><h1>${L('Wala pang laman ang cart mo', 'Your cart is empty')}</h1><p>${L('Pumili ng laro sa Store at lalabas ito dito.', 'Pick a game from the store and it will show up here.')}</p><a class="btn go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div></div>`,
   };
   const subtotal = items.reduce((s, g) => s + g.price, 0);
   const totals = () => { const discount = promo ? Math.floor(subtotal * promo.percent / 100) : 0; return { discount, total: subtotal - discount }; };
@@ -574,29 +574,29 @@ function cartView() {
     const { discount, total } = totals();
     return `<div class="row"><span>${items.length} ${L('laro', items.length === 1 ? 'game' : 'games')}</span><span>${peso(subtotal)}</span></div>
       ${promo ? `<div class="row"><span>${L('Promo', 'Promo')} ${esc(promo.code)} (−${promo.percent}%)</span><span>−${peso(discount)}</span></div>` : ''}
-      <div class="row"><span>${L('Para sa developer', 'To developers')}</span><span>${peso(Math.round(total * config.devShare * 100) / 100)}</span></div>
-      <div class="row total"><span>${L('Kabuuan (demo)', 'Total (demo)')}</span><span>${peso(total)}</span></div>`;
+      <div class="row"><span>${L('Para sa mga developer', 'To developers')}</span><span>${peso(Math.round(total * config.devShare * 100) / 100)}</span></div>
+      <div class="row total"><span>${L('Total (demo)', 'Total (demo)')}</span><span>${peso(total)}</span></div>`;
   };
-  const placeLabel = () => `${L('Ilagay ang order', 'Place order')} · ${peso(totals().total)}`;
+  const placeLabel = () => `${L('Place order', 'Place order')} · ${peso(totals().total)}`;
   return {
     title: 'Cart | TEKS',
-    html: `<div class="wrap cart"><div><h1 style="font-size:clamp(2rem,4vw,2.8rem);margin-bottom:1.4rem">${L('Mga sasakyan mo', 'Your cart')}</h1>
+    html: `<div class="wrap cart"><div><h1 style="font-size:clamp(2rem,4vw,2.8rem);margin-bottom:1.4rem">${L('Cart mo', 'Your cart')}</h1>
       ${items.map(g => `<div class="line-item" style="${routeStyle(g)}"><a class="thumb" href="#/game/${g.id}" aria-label="${esc(g.title)}">${cover(g)}</a>
-        <div><h3>${esc(g.title)}</h3><p>${esc(studioName(g))} · ${esc(g.genre)}</p><button class="linkish" data-rm="${g.id}" type="button">${L('Alisin', 'Remove')} ${esc(g.title)}</button></div><span class="amount"><small>${demoPrice()}</small>${peso(g.price)}</span></div>`).join('')}
-      <p class="disclaimer">${L('Demo na presyo ang lahat ng presyo. Hindi ibinebenta ng TEKS ang mga larong ito; bilhin ang mga ito sa opisyal na pahina ng developer.', 'All prices are demo prices. TEKS does not sell these games; get them from each developer’s official page.')}</p></div>
-      <aside class="summary" aria-label="${L('Buod ng order', 'Order summary')}"><h2>${L('Buod', 'Order summary')}</h2>
+        <div><h3>${esc(g.title)}</h3><p>${esc(studioName(g))} · ${esc(g.genre)}</p><button class="linkish" data-rm="${g.id}" type="button">${L('Tanggalin', 'Remove')} ${esc(g.title)}</button></div><span class="amount"><small>${demoPrice()}</small>${peso(g.price)}</span></div>`).join('')}
+      <p class="disclaimer">${L('Demo price ang lahat ng presyo. Hindi ibinebenta ng TEKS ang mga larong ito; kunin sila sa official page ng bawat developer.', 'All prices are demo prices. TEKS does not sell these games; get them from each developer’s official page.')}</p></div>
+      <aside class="summary" aria-label="${L('Order summary', 'Order summary')}"><h2>${L('Order summary', 'Order summary')}</h2>
         <div id="sum-rows">${rows()}</div>
         <form id="checkout" novalidate>
           <label class="field" id="f-customer_name">${L('Pangalan', 'Name')}<input name="customer_name" autocomplete="name" value="${esc(user?.name || '')}"><span class="err" role="alert"></span></label>
           <label class="field" id="f-email">Email<input name="email" type="email" autocomplete="email" value="${esc(user?.email || '')}"><span class="err" role="alert"></span></label>
           <label class="field" id="f-mobile">${L('Mobile number', 'Mobile number')}<input name="mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="09171234567"><span class="err" role="alert"></span></label>
-          <fieldset class="field pick" id="f-payment_method"><legend>${L('Paraan ng bayad', 'Payment method')}</legend>
+          <fieldset class="field pick" id="f-payment_method"><legend>${L('Payment method', 'Payment method')}</legend>
             <div class="chips">${Object.entries(PAYMENTS).map(([v, label], i) => `<label class="chip"><input type="radio" name="payment_method" value="${v}"${i === 0 ? ' checked' : ''}>${label}</label>`).join('')}</div>
-            <small>${L('Demo lang: walang hihinging card o account details.', 'Demo only: no card or account details are asked for.')}</small><span class="err" role="alert"></span></fieldset>
-          <div class="field" id="f-promo_code"><label for="promo">${L('Promo code', 'Promo code')} <small>${L('Opsyonal', 'Optional')}</small></label>
-            <div class="promo-row"><input id="promo" name="promo_code" autocomplete="off" autocapitalize="characters" maxlength="20" value="${esc(promo?.code || '')}"><button type="button" class="btn small alt" id="promo-apply">${L('Gamitin', 'Apply')}</button></div><span class="err" role="alert"></span></div>
+            <small>${L('Demo lang ito: hindi kami hihingi ng card o account details.', 'Demo only: no card or account details are asked for.')}</small><span class="err" role="alert"></span></fieldset>
+          <div class="field" id="f-promo_code"><label for="promo">${L('Promo code', 'Promo code')} <small>${L('Optional', 'Optional')}</small></label>
+            <div class="promo-row"><input id="promo" name="promo_code" autocomplete="off" autocapitalize="characters" maxlength="20" value="${esc(promo?.code || '')}"><button type="button" class="btn small alt" id="promo-apply">${L('I-apply', 'Apply')}</button></div><span class="err" role="alert"></span></div>
           <button class="btn go" type="submit" id="place">${placeLabel()}</button>
-          <small>${L('Demo checkout. Walang bayad.', 'Demo checkout. No payment is taken.')}</small>
+          <small>${L('Demo checkout ito. Walang kukuning bayad.', 'Demo checkout. No payment is taken.')}</small>
           <span class="err" id="form-err" role="alert"></span>
         </form></aside></div>`,
     mount() {
@@ -610,8 +610,8 @@ function cartView() {
         if (!code) { promo = null; return redrawTotals(); }
         try {
           const r = await api('/api/promo/' + encodeURIComponent(code));
-          if (r.valid) { promo = { code: code.toUpperCase(), percent: num(r.percent) }; toast(L(`${num(r.percent)}% bawas na`, `${num(r.percent)}% off applied`)); }
-          else { promo = null; promoErr(L('Hindi tanggap ang promo code na iyan.', 'That promo code is not valid.')); }
+          if (r.valid) { promo = { code: code.toUpperCase(), percent: num(r.percent) }; toast(L(`Na-apply ang ${num(r.percent)}% off`, `${num(r.percent)}% off applied`)); }
+          else { promo = null; promoErr(L('Hindi valid ang promo code na iyan.', 'That promo code is not valid.')); }
         } catch (err) { if (!document.body.contains(promoField)) return; promoErr(err.message); }
         if (!document.body.contains(promoField)) return;
         redrawTotals();
@@ -620,7 +620,7 @@ function cartView() {
         e.preventDefault();
         const f = e.target, btn = $('button[type=submit]', f);
         $$('.field', f).forEach(x => { x.classList.remove('bad'); $('.err', x).textContent = ''; }); $('#form-err').textContent = '';
-        btn.disabled = true; btn.textContent = L('Pinoproseso', 'Placing order');
+        btn.disabled = true; btn.textContent = L('Pinoproseso ang order', 'Placing order');
         const body = { customer_name: f.customer_name.value, email: f.email.value, mobile: f.mobile.value, payment_method: f.payment_method.value,
           promo_code: f.promo_code.value.trim() || null, game_ids: items.map(g => g.dbId) };
         try {
@@ -629,7 +629,7 @@ function cartView() {
           if (user) owned = [...new Set([...owned, ...ids])];
           else { localOwned = [...new Set([...localOwned, ...ids])]; owned = localOwned; saveOwned(); }
           cart = []; saveCart(); promo = null;
-          toast(L('Nailagay na ang order', 'Order placed'));
+          toast(L('Na-place na ang order mo', 'Order placed'));
           location.hash = '#/order/' + encodeURIComponent(code);
         } catch (err) {
           if (!document.body.contains(f)) return;
@@ -645,41 +645,41 @@ function cartView() {
 function collectionView() {
   const mine = owned.map(byId).filter(Boolean);
   const favs = likes.map(byId).filter(Boolean);
-  const title = L('Koleksyon ko | TEKS', 'My collection | TEKS');
+  const title = L('Collection ko | TEKS', 'My collection | TEKS');
   if (!mine.length && !favs.length) return {
     title,
-    html: `<div class="wrap section"><div class="empty"><h1>${L('Wala ka pang laro', 'Nothing here yet')}</h1><p>${L('Ang mga larong bibilhin mo ay lalabas dito, at ang mga laro na minarkahan mo ng ♡ ay mapupunta sa Mga paborito. Kumuha ng una sa tindahan.', 'Games you buy show up here, and games you mark with ♡ are saved under Favorites. Pick up your first one in the store.')}</p><a class="btn go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div></div>`,
+    html: `<div class="wrap section"><div class="empty"><h1>${L('Wala pang laman dito', 'Nothing here yet')}</h1><p>${L('Dito lalabas ang mga larong bibilhin mo, at mase-save sa Favorites ang mga larong minarkahan mo ng ♡. Kunin ang una mo sa Store.', 'Games you buy show up here, and games you mark with ♡ are saved under Favorites. Pick up your first one in the store.')}</p><a class="btn go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div></div>`,
   };
   const ownedBlock = mine.length
-    ? `<div class="cards">${mine.map(g => `<div class="owned">${teks(g)}<span class="stamp">${L('Pag-aari', 'Owned')}</span><button class="btn small go" data-play="${g.id}" type="button">${L('Laruin', 'Play')} ${esc(g.title)}</button></div>`).join('')}</div>`
-    : `<div class="coll-empty"><p>${L('Wala ka pang pag-aaring laro.', 'You do not own any games yet.')}</p><a class="btn small go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div>`;
-  const favAction = g => owned.includes(g.id) ? `<span class="tag owned">${L('Pag-aari', 'Owned')}</span>`
+    ? `<div class="cards">${mine.map(g => `<div class="owned">${teks(g)}<span class="stamp">${L('Owned', 'Owned')}</span><button class="btn small go" data-play="${g.id}" type="button">${L('Play', 'Play')} ${esc(g.title)}</button></div>`).join('')}</div>`
+    : `<div class="coll-empty"><p>${L('Wala ka pang nabibiling laro.', 'You do not own any games yet.')}</p><a class="btn small go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div>`;
+  const favAction = g => owned.includes(g.id) ? `<span class="tag owned">${L('Owned', 'Owned')}</span>`
     : cart.includes(g.id) ? `<a class="btn small" href="#/cart">${L('Nasa cart', 'In cart')}</a>`
-    : `<button class="btn small go" type="button" data-favbuy="${g.id}">${L('Bilhin', 'Buy')} · ${peso(g.price)}</button>`;
+    : `<button class="btn small go" type="button" data-favbuy="${g.id}">${L('Buy', 'Buy')} · ${peso(g.price)}</button>`;
   const favBlock = favs.length
-    ? `<div class="cards">${favs.map(g => `<div class="fav">${teks(g)}<div class="fav-actions">${favAction(g)}<button class="btn small alt" type="button" data-unlike="${g.id}" aria-label="${L('Alisin sa paborito', 'Remove from favorites')}: ${esc(g.title)}">♥ ${L('Alisin', 'Remove')}</button></div></div>`).join('')}</div>`
-    : `<div class="coll-empty"><p>${L('Wala pang paborito. Pindutin ang ♡ Gusto ko sa pahina ng laro para i-save ito dito.', 'No favorites yet. Tap ♡ Like on a game page to save it here.')}</p><a class="btn small go" href="#/store">${L('Maghanap ng laro', 'Find a game')}</a></div>`;
+    ? `<div class="cards">${favs.map(g => `<div class="fav">${teks(g)}<div class="fav-actions">${favAction(g)}<button class="btn small alt" type="button" data-unlike="${g.id}" aria-label="${L('Tanggalin sa Favorites', 'Remove from favorites')}: ${esc(g.title)}">♥ ${L('Tanggalin', 'Remove')}</button></div></div>`).join('')}</div>`
+    : `<div class="coll-empty"><p>${L('Wala pang favorites. I-tap ang ♡ Like sa page ng laro para i-save ito dito.', 'No favorites yet. Tap ♡ Like on a game page to save it here.')}</p><a class="btn small go" href="#/store">${L('Maghanap ng laro', 'Find a game')}</a></div>`;
   return {
     title,
-    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Koleksyon', 'Collection')}</span><h1>${L('Koleksyon ko', 'My collection')}</h1>
-        <p>${L(`${mine.length} sa ${games.length} laro ang pag-aari mo · ${favs.length} paborito`, `${mine.length} of ${games.length} games owned · ${favs.length} ${favs.length === 1 ? 'favorite' : 'favorites'}`)}</p>
-        <div class="coll-jump"><button type="button" class="chip" data-jump="owned-sec">${L('Pag-aari', 'Owned')} (${mine.length})</button><button type="button" class="chip" data-jump="fav-sec">♥ ${L('Mga paborito', 'Favorites')} (${favs.length})</button></div></div></section>
-      <section class="section" id="owned-sec"><div class="wrap"><div class="head"><div><h2>${L('Pag-aari', 'Owned')}</h2><p>${L('Mga larong nabili mo na.', 'Games you have bought.')}</p></div></div>${ownedBlock}</div></section>
-      <section class="section" id="fav-sec" style="padding-top:0"><div class="wrap"><div class="head"><div><h2>♥ ${L('Mga paborito', 'Favorites')}</h2><p>${L('Mga larong minarkahan mo ng Gusto ko.', 'Games you marked with Like.')}</p></div></div>${favBlock}</div></section>`,
+    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Collection', 'Collection')}</span><h1>${L('Collection ko', 'My collection')}</h1>
+        <p>${L(`${mine.length} sa ${games.length} laro ang owned mo · ${favs.length} favorites`, `${mine.length} of ${games.length} games owned · ${favs.length} ${favs.length === 1 ? 'favorite' : 'favorites'}`)}</p>
+        <div class="coll-jump"><button type="button" class="chip" data-jump="owned-sec">${L('Owned', 'Owned')} (${mine.length})</button><button type="button" class="chip" data-jump="fav-sec">♥ ${L('Favorites', 'Favorites')} (${favs.length})</button></div></div></section>
+      <section class="section" id="owned-sec"><div class="wrap"><div class="head"><div><h2>${L('Owned', 'Owned')}</h2><p>${L('Mga larong nabili mo na.', 'Games you have bought.')}</p></div></div>${ownedBlock}</div></section>
+      <section class="section" id="fav-sec" style="padding-top:0"><div class="wrap"><div class="head"><div><h2>♥ ${L('Favorites', 'Favorites')}</h2><p>${L('Mga larong ni-like mo.', 'Games you marked with Like.')}</p></div></div>${favBlock}</div></section>`,
     mount() {
       $$('[data-play]').forEach(b => b.addEventListener('click', () => {
         const g = byId(b.dataset.play), d = $('#dlg');
         d.className = g.trailer ? 'wide' : '';
-        d.innerHTML = `<h2>${esc(g.title)}</h2><p>${L('Demo ito kaya hindi nakakabit ang launcher, at hindi ibinebenta ng TEKS ang larong ito. Panoorin ang trailer, o kunin ang laro sa opisyal na pahina nito.', 'This is a demo, so no game launcher is connected, and TEKS does not sell this game. Watch the trailer, or get the game from its official page.')}</p>
+        d.innerHTML = `<h2>${esc(g.title)}</h2><p>${L('Demo lang ito kaya walang naka-connect na game launcher, at hindi ibinebenta ng TEKS ang larong ito. Panoorin ang trailer, o kunin ang laro sa official page nito.', 'This is a demo, so no game launcher is connected, and TEKS does not sell this game. Watch the trailer, or get the game from its official page.')}</p>
           ${trailerBox(g)}
-          <div class="actions">${g.official ? `<a class="btn go" href="${esc(g.official)}" target="_blank" rel="noopener noreferrer">${L('Opisyal na pahina', 'Official page')} <span aria-hidden="true">↗</span></a>` : ''}<form method="dialog"><button class="btn">${L('Isara', 'Close')}</button></form></div>`;
+          <div class="actions">${g.official ? `<a class="btn go" href="${esc(g.official)}" target="_blank" rel="noopener noreferrer">${L('Official page', 'Official page')} <span aria-hidden="true">↗</span></a>` : ''}<form method="dialog"><button class="btn">${L('Isara', 'Close')}</button></form></div>`;
         d.addEventListener('close', () => { d.className = ''; d.innerHTML = ''; }, { once: true });   // stops the video
         bindTrailers(d);
         d.showModal();
       }));
       $$('[data-unlike]').forEach(b => b.addEventListener('click', () => {
         likes = likes.filter(x => x !== b.dataset.unlike); store.set('teks.likes', likes);
-        toast(L('Inalis sa paborito', 'Removed from favorites')); render();
+        toast(L('Tinanggal sa Favorites', 'Removed from favorites')); render();
       }));
       $$('[data-favbuy]').forEach(b => b.addEventListener('click', () => { addToCart(byId(b.dataset.favbuy)); render(); }));
       $$('[data-jump]').forEach(b => b.addEventListener('click', () => $('#' + b.dataset.jump).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })));
@@ -691,50 +691,50 @@ function developersView() {
   const pct = Math.round(config.devShare * 100);
   const isDev = user?.role === 'developer';
   const gate = user
-    ? `<div class="box gate"><h2>${L('Para sa developer account lang', 'Developer accounts only')}</h2><p>${L(`Naka-sign in ka bilang customer (${esc(user.name)}). Gumawa ng developer account para makapagpasa ng laro.`, `You are signed in as a customer (${esc(user.name)}). Create a developer account to submit a game.`)}</p><div class="actions"><button class="btn go" type="button" data-gate="switch">${L('Mag-sign out at gumawa ng developer account', 'Sign out and create a developer account')}</button></div></div>`
-    : `<div class="box gate"><h2>${L('Mag-sign in para magpasa ng laro', 'Sign in to submit a game')}</h2><p>${L('Kailangan ng developer account para makapagpasa ng laro at masubaybayan ang studio mo.', 'You need a developer account to submit a game and follow your studio.')}</p><div class="actions"><a class="btn go" href="#/account?role=developer&next=/developers">${L('Mag-sign in bilang developer', 'Sign in as a developer')}</a><a class="btn alt" href="#/account?mode=signup&role=developer&next=/developers">${L('Gumawa ng developer account', 'Create a developer account')}</a></div></div>`;
+    ? `<div class="box gate"><h2>${L('Para lang sa developer accounts', 'Developer accounts only')}</h2><p>${L(`Naka-sign in ka bilang customer (${esc(user.name)}). Gumawa ng developer account para makapag-submit ng laro.`, `You are signed in as a customer (${esc(user.name)}). Create a developer account to submit a game.`)}</p><div class="actions"><button class="btn go" type="button" data-gate="switch">${L('Mag-sign out at gumawa ng developer account', 'Sign out and create a developer account')}</button></div></div>`
+    : `<div class="box gate"><h2>${L('Mag-sign in para makapag-submit ng laro', 'Sign in to submit a game')}</h2><p>${L('Kailangan mo ng developer account para makapag-submit ng laro at masubaybayan ang studio mo.', 'You need a developer account to submit a game and follow your studio.')}</p><div class="actions"><a class="btn go" href="#/account?role=developer&next=/developers">${L('Mag-sign in bilang developer', 'Sign in as a developer')}</a><a class="btn alt" href="#/account?mode=signup&role=developer&next=/developers">${L('Gumawa ng developer account', 'Create a developer account')}</a></div></div>`;
   return {
-    title: L('Magbenta | TEKS', 'Sell a game | TEKS'),
-    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Para sa mga developer', 'For developers')}</span><h1>${L('Ibenta ang laro mo', 'Sell your game on TEKS')}</h1><p>${L(`Maabot ang mga manlalarong naghahanap ng larong gawang Pinoy, at itago ang ${pct}% ng bawat benta.`, `Reach players who are looking for Filipino-made games, and keep ${pct}% of every sale.`)}</p></div></section>
+    title: L('Magbenta ng laro | TEKS', 'Sell a game | TEKS'),
+    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Para sa mga developer', 'For developers')}</span><h1>${L('Ibenta ang laro mo sa TEKS', 'Sell your game on TEKS')}</h1><p>${L(`Abutin ang mga player na naghahanap ng larong gawang Pinoy, at sa'yo ang ${pct}% ng bawat benta.`, `Reach players who are looking for Filipino-made games, and keep ${pct}% of every sale.`)}</p></div></section>
     <div class="wrap section"><div class="two" style="align-items:start">
-      ${isDev ? `<div class="box"><h2>${L('Ipasa ang laro', 'Submit a game')}</h2>
+      ${isDev ? `<div class="box"><h2>${L('Mag-submit ng laro', 'Submit a game')}</h2>
         <form class="form" id="submit" novalidate>
           <div class="pair">
             <label class="field" id="f-studio_name">${L('Studio o developer', 'Studio or developer')}<input name="studio_name" autocomplete="organization" value="${esc(user?.studio || '')}"><span class="err" role="alert"></span></label>
-            <label class="field" id="f-email">${L('Email para sa contact', 'Contact email')}<input name="email" type="email" autocomplete="email" value="${esc(user?.email || '')}"><span class="err" role="alert"></span></label>
+            <label class="field" id="f-email">${L('Contact email', 'Contact email')}<input name="email" type="email" autocomplete="email" value="${esc(user?.email || '')}"><span class="err" role="alert"></span></label>
           </div>
-          <label class="field" id="f-game_title">${L('Pamagat ng laro', 'Game title')}<input name="game_title" maxlength="80"><span class="err" role="alert"></span></label>
+          <label class="field" id="f-game_title">${L('Title ng laro', 'Game title')}<input name="game_title" maxlength="80"><span class="err" role="alert"></span></label>
           <div class="pair">
-            <label class="field" id="f-genre">Genre<select name="genre"><option value="">${L('Pumili', 'Choose one')}</option>${config.genres.map(x => `<option>${esc(x)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
-            <label class="field" id="f-collection">${L('Koleksyon', 'Collection')} <small>${L('Opsyonal', 'Optional')}</small><select name="collection"><option value="">${L('Wala sa mga ito', 'None of these')}</option>${config.collections.map(c => `<option value="${c.slug}">${esc(c.title)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
+            <label class="field" id="f-genre">Genre<select name="genre"><option value="">${L('Pumili ng isa', 'Choose one')}</option>${config.genres.map(x => `<option>${esc(x)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
+            <label class="field" id="f-collection">${L('Collection', 'Collection')} <small>${L('Optional', 'Optional')}</small><select name="collection"><option value="">${L('Wala sa mga ito', 'None of these')}</option>${config.collections.map(c => `<option value="${c.slug}">${esc(c.title)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
           </div>
           <div class="pair">
-            <label class="field" id="f-developer_type">${L('Uri ng developer', 'Developer type')}<select name="developer_type"><option value="">${L('Pumili', 'Choose one')}</option>${['student', 'indie', 'studio'].map(t => `<option value="${t}">${devTypeLabel(t)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
-            <label class="field" id="f-price">${L('Presyo sa piso', 'Price in pesos')}<input name="price" type="number" min="0" max="5000" step="1" value="199"><span class="err" role="alert"></span></label>
+            <label class="field" id="f-developer_type">${L('Uri ng developer', 'Developer type')}<select name="developer_type"><option value="">${L('Pumili ng isa', 'Choose one')}</option>${['student', 'indie', 'studio'].map(t => `<option value="${t}">${devTypeLabel(t)}</option>`).join('')}</select><span class="err" role="alert"></span></label>
+            <label class="field" id="f-price">${L('Price (sa piso)', 'Price in pesos')}<input name="price" type="number" min="0" max="5000" step="1" value="199"><span class="err" role="alert"></span></label>
           </div>
-          <fieldset class="field pick" id="f-platforms"><legend>${L('Plataporma', 'Platforms')}</legend>
+          <fieldset class="field pick" id="f-platforms"><legend>${L('Platforms', 'Platforms')}</legend>
             <div class="chips">${config.platforms.map(p => `<label class="chip"><input type="checkbox" name="platforms" value="${esc(p)}"${p === 'PC' ? ' checked' : ''}>${esc(p)}</label>`).join('')}</div><span class="err" role="alert"></span></fieldset>
-          <label class="field" id="f-description">${L('Maikling pitch', 'Short pitch')} <small>${L('Hindi bababa sa 20 character', 'At least 20 characters')}</small><textarea name="description" rows="4" maxlength="2000" placeholder="${L('Tungkol saan ang laro, at anong bahagi ng buhay o kwentong Pilipino ang pinagmulan?', 'What is the game, and which part of Filipino life or story does it draw on?')}"></textarea><span class="err" role="alert"></span></label>
-          <label class="field" id="f-build_url">${L('Link ng build o trailer', 'Playable build or trailer link')}<input name="build_url" type="url" maxlength="300" placeholder="https://"><span class="err" role="alert"></span></label>
-          <button class="btn go" type="submit">${L('Ipadala para i-review', 'Send for review')}</button>
+          <label class="field" id="f-description">${L('Maikling pitch', 'Short pitch')} <small>${L('Hindi bababa sa 20 characters', 'At least 20 characters')}</small><textarea name="description" rows="4" maxlength="2000" placeholder="${L('Tungkol saan ang laro, at anong bahagi ng buhay o kwentong Pinoy ang pinaghugutan nito?', 'What is the game, and which part of Filipino life or story does it draw on?')}"></textarea><span class="err" role="alert"></span></label>
+          <label class="field" id="f-build_url">${L('Link ng playable build o trailer', 'Playable build or trailer link')}<input name="build_url" type="url" maxlength="300" placeholder="https://"><span class="err" role="alert"></span></label>
+          <button class="btn go" type="submit">${L('I-send para ma-review', 'Send for review')}</button>
           <span class="err" id="form-err" role="alert"></span>
           <p id="ok" role="status"></p>
         </form></div>` : gate}
       <div style="display:grid;gap:1.5rem">
         <div class="box dark calc"><h2>${L('Magkano ang kikitain mo', 'What you earn')}</h2>
-          <label class="field" for="cp">${L('Presyo', 'Price')}: <span id="cpv"></span></label>
+          <label class="field" for="cp">${L('Price', 'Price')}: <span id="cpv"></span></label>
           <input id="cp" type="range" min="49" max="999" step="10" value="299">
-          <div class="meter" style="margin-top:1rem"><div class="lab">${L('Sa bawat kopya', 'Per copy you receive')}</div><div class="digits" id="cdev"></div></div>
+          <div class="meter" style="margin-top:1rem"><div class="lab">${L('Kikitain mo bawat kopya', 'Per copy you receive')}</div><div class="digits" id="cdev"></div></div>
           <p style="margin:1rem 0 0" id="c100"></p></div>
         <div class="box"><h2>${L('Paano ito gumagana', 'How it works')}</h2>
-          <ol class="steps"><li>${L('Ipasa ang laro at maikling pitch.', 'Submit your game with a short pitch.')}</li><li>${L('Susuriin namin ang build at sasagot sa email.', 'We check the build and reply by email.')}</li><li>${L('Lalabas ang laro sa tindahan at makikita ang benta sa studio mo.', 'Your game goes in the store, and sales show up under your studio.')}</li></ol>
+          <ol class="steps"><li>${L('I-submit ang laro mo kasama ang maikling pitch.', 'Submit your game with a short pitch.')}</li><li>${L('Iche-check namin ang build at sasagot kami sa email.', 'We check the build and reply by email.')}</li><li>${L('Ilalagay ang laro mo sa Store, at makikita ang sales sa ilalim ng studio mo.', 'Your game goes in the store, and sales show up under your studio.')}</li></ol>
           <p class="split">${L('May tanong muna?', 'Questions first?')} <a href="#/contact?type=developer">${L('Kausapin kami', 'Contact us')}</a></p></div>
       </div></div></div>`,
     mount() {
       const calc = () => {
         const p = +$('#cp').value;
         $('#cpv').textContent = peso(p); $('#cdev').textContent = peso(Math.round(p * config.devShare * 100) / 100);
-        $('#c100').textContent = L(`Kapag nakabenta ng 100 kopya, ${peso(Math.round(p * config.devShare * 10000) / 100)} ang makukuha mo.`, `Sell 100 copies and you receive ${peso(Math.round(p * config.devShare * 10000) / 100)}.`);
+        $('#c100').textContent = L(`Kapag nakabenta ka ng 100 kopya, ${peso(Math.round(p * config.devShare * 10000) / 100)} ang matatanggap mo.`, `Sell 100 copies and you receive ${peso(Math.round(p * config.devShare * 10000) / 100)}.`);
       };
       $('#cp').addEventListener('input', calc); calc();
       $('[data-gate=switch]')?.addEventListener('click', async () => { await signOut(); location.hash = '#/account?mode=signup&role=developer&next=/developers'; });
@@ -742,7 +742,7 @@ function developersView() {
         e.preventDefault();
         const f = e.target, btn = $('button[type=submit]', f);
         $$('.field', f).forEach(x => { x.classList.remove('bad'); $('.err', x).textContent = ''; }); $('#form-err').textContent = ''; $('#ok').textContent = '';
-        btn.disabled = true; btn.textContent = L('Ipinapadala', 'Sending');
+        btn.disabled = true; btn.textContent = L('Sine-send', 'Sending');
         const fd = new FormData(f), price = String(fd.get('price') ?? '').trim();
         const body = { studio_name: fd.get('studio_name'), email: fd.get('email'), game_title: fd.get('game_title'), genre: fd.get('genre'),
           developer_type: fd.get('developer_type'), collection: fd.get('collection') || null, platforms: fd.getAll('platforms'),
@@ -750,14 +750,14 @@ function developersView() {
         try {
           const r = await api('/api/submissions', { method: 'POST', body });
           if (!document.body.contains(f)) return;
-          f.reset(); toast(L('Natanggap na', 'Submission received'));
-          $('#ok').textContent = L(`Natanggap. Ang reference mo ay #${r.id}. Mag-eemail kami pagkatapos ng review.`, `Received. Your reference is #${r.id}. We will email you after review.`);
+          f.reset(); toast(L('Natanggap na ang submission', 'Submission received'));
+          $('#ok').textContent = L(`Natanggap na. Ang reference mo ay #${r.id}. Ie-email ka namin pagkatapos ng review.`, `Received. Your reference is #${r.id}. We will email you after review.`);
         } catch (err) {
           if (!document.body.contains(f)) return;
           const fld = err.field && $('#f-' + err.field);
           if (fld) { fld.classList.add('bad'); $('.err', fld).textContent = err.message; $('input,select,textarea', fld)?.focus(); } else $('#form-err').textContent = err.message;
         }
-        btn.disabled = false; btn.textContent = L('Ipadala para i-review', 'Send for review');
+        btn.disabled = false; btn.textContent = L('I-send para ma-review', 'Send for review');
       });
     },
   };
@@ -766,7 +766,7 @@ function developersView() {
 /* ---------- accounts: customers and developers ---------- */
 function refreshAccountUi() {
   const a = $('#acct'); if (!a) return;
-  a.textContent = user ? user.name.split(' ')[0] : L('Mag-sign in', 'Sign in');
+  a.textContent = user ? user.name.split(' ')[0] : L('Sign in', 'Sign in');
   a.classList.toggle('in', !!user);
   a.setAttribute('aria-label', user ? L(`Account ni ${user.name}`, `Account: ${user.name}`) : L('Mag-sign in o gumawa ng account', 'Sign in or create an account'));
 }
@@ -785,7 +785,7 @@ function sessionEnded() {   // the server says our session is over (expired or s
   if (!token) return;
   clearToken();
   const had = !!user; user = null; owned = localOwned; refreshAccountUi();
-  if (had) { toast(L('Natapos na ang session mo. Mag-sign in ulit.', 'Your session ended. Please sign in again.')); if (games.length) render(true); }
+  if (had) { toast(L('Tapos na ang session mo. Paki-sign in ulit.', 'Your session ended. Please sign in again.')); if (games.length) render(true); }
 }
 async function validateSession() {
   if (!token) return;
@@ -805,42 +805,42 @@ function accountView(params) {
       <div class="auth-bg" aria-hidden="true"><div class="auth-bg-grid">${tiles}</div></div>
       <div class="auth-shell"><div class="auth-panel">
         <div class="auth-main">
-          <h1>${signup ? L('Gumawa ng account', 'Create account') : L('Mag-sign in', 'Sign in')}</h1>
-          <p class="auth-lead">${signup ? L('Sumali sa TEKS at simulan ang koleksyon mo.', 'Join TEKS and start your collection.') : L('Maligayang pagbabalik. Ituloy kung saan ka huminto.', 'Welcome back. Pick up where you left off.')}</p>
+          <h1>${signup ? L('Gumawa ng account', 'Create account') : L('Sign in', 'Sign in')}</h1>
+          <p class="auth-lead">${signup ? L('Sumali sa TEKS at simulan ang Collection mo.', 'Join TEKS and start your collection.') : L('Welcome back. Ituloy kung saan ka huminto.', 'Welcome back. Pick up where you left off.')}</p>
           <div class="role-block">
             <div class="role-pick" role="radiogroup" aria-label="${L('Ako ay', 'I am a')}">${pill('customer', 'Customer')}${pill('developer', 'Developer')}</div></div>
           <form id="auth-form" novalidate>
-            ${signup ? `<label class="field" id="f-name">${L('Pangalan', 'Your name')}<input name="name" autocomplete="name" value="${esc(st.name)}"><span class="err" role="alert"></span></label>` : ''}
+            ${signup ? `<label class="field" id="f-name">${L('Pangalan mo', 'Your name')}<input name="name" autocomplete="name" value="${esc(st.name)}"><span class="err" role="alert"></span></label>` : ''}
             ${signup && dev ? `<label class="field" id="f-studio">${L('Studio o developer', 'Studio or developer')}<input name="studio" autocomplete="organization" value="${esc(st.studio)}"><span class="err" role="alert"></span></label>` : ''}
             <label class="field" id="f-email">Email<input name="email" type="email" autocomplete="email" value="${esc(st.email)}"><span class="err" role="alert"></span></label>
             <div class="field" id="f-password"><label for="pw">Password</label>
               <div class="pw"><input id="pw" name="password" type="password" autocomplete="${signup ? 'new-password' : 'current-password'}"><button type="button" class="pw-toggle" aria-pressed="false">${L('Ipakita', 'Show')}</button></div>
-              ${signup ? `<small>${L('Hindi bababa sa 8 character.', 'At least 8 characters.')}</small>` : ''}<span class="err" role="alert"></span></div>
+              ${signup ? `<small>${L('Hindi bababa sa 8 characters.', 'At least 8 characters.')}</small>` : ''}<span class="err" role="alert"></span></div>
             <div class="form-row">
               <label class="remember"><input type="checkbox" name="remember" checked> ${L('Tandaan ako', 'Remember me')}</label>
               <button type="button" class="help-link" data-help>${L('Kailangan ng tulong?', 'Need help?')}</button>
             </div>
-            <button class="btn go" type="submit">${signup ? L('Gumawa ng account', 'Create account') : L('Mag-sign in', 'Sign in')}</button>
+            <button class="btn go" type="submit">${signup ? L('Gumawa ng account', 'Create account') : L('Sign in', 'Sign in')}</button>
             <span class="err" id="form-err" role="alert"></span>
           </form>
           <div class="auth-or" aria-hidden="true"><span>${L('o', 'or')}</span></div>
           <div class="auth-alt">
             <button type="button" class="alt-btn" data-mode="${signup ? 'login' : 'signup'}">${signup ? L('May account na ako', 'I already have an account') : L('Gumawa ng account', 'Create an account')}</button>
-            <button type="button" class="alt-btn quiet" data-guest>${L('Magpatuloy bilang bisita', 'Continue as guest')}</button>
+            <button type="button" class="alt-btn quiet" data-guest>${L('Magpatuloy bilang guest', 'Continue as guest')}</button>
           </div>
         </div>
         <aside class="auth-card-col">
-          <button type="button" class="lang-btn auth-lang" id="lang2" aria-label="${lang === 'en' ? 'Language: English. Switch to Taglish.' : 'Wika: Taglish. Lipat sa English.'}">${lang === 'en' ? 'EN' : 'TL'}</button>
+          <button type="button" class="lang-btn auth-lang" id="lang2" aria-label="${lang === 'en' ? 'Language: English. Switch to Taglish.' : 'Language: Taglish. I-switch sa English.'}">${lang === 'en' ? 'EN' : 'TL'}</button>
           <span class="logo static auth-logo"><span class="logo-img" role="img" aria-label="TEKS"></span></span>
           <div class="id-card ${dev ? 'dev' : 'cust'}" aria-hidden="true">
-            <div class="id-art"><span class="id-no" id="id-no">No. 000</span><span class="id-avatar" id="id-avatar">?</span><span class="id-rar">${dev ? L('TAGAGAWA', 'CREATOR') : L('MANLALARO', 'PLAYER')}</span></div>
+            <div class="id-art"><span class="id-no" id="id-no">No. 000</span><span class="id-avatar" id="id-avatar">?</span><span class="id-rar">${dev ? L('CREATOR', 'CREATOR') : L('PLAYER', 'PLAYER')}</span></div>
             <div class="id-info"><h3 id="id-name">${L('Pangalan mo', 'Your name')}</h3><p class="id-sub" id="id-sub">${dev ? L('Studio mo', 'Your studio') : 'Customer'}</p>
-              <dl class="stats"><div><dt>${L('Uri', 'Role')}</dt><dd>${dev ? 'Dev' : 'Player'}</dd></div><div><dt>${L('Laro', 'Games')}</dt><dd>0</dd></div><div><dt>${L('Mula', 'Since')}</dt><dd>${new Date().getFullYear()}</dd></div></dl></div>
+              <dl class="stats"><div><dt>${L('Role', 'Role')}</dt><dd>${dev ? 'Dev' : 'Player'}</dd></div><div><dt>${L('Laro', 'Games')}</dt><dd>0</dd></div><div><dt>${L('Mula', 'Since')}</dt><dd>${new Date().getFullYear()}</dd></div></dl></div>
           </div>
-          <p class="auth-card-note">${L('Napupunan ang card habang nagta-type ka. Bawat account ay may sariling numero ng serye.', 'Your card fills in as you type. Every account gets its own series number.')}</p>
+          <p class="auth-card-note">${L('Napupunan ang card habang nagta-type ka. May sariling series number ang bawat account.', 'Your card fills in as you type. Every account gets its own series number.')}</p>
         </aside>
       </div></div>
-      <button type="button" class="scroll-cue" data-scroll-about>${L('Alamin ang TEKS', 'Learn about TEKS')} <span aria-hidden="true">↓</span></button>
+      <button type="button" class="scroll-cue" data-scroll-about>${L('Alamin ang tungkol sa TEKS', 'Learn about TEKS')} <span aria-hidden="true">↓</span></button>
     </section>`;
   };
   const mount = () => {
@@ -863,7 +863,7 @@ function accountView(params) {
       $('[data-scroll-about]').addEventListener('click', () => $('#auth-about').scrollIntoView({ behavior: smooth(), block: 'start' }));
       $('[data-help]').addEventListener('click', () => {
         const d = $('#dlg');
-        d.innerHTML = `<h2>${L('Hindi makapag-sign in?', 'Can\u2019t sign in?')}</h2><p>${L('Wala pang pag-reset ng password. Magpadala ng mensahe sa pahinang Kontak, gumawa ng bagong account gamit ang ibang email, o magpatuloy bilang bisita.', 'Password reset is not available yet. Send us a message from the Contact page, create a new account with another email, or continue as a guest.')}</p><form method="dialog"><button class="btn">${L('Sige', 'OK')}</button></form>`;
+        d.innerHTML = `<h2>${L('Hindi makapag-sign in?', 'Can\u2019t sign in?')}</h2><p>${L('Wala pang password reset sa ngayon. Mag-message sa amin sa Contact page, gumawa ng bagong account gamit ang ibang email, o magpatuloy bilang guest.', 'Password reset is not available yet. Send us a message from the Contact page, create a new account with another email, or continue as a guest.')}</p><form method="dialog"><button class="btn">${L('Sige', 'OK')}</button></form>`;
         d.showModal();
       });
       const tog = $('.pw-toggle');
@@ -879,7 +879,7 @@ function accountView(params) {
           const r = await api('/api/auth/' + (st.mode === 'signup' ? 'signup' : 'login'), { method: 'POST', body: { role: st.role, remember: f.elements.remember.checked, name: v('name'), studio: v('studio'), email: v('email'), password: v('password') } });
           setSession(r.token, r.user, f.elements.remember.checked);
           await loadLibrary();
-          toast(L(`Maligayang pagdating, ${r.user.name.split(' ')[0]}`, `Welcome, ${r.user.name.split(' ')[0]}`));
+          toast(L(`Welcome, ${r.user.name.split(' ')[0]}`, `Welcome, ${r.user.name.split(' ')[0]}`));
           location.hash = next ? '#' + next : r.user.role === 'developer' ? '#/developers' : '#/';
         } catch (err) {
           const fld = err.field && $('#f-' + err.field);
@@ -898,7 +898,7 @@ function accountView(params) {
       redraw(); window.scrollTo({ top: 0, behavior: smooth() }); setTimeout(() => $('#auth-form input')?.focus({ preventScroll: true }), 300);
     }));
   };
-  return { title: L('Mag-sign in | TEKS', 'Sign in | TEKS'), html: `<div id="auth-root">${body()}</div><section id="auth-about" class="auth-about-wrap" aria-label="${L('Tungkol sa TEKS', 'About TEKS')}">${aboutView(true).html}</section>`, mount, auth: true };
+  return { title: L('Sign in | TEKS', 'Sign in | TEKS'), html: `<div id="auth-root">${body()}</div><section id="auth-about" class="auth-about-wrap" aria-label="${L('Tungkol sa TEKS', 'About TEKS')}">${aboutView(true).html}</section>`, mount, auth: true };
 }
 
 function accountHome() {
@@ -906,19 +906,19 @@ function accountHome() {
   const mine = dev ? games.filter(g => !g.tbc && g.studio.toLowerCase() === (user.studio || '').toLowerCase()) : [];
   const dl = mine.reduce((s, g) => s + (g.downloads || 0), 0);
   const card = dev ? `<div class="box"><h2>${esc(user.studio)}</h2>
-      <p>${mine.length ? L(`${mine.length} laro sa tindahan, ${dl.toLocaleString('en-US')} na nabili sa demo checkout.`, `${mine.length} ${mine.length === 1 ? 'game' : 'games'} in the store, ${dl.toLocaleString('en-US')} copies from demo checkouts.`) : L('Wala pang laro sa tindahan sa ilalim ng pangalan ng studio mo.', 'No games in the store yet under your studio name.')}</p>
+      <p>${mine.length ? L(`${mine.length} laro sa Store, ${dl.toLocaleString('en-US')} kopya mula sa demo checkouts.`, `${mine.length} ${mine.length === 1 ? 'game' : 'games'} in the store, ${dl.toLocaleString('en-US')} copies from demo checkouts.`) : L('Wala pang laro sa Store sa ilalim ng pangalan ng studio mo.', 'No games in the store yet under your studio name.')}</p>
       ${mine.length ? `<ul class="list">${mine.map(g => `<li><a href="#/game/${g.id}">${esc(g.title)}</a> · ${(g.downloads || 0).toLocaleString('en-US')}</li>`).join('')}</ul>` : ''}
-      <div class="actions"><a class="btn go" href="#/developers">${L('Ipasa ang laro', 'Submit a game')}</a></div></div>`
-    : `<div class="box"><h2>${L('Koleksyon mo', 'Your collection')}</h2>
-      <p>${L(`${owned.length} sa ${games.length} laro ang nasa koleksyon mo.`, `${owned.length} of ${games.length} games collected.`)}</p>
-      <div class="actions"><a class="btn go" href="#/collection">${L('Buksan ang koleksyon', 'Open collection')}</a><a class="btn alt" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div></div>`;
+      <div class="actions"><a class="btn go" href="#/developers">${L('Mag-submit ng laro', 'Submit a game')}</a></div></div>`
+    : `<div class="box"><h2>${L('Collection mo', 'Your collection')}</h2>
+      <p>${L(`${owned.length} sa ${games.length} laro ang nasa Collection mo.`, `${owned.length} of ${games.length} games collected.`)}</p>
+      <div class="actions"><a class="btn go" href="#/collection">${L('Buksan ang Collection', 'Open collection')}</a><a class="btn alt" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div></div>`;
   return {
     title: L('Account ko | TEKS', 'My account | TEKS'),
     html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${dev ? 'Developer' : 'Customer'}</span><h1>${L('Kumusta', 'Hi')}, ${esc(user.name.split(' ')[0])}</h1><p>${esc(user.email)}</p></div></section>
       <div class="wrap section"><div class="two" style="align-items:start">${card}
-        <div class="box"><h2>${L('Detalye ng account', 'Account details')}</h2>
-          <dl class="acct-dl"><div><dt>${L('Pangalan', 'Name')}</dt><dd>${esc(user.name)}</dd></div><div><dt>Email</dt><dd>${esc(user.email)}</dd></div><div><dt>${L('Uri', 'Account type')}</dt><dd>${dev ? 'Developer' : 'Customer'}</dd></div>${dev ? `<div><dt>Studio</dt><dd>${esc(user.studio)}</dd></div>` : ''}</dl>
-          <button class="btn alt" id="signout" type="button">${L('Mag-sign out', 'Sign out')}</button></div></div></div>`,
+        <div class="box"><h2>${L('Account details', 'Account details')}</h2>
+          <dl class="acct-dl"><div><dt>${L('Pangalan', 'Name')}</dt><dd>${esc(user.name)}</dd></div><div><dt>Email</dt><dd>${esc(user.email)}</dd></div><div><dt>${L('Account type', 'Account type')}</dt><dd>${dev ? 'Developer' : 'Customer'}</dd></div>${dev ? `<div><dt>Studio</dt><dd>${esc(user.studio)}</dd></div>` : ''}</dl>
+          <button class="btn alt" id="signout" type="button">${L('Sign out', 'Sign out')}</button></div></div></div>`,
     mount() { $('#signout').addEventListener('click', async () => { await signOut(); toast(L('Naka-sign out ka na', 'You are signed out')); render(false); }); },
   };
 }
@@ -932,28 +932,28 @@ function aboutView(embedded = false) {   // embedded: shown under the sign-in sc
   const stat = (n, label) => `<div class="ab-stat"><b>${n}</b><span>${label}</span></div>`;
   const icon = d => `<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const faq = [
-    [L('Totoong tindahan ba ito?', 'Is this a real store?'), `${DISCLAIMER()} ${L('Demo na presyo ang mga presyo, at walang bayad na kinukuha sa checkout.', 'Prices are demo prices, and checkout takes no payment.')}`],
-    [L('Totoo ba ang mga laro?', 'Are these real games?'), L('Oo. Mga totoong laro ito ng mga Pilipinong developer. Ang studio, paglalarawan, at media ay mula sa kanilang opisyal na pahina. Para bilhin o laruin ang isang laro, pumunta sa "Opisyal na pahina" nito. Walang rating o bilang ng download dito dahil wala kaming totoong datos para sa mga ito.', 'Yes. They are real games by Filipino developers. Studios, descriptions and media come from their official pages. To buy or play a game, use its "Official page" link. We show no ratings or download counts, because we have no real data for them.')],
-    [L('Kailangan ko ba ng account para mag-browse?', 'Do I need an account to browse?'), L('Hindi. Pwede kang magpatuloy bilang bisita. Kailangan lang ng account kung gusto mong mag-save ng detalye o magbenta ng laro.', 'No. You can continue as a guest. An account is only for saving your details or selling a game.')],
-    [L('Magkano ang napupunta sa developer?', 'How much do developers keep?'), L(`${pct}% ng bawat benta. Ang natitira ay para sa pagpapatakbo ng tindahan.`, `${pct}% of every sale. The rest runs the store.`)],
-    [L('Paano ako magbebenta ng laro?', 'How do I sell a game?'), L('Gumawa ng developer account, pagkatapos ay ipadala ang laro at maikling pitch sa pahinang Magbenta. Susuriin namin at sasagot sa email.', 'Create a developer account, then send your game and a short pitch from the Sell a game page. We review it and reply by email.')],
-    [L('Ano ang teks?', 'What are teks?'), L('Maliliit na baraha na kinokolekta at nilalaro ng mga batang Pilipino. Dito, bawat larong bibilhin mo ay nagiging baraha sa koleksyon mo.', 'Small paper cards Filipino kids collect, trade and play with. Here, every game you buy becomes a card in your collection.')],
+    [L('Totoong store ba ito?', 'Is this a real store?'), `${DISCLAIMER()} ${L('Demo price ang mga presyo, at walang kinukuhang bayad sa checkout.', 'Prices are demo prices, and checkout takes no payment.')}`],
+    [L('Totoong mga laro ba ito?', 'Are these real games?'), L('Oo. Totoong mga laro ito na gawa ng mga Pilipinong developer. Galing sa kanilang official page ang studio, description, at media. Para bilhin o laruin ang isang laro, gamitin ang "Official page" link nito. Wala kaming ipinapakitang rating o download count, dahil wala kaming totoong data para sa mga ito.', 'Yes. They are real games by Filipino developers. Studios, descriptions and media come from their official pages. To buy or play a game, use its "Official page" link. We show no ratings or download counts, because we have no real data for them.')],
+    [L('Kailangan ko ba ng account para mag-browse?', 'Do I need an account to browse?'), L('Hindi. Puwede kang magpatuloy bilang guest. Kailangan lang ang account para i-save ang details mo o magbenta ng laro.', 'No. You can continue as a guest. An account is only for saving your details or selling a game.')],
+    [L('Magkano ang napupunta sa developer?', 'How much do developers keep?'), L(`${pct}% ng bawat benta. Ang natitira ay pampatakbo ng store.`, `${pct}% of every sale. The rest runs the store.`)],
+    [L('Paano ako magbebenta ng laro?', 'How do I sell a game?'), L('Gumawa ng developer account, tapos i-send ang laro mo at maikling pitch mula sa Magbenta page. Ire-review namin ito at sasagot kami sa email.', 'Create a developer account, then send your game and a short pitch from the Sell a game page. We review it and reply by email.')],
+    [L('Ano ang teks?', 'What are teks?'), L('Maliliit na papel na baraha na kinokolekta, pinagpapalitan, at nilalaro ng mga batang Pilipino. Dito, bawat larong bibilhin mo ay nagiging card sa Collection mo.', 'Small paper cards Filipino kids collect, trade and play with. Here, every game you buy becomes a card in your collection.')],
   ];
   return {
-    title: L('Tungkol | TEKS', 'About | TEKS'),
+    title: L('About | TEKS', 'About | TEKS'),
     html: `
     <section class="ab-hero"><div class="wide-wrap ab-hero-grid">
       <div>
         <span class="eyebrow">${L('Tungkol sa TEKS', 'About TEKS')}</span>
         <${embedded ? 'h2' : 'h1'} class="ab-title">${L('Bawat larong Pinoy, nasa iisang shelf.', 'Every Filipino game, on one shelf.')}</${embedded ? 'h2' : 'h1'}>
-        <p class="ab-lead">${L('Ang TEKS ay tindahan para sa mga larong gawa ng mga Pilipinong developer. Hanapin ang mga ito, bilhin, kolektahin, at laruin.', 'TEKS is a store for games made by Filipino developers. Find them, buy them, collect them, and play.')}</p>
-        ${embedded ? `<div class="actions"><button type="button" class="btn go" data-guest>${L('Tingnan ang tindahan', 'Browse the store')}</button><button type="button" class="btn alt" data-scroll-top>${L('Gumawa ng account', 'Create an account')}</button></div>` : `<div class="actions"><a class="btn go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a><a class="btn alt" href="#/developers">${L('Magbenta ng laro', 'Sell your game')}</a></div>`}
+        <p class="ab-lead">${L('Ang TEKS ay store para sa mga larong gawa ng mga Pilipinong developer. Hanapin, bilhin, kolektahin, at laruin.', 'TEKS is a store for games made by Filipino developers. Find them, buy them, collect them, and play.')}</p>
+        ${embedded ? `<div class="actions"><button type="button" class="btn go" data-guest>${L('Tingnan ang Store', 'Browse the store')}</button><button type="button" class="btn alt" data-scroll-top>${L('Gumawa ng account', 'Create an account')}</button></div>` : `<div class="actions"><a class="btn go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a><a class="btn alt" href="#/developers">${L('Ibenta ang laro mo', 'Sell your game')}</a></div>`}
       </div>
       <div class="ab-fan" aria-hidden="true">${fan.map((g, i) => `<div class="ab-card c${i}">${cardFace(g, 'div')}</div>`).join('')}</div>
     </div></section>
 
-    <section class="wide-wrap ab-stats" aria-label="${L('TEKS sa mga numero', 'TEKS in numbers')}">
-      ${stat(games.length, L('Mga laro', 'Games'))}${stat(studioList.length, L('Mga studio', 'Studios'))}${stat(config.collections.length, 'Pinoy Collections')}${stat(pct + '%', L('Bahagi ng developer', 'Developer share'))}
+    <section class="wide-wrap ab-stats" aria-label="${L('TEKS sa numero', 'TEKS in numbers')}">
+      ${stat(games.length, L('Mga laro', 'Games'))}${stat(studioList.length, L('Mga studio', 'Studios'))}${stat(config.collections.length, 'Pinoy Collections')}${stat(pct + '%', L('Share ng developer', 'Developer share'))}
     </section>
 
     <section class="section"><div class="wrap ab-story">
@@ -961,42 +961,42 @@ function aboutView(embedded = false) {   // embedded: shown under the sign-in sc
       <div>
         <span class="eyebrow">${L('Ang kwento', 'The story')}</span>
         <h2>${L('Saan galing ang pangalan', 'Where the name comes from')}</h2>
-        <p>${L('Ang teks ay maliliit na baraha na kinokolekta at nilalaro ng mga batang Pilipino. Pinagpapalit ito sa kaibigan, nilalaro sa kalye, at ipinagmamalaki. Ganoon din dito: bawat laro ay baraha na iyong kokolektahin, at pagkatapos ay lalaruin.', 'Teks are the small paper cards Filipino children collected and played with. Kids traded them with friends, played them on the street, and took pride in the cards they had gathered. Here, every game is a card you collect, then play.')}</p>
-        <p>${L('Kalat ang mga larong lokal sa iba-ibang store at social page, nalulunod sa libo-libong bagong labas bawat taon. Tinitipon sila ng TEKS sa iisang tindahan, para madali silang mahanap.', 'Many local games sit across global stores and social media pages. Among thousands of international releases each year, they are easy to miss. TEKS gathers them in one store, so they are easy to find.')}</p>
+        <p>${L('Ang teks ay maliliit na papel na baraha na kinolekta at nilaro ng mga batang Pilipino noon. Pinagpapalit nila ito sa mga kaibigan, nilalaro sa kalye, at ipinagmamalaki ang mga naipon nilang baraha. Ganoon din dito: bawat laro ay card na kokolektahin mo, tapos lalaruin.', 'Teks are the small paper cards Filipino children collected and played with. Kids traded them with friends, played them on the street, and took pride in the cards they had gathered. Here, every game is a card you collect, then play.')}</p>
+        <p>${L('Maraming lokal na laro ang nakakalat sa iba\'t ibang global store at social media page. Sa libo-libong international release bawat taon, madali silang hindi mapansin. Tinitipon sila ng TEKS sa iisang store, para madali silang mahanap.', 'Many local games sit across global stores and social media pages. Among thousands of international releases each year, they are easy to miss. TEKS gathers them in one store, so they are easy to find.')}</p>
       </div>
     </div></section>
 
     <section class="section" style="padding-top:0"><div class="wrap">
       <div class="head"><div><span class="eyebrow">${L('Bakit TEKS', 'Why TEKS')}</span><h2>${L('Tatlong pangako', 'Three promises')}</h2></div></div>
       <div class="ab-pillars">
-        <div class="ab-pillar">${icon('<path d="M3 7h18M3 12h18M3 17h18"/>')}<h3>${L('Iisang shelf', 'One shelf')}</h3><p>${L('Lahat ng larong gawang Pinoy ay nasa isang lugar, hindi na kailangang hanapin sa kung saan-saan.', 'Every Filipino-made game in one place, instead of scattered across stores and pages.')}</p></div>
-        <div class="ab-pillar">${icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10c0-1.5 1.3-2 3-2s3 .7 3 2-1.3 1.8-3 2-3 .6-3 2 1.3 2 3 2 3-.5 3-2"/>')}<h3>${L('Patas na hatian', 'A fair split')}</h3><p>${L(`Bawat benta ay may ${pct}% para sa developer.`, `Every sale pays the developer ${pct}%.`)}</p></div>
-        <div class="ab-pillar">${icon('<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 8h6M9 12h6"/>')}<h3>${L('Baraha sa bawat laro', 'A card for every game')}</h3><p>${L('Ang bawat larong bibilhin mo ay nagiging baraha sa koleksyon mo, parang teks noong bata ka.', 'Every game you buy becomes a card in your collection, like the teks you traded as a kid.')}</p></div>
+        <div class="ab-pillar">${icon('<path d="M3 7h18M3 12h18M3 17h18"/>')}<h3>${L('Iisang shelf', 'One shelf')}</h3><p>${L('Lahat ng larong gawang Pinoy, nasa iisang lugar, imbes na nakakalat sa iba\'t ibang store at page.', 'Every Filipino-made game in one place, instead of scattered across stores and pages.')}</p></div>
+        <div class="ab-pillar">${icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10c0-1.5 1.3-2 3-2s3 .7 3 2-1.3 1.8-3 2-3 .6-3 2 1.3 2 3 2 3-.5 3-2"/>')}<h3>${L('Patas na hatian', 'A fair split')}</h3><p>${L(`${pct}% ng bawat benta ay napupunta sa developer.`, `Every sale pays the developer ${pct}%.`)}</p></div>
+        <div class="ab-pillar">${icon('<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 8h6M9 12h6"/>')}<h3>${L('May card ang bawat laro', 'A card for every game')}</h3><p>${L('Bawat larong bibilhin mo ay nagiging card sa Collection mo, parang mga teks na pinagpapalitan mo noong bata ka.', 'Every game you buy becomes a card in your collection, like the teks you traded as a kid.')}</p></div>
       </div>
     </div></section>
 
     <section class="section" style="padding-top:0"><div class="wrap">
-      <div class="head"><div><span class="eyebrow">${L('Mga studio', 'Studios')}</span><h2>${L('Kilalanin ang mga studio', 'Meet the studios')}</h2><p>${L('Mga studio na may laro sa tindahan ngayon.', 'The studios with games in the store right now.')}</p></div></div>
+      <div class="head"><div><span class="eyebrow">${L('Mga studio', 'Studios')}</span><h2>${L('Kilalanin ang mga studio', 'Meet the studios')}</h2><p>${L('Mga studio na may laro sa Store ngayon.', 'The studios with games in the store right now.')}</p></div></div>
       <p class="disclaimer">${DISCLAIMER()}</p>
       <div class="ab-studios">${studioList.map(([name, gs]) => `<div class="ab-studio"><h3>${!embedded && gs[0].studioSlug ? `<a href="#/studio/${gs[0].studioSlug}">${esc(name)}</a>` : esc(name)}</h3><p class="mono">${gs.length} ${L('laro', gs.length === 1 ? 'game' : 'games')}</p><ul>${gs.map(g => `<li>${embedded ? `<span class="gl"><i class="gdot" style="${routeStyle(g)}"></i>${esc(g.title)}</span>` : `<a href="#/game/${g.id}"><i class="gdot" style="${routeStyle(g)}"></i>${esc(g.title)}</a>`}</li>`).join('')}</ul></div>`).join('')}</div>
     </div></section>
 
     <section class="section" style="padding-top:0"><div class="wrap two">
-      <div class="box"><span class="eyebrow">${L('Para sa players', 'For players')}</span><h2>${L('Paano ito gumagana', 'How it works')}</h2>
-        <ol class="steps"><li>${L('Mag-browse ayon sa genre, koleksyon, o plataporma.', 'Browse by genre, collection or platform.')}</li><li>${L('Bilhin ang mga larong gusto mo. Bawat isa ay nagiging baraha.', 'Buy the games you want. Each one becomes a card.')}</li><li>${L('Buksan ang koleksyon mo at maglaro.', 'Open your collection and play.')}</li></ol>
+      <div class="box"><span class="eyebrow">${L('Para sa mga player', 'For players')}</span><h2>${L('Paano ito gumagana', 'How it works')}</h2>
+        <ol class="steps"><li>${L('Mag-browse ayon sa genre, collection, o platform.', 'Browse by genre, collection or platform.')}</li><li>${L('Bilhin ang mga larong gusto mo. Bawat isa ay nagiging card.', 'Buy the games you want. Each one becomes a card.')}</li><li>${L('Buksan ang Collection mo at maglaro.', 'Open your collection and play.')}</li></ol>
         ${embedded ? `<button type="button" class="btn" data-guest>${L('Magsimulang mangolekta', 'Start collecting')}</button>` : `<a class="btn" href="#/store">${L('Magsimulang mangolekta', 'Start collecting')}</a>`}</div>
       <div class="box dark"><span class="eyebrow" style="color:var(--yellow)">${L('Para sa mga developer', 'For developers')}</span><h2>${L('Magbenta sa TEKS', 'Sell on TEKS')}</h2>
-        <ol class="steps"><li>${L('Gumawa ng developer account.', 'Create a developer account.')}</li><li>${L('Ipadala ang laro at maikling pitch. Susuriin namin ito.', 'Send your game and a short pitch. We review it.')}</li><li>${L(`Kapag may bumili, ${pct}% ay sa iyo.`, `When players buy it, you keep ${pct}%.`)}</li></ol>
-        ${embedded ? `<button type="button" class="btn yellow" data-scroll-top="developer">${L('Gumawa ng developer account', 'Create a developer account')}</button>` : `<a class="btn yellow" href="#/developers">${L('Ipasa ang laro', 'Submit a game')}</a>`}</div>
+        <ol class="steps"><li>${L('Gumawa ng developer account.', 'Create a developer account.')}</li><li>${L('I-send ang laro mo at maikling pitch. Ire-review namin ito.', 'Send your game and a short pitch. We review it.')}</li><li>${L(`Kapag may bumili, sa'yo ang ${pct}%.`, `When players buy it, you keep ${pct}%.`)}</li></ol>
+        ${embedded ? `<button type="button" class="btn yellow" data-scroll-top="developer">${L('Gumawa ng developer account', 'Create a developer account')}</button>` : `<a class="btn yellow" href="#/developers">${L('Mag-submit ng laro', 'Submit a game')}</a>`}</div>
     </div></section>
 
     <section class="section" style="padding-top:0"><div class="wrap ab-faq">
-      <div class="head"><div><span class="eyebrow">FAQ</span><h2>${L('Madalas itanong', 'Questions, answered')}</h2></div></div>
+      <div class="head"><div><span class="eyebrow">FAQ</span><h2>${L('Sagot sa mga tanong mo', 'Questions, answered')}</h2></div></div>
       ${faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}
     </div></section>
 
     <section class="band"><div class="wrap ab-cta">
-      <div><h2>${L('Handa ka na bang maglaro?', 'Ready to start playing?')}</h2><p>${L('Sumali nang libre, o mag-browse muna bilang bisita.', 'Join for free, or browse as a guest first.')}</p></div>
+      <div><h2>${L('Ready ka na bang maglaro?', 'Ready to start playing?')}</h2><p>${L('Sumali nang libre, o mag-browse muna bilang guest.', 'Join for free, or browse as a guest first.')}</p></div>
       ${embedded ? `<div class="actions"><button type="button" class="btn go" data-scroll-top>${L('Gumawa ng account', 'Create an account')}</button><button type="button" class="btn ghost" data-guest>${L('Mag-browse muna', 'Just browse')}</button></div>` : `<div class="actions"><a class="btn go" href="#/account?mode=signup">${L('Gumawa ng account', 'Create an account')}</a><a class="btn ghost" href="#/store">${L('Mag-browse muna', 'Just browse')}</a></div>`}
     </div></section>`,
   };
@@ -1019,7 +1019,7 @@ function pinoyIndexView() {
     if (!gg.length) return '';
     return `<section class="section" style="padding-top:0"><div class="wrap" style="${collStyle(c.slug)}">
       <div class="head"><div><span class="eyebrow coll-eyebrow">${gg.length} ${L('laro', gg.length === 1 ? 'game' : 'games')}</span><h2>${esc(c.title)}</h2>${meta(c.slug).tagline ? `<p>${esc(meta(c.slug).tagline)}</p>` : ''}</div>
-        <div class="head-r"><a class="btn alt small" href="#/pinoy/${c.slug}">${L('Buksan ang koleksyon', 'Open collection')}</a></div></div>
+        <div class="head-r"><a class="btn alt small" href="#/pinoy/${c.slug}">${L('Buksan ang collection', 'Open collection')}</a></div></div>
       <div class="cards">${gg.map(teks).join('')}</div>
     </div></section>`;
   }).join('');
@@ -1041,10 +1041,10 @@ function pinoyView(slug) {
   return {
     title: `${c.title} | TEKS`,
     html: `<section class="page-head" style="${collStyle(slug)}"><div class="wrap"><span class="eyebrow coll-eyebrow">Pinoy Collection</span><h1>${esc(c.title)}</h1>${m.tagline ? `<p>${esc(m.tagline)}</p>` : ''}
-        <div class="coll-jump">${others.map(o => `<a class="chip" href="#/pinoy/${o.slug}">${esc(o.title)}</a>`).join('')}<a class="chip" href="#/pinoy">${L('Lahat ng koleksyon', 'All collections')}</a></div></div></section>
+        <div class="coll-jump">${others.map(o => `<a class="chip" href="#/pinoy/${o.slug}">${esc(o.title)}</a>`).join('')}<a class="chip" href="#/pinoy">${L('Lahat ng collection', 'All collections')}</a></div></div></section>
       <div class="wrap">${m.description ? `<div class="prose"><p>${esc(m.description)}</p></div>` : ''}</div>
       <section class="section"${m.description ? ' style="padding-top:0"' : ''}><div class="wrap">
-        <div class="head"><div><h2>${L(`${gg.length} laro sa koleksyong ito`, `${gg.length} ${gg.length === 1 ? 'game' : 'games'} in this collection`)}</h2></div><div class="head-r"><a class="btn alt small" href="#/store?theme=${encodeURIComponent(c.title)}">${L('Buksan sa tindahan', 'Filter in the store')}</a></div></div>
+        <div class="head"><div><h2>${L(`${gg.length} laro sa collection na ito`, `${gg.length} ${gg.length === 1 ? 'game' : 'games'} in this collection`)}</h2></div><div class="head-r"><a class="btn alt small" href="#/store?theme=${encodeURIComponent(c.title)}">${L('I-filter sa Store', 'Filter in the store')}</a></div></div>
         ${gg.length ? `<div class="cards">${gg.map(teks).join('')}</div>` : `<div class="coll-empty"><p>${L('Wala pang laro dito.', 'No games here yet.')}</p></div>`}
       </div></section>`,
   };
@@ -1059,13 +1059,13 @@ function studioView(slug) {
     title: `${name || 'Studio'} | TEKS`,
     html: `<section class="page-head"><div class="wrap"><span class="eyebrow" id="st-type">${L('Developer', 'Developer')}</span><h1 id="st-name">${esc(name)}</h1><p id="st-loc"></p></div></section>
       <div class="wrap section"><div class="two" style="align-items:start">
-        <div class="box" id="st-about"><h2>${L('Tungkol sa studio', 'About the studio')}</h2><p class="mono">${L('Kinukuha...', 'Loading...')}</p></div>
+        <div class="box" id="st-about"><h2>${L('Tungkol sa studio', 'About the studio')}</h2><p class="mono">${L('Naglo-load...', 'Loading...')}</p></div>
         <div class="box dark"><h2>${L('Sa TEKS', 'On TEKS')}</h2>
-          <div class="meter"><div class="lab">${L('Nabili sa TEKS (demo)', 'Bought on TEKS (demo orders)')}</div><div class="digits">${fmtDl(dl)}</div></div>
-          <p style="margin:1rem 0 0">${L(`${mine.length} laro sa TEKS · demo na presyo lang`, `${mine.length} ${mine.length === 1 ? 'game' : 'games'} on TEKS · demo prices only`)}</p>
+          <div class="meter"><div class="lab">${L('Nabili sa TEKS (demo orders)', 'Bought on TEKS (demo orders)')}</div><div class="digits">${fmtDl(dl)}</div></div>
+          <p style="margin:1rem 0 0">${L(`${mine.length} laro sa TEKS · demo price lang`, `${mine.length} ${mine.length === 1 ? 'game' : 'games'} on TEKS · demo prices only`)}</p>
           <p class="disclaimer" style="margin:.8rem 0 0">${DISCLAIMER()}</p></div>
       </div>
-      ${mine.length ? `<div class="section" style="padding-bottom:0"><div class="head"><div><h2>${L(`Mga laro ng ${esc(name)}`, `Games by ${esc(name)}`)}</h2></div></div><div class="cards">${mine.map(teks).join('')}</div></div>` : ''}
+      ${mine.length ? `<div class="section" style="padding-bottom:0"><div class="head"><div><h2>${L(`Mga larong gawa ng ${esc(name)}`, `Games by ${esc(name)}`)}</h2></div></div><div class="cards">${mine.map(teks).join('')}</div></div>` : ''}
       </div>`,
     mount() {
       const about = $('#st-about');
@@ -1074,7 +1074,7 @@ function studioView(slug) {
         $('#st-name').textContent = d.name; document.title = `${d.name} | TEKS`;
         $('#st-type').textContent = devTypeLabel(d.type) || L('Developer', 'Developer');
         $('#st-loc').textContent = d.location || '';
-        const links = [[safeUrl(d.website_url), L('Opisyal na pahina', 'Official page')], [safeUrl(d.facebook_url), 'Facebook']].filter(([u]) => u);
+        const links = [[safeUrl(d.website_url), L('Official page', 'Official page')], [safeUrl(d.facebook_url), 'Facebook']].filter(([u]) => u);
         about.innerHTML = `<h2>${L('Tungkol sa studio', 'About the studio')}</h2><p>${d.bio ? esc(d.bio) : L('Wala pang impormasyon.', 'No information yet.')}</p>
           ${links.length ? `<div class="actions">${links.map(([u, l]) => `<a class="btn alt small" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${l} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : ''}`;
       }).catch(err => {
@@ -1087,34 +1087,34 @@ function studioView(slug) {
 }
 
 const inquiries = () => [
-  ['general', L('Pangkalahatang tanong', 'General question'), L('Tungkol sa tindahan, isang order, o account mo.', 'About the store, an order or your account.')],
-  ['developer', L('Pagbebenta ng laro', 'Selling a game'), L('Bago o habang nagpapasa ka ng laro.', 'Before or while you submit a game.')],
-  ['creator', L('Content creator at press', 'Creators and press'), L('Review, stream, o artikulo tungkol sa larong Pinoy.', 'Reviews, streams or articles about Filipino games.')],
-  ['community', L('Komunidad at events', 'Community and events'), L('Game jam, meetup, o grupong gustong makipagtulungan.', 'Game jams, meetups or groups who want to work with us.')],
-  ['school', L('Paaralan at guro', 'Schools and teachers'), L('Paggamit ng TEKS sa klase o sa school project.', 'Using TEKS in class or for a school project.')],
+  ['general', L('General na tanong', 'General question'), L('Tungkol sa store, isang order, o account mo.', 'About the store, an order or your account.')],
+  ['developer', L('Pagbebenta ng laro', 'Selling a game'), L('Bago o habang nagsa-submit ka ng laro.', 'Before or while you submit a game.')],
+  ['creator', L('Creators at press', 'Creators and press'), L('Review, stream, o article tungkol sa mga larong Pinoy.', 'Reviews, streams or articles about Filipino games.')],
+  ['community', L('Community at events', 'Community and events'), L('Game jam, meetup, o grupong gustong makipagtulungan sa amin.', 'Game jams, meetups or groups who want to work with us.')],
+  ['school', L('Mga paaralan at guro', 'Schools and teachers'), L('Paggamit ng TEKS sa klase o para sa school project.', 'Using TEKS in class or for a school project.')],
 ];
 function contactView(params) {
   const list = inquiries();
   const type = list.some(([v]) => v === params.get('type')) ? params.get('type') : 'general';
   return {
-    title: L('Kontak | TEKS', 'Contact | TEKS'),
-    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Kontak', 'Contact')}</span><h1>${L('Kausapin ang TEKS', 'Talk to TEKS')}</h1>
-        <p>${L('May tanong, gustong makipag-partner, o may larong dapat naming makita? Sasagot kami sa email.', 'A question, a partnership, or a game we should know about? We reply by email.')}</p></div></section>
+    title: L('Contact | TEKS', 'Contact | TEKS'),
+    html: `<section class="page-head"><div class="wrap"><span class="eyebrow">${L('Contact', 'Contact')}</span><h1>${L('Kausapin ang TEKS', 'Talk to TEKS')}</h1>
+        <p>${L('May tanong, partnership, o larong dapat naming makita? Sasagot kami sa email.', 'A question, a partnership, or a game we should know about? We reply by email.')}</p></div></section>
       <div class="wrap section"><div class="two" style="align-items:start">
-        <div class="box"><h2>${L('Magpadala ng mensahe', 'Send a message')}</h2>
+        <div class="box"><h2>${L('Mag-send ng message', 'Send a message')}</h2>
           <form class="form" id="contact-form" novalidate>
             <div class="pair">
               <label class="field" id="f-name">${L('Pangalan', 'Name')}<input name="name" autocomplete="name" maxlength="80" value="${esc(user?.name || '')}"><span class="err" role="alert"></span></label>
               <label class="field" id="f-email">Email<input name="email" type="email" autocomplete="email" maxlength="120" value="${esc(user?.email || '')}"><span class="err" role="alert"></span></label>
             </div>
             <label class="field" id="f-inquiry_type">${L('Tungkol saan ito?', 'What is it about?')}<select name="inquiry_type">${list.map(([v, l]) => `<option value="${v}"${v === type ? ' selected' : ''}>${l}</option>`).join('')}</select><span class="err" role="alert"></span></label>
-            <label class="field" id="f-message">${L('Mensahe', 'Message')} <small>${L('Hindi bababa sa 10 character', 'At least 10 characters')}</small><textarea name="message" rows="6" maxlength="2000"></textarea><span class="err" role="alert"></span></label>
-            <button class="btn go" type="submit">${L('Ipadala', 'Send message')}</button>
+            <label class="field" id="f-message">${L('Message', 'Message')} <small>${L('Hindi bababa sa 10 characters', 'At least 10 characters')}</small><textarea name="message" rows="6" maxlength="2000"></textarea><span class="err" role="alert"></span></label>
+            <button class="btn go" type="submit">${L('I-send ang message', 'Send message')}</button>
             <span class="err" id="form-err" role="alert"></span>
             <p id="ok" role="status"></p>
           </form></div>
-        <div class="box dark"><h2>${L('Sino ang babasa nito', 'Who reads it')}</h2>
-          <p>${L('Binabasa ng TEKS team ang bawat mensahe. Piliin ang tamang paksa para mapunta ito sa tamang tao.', 'The TEKS team reads every message. Pick the right topic so it reaches the right person.')}</p>
+        <div class="box dark"><h2>${L('Sino ang nagbabasa nito', 'Who reads it')}</h2>
+          <p>${L('Binabasa ng TEKS team ang bawat message. Piliin ang tamang topic para mapunta ito sa tamang tao.', 'The TEKS team reads every message. Pick the right topic so it reaches the right person.')}</p>
           <ul class="list">${list.map(([, l, d]) => `<li><b>${l}</b>: ${d}</li>`).join('')}</ul></div>
       </div></div>`,
     mount() {
@@ -1122,20 +1122,20 @@ function contactView(params) {
         e.preventDefault();
         const f = e.target, btn = $('button[type=submit]', f);
         $$('.field', f).forEach(x => { x.classList.remove('bad'); $('.err', x).textContent = ''; }); $('#form-err').textContent = ''; $('#ok').textContent = '';
-        btn.disabled = true; btn.textContent = L('Ipinapadala', 'Sending');
+        btn.disabled = true; btn.textContent = L('Sine-send', 'Sending');
         const fd = new FormData(f);
         try {
           const r = await api('/api/contact', { method: 'POST', body: { name: fd.get('name'), email: fd.get('email'), inquiry_type: fd.get('inquiry_type'), message: fd.get('message') } });
           if (!document.body.contains(f)) return;
           const to = fd.get('email');
-          f.reset(); toast(L('Naipadala ang mensahe', 'Message sent'));
-          $('#ok').textContent = L(`Naipadala. Reference #${r.id}. Sasagot kami sa ${to}.`, `Sent. Reference #${r.id}. We will reply to ${to}.`);
+          f.reset(); toast(L('Na-send na ang message', 'Message sent'));
+          $('#ok').textContent = L(`Na-send na. Reference #${r.id}. Sasagot kami sa ${to}.`, `Sent. Reference #${r.id}. We will reply to ${to}.`);
         } catch (err) {
           if (!document.body.contains(f)) return;
           const fld = err.field && $('#f-' + err.field);
           if (fld) { fld.classList.add('bad'); $('.err', fld).textContent = err.message; $('input,select,textarea', fld)?.focus(); } else $('#form-err').textContent = err.message;
         }
-        btn.disabled = false; btn.textContent = L('Ipadala', 'Send message');
+        btn.disabled = false; btn.textContent = L('I-send ang message', 'Send message');
       });
     },
   };
@@ -1146,7 +1146,7 @@ function orderView(code) {
   if (!/^[A-Za-z0-9-]{4,40}$/.test(code || '')) return notFound();
   return {
     title: L('Order | TEKS', 'Order | TEKS'),
-    html: `<div class="wrap" id="order-root"><div class="success"><span class="stamp">Order</span><p class="mono" style="margin-top:1rem">${L('Kinukuha ang order mo...', 'Loading your order...')}</p></div></div>`,
+    html: `<div class="wrap" id="order-root"><div class="success"><span class="stamp">Order</span><p class="mono" style="margin-top:1rem">${L('Nilo-load ang order mo...', 'Loading your order...')}</p></div></div>`,
     mount() {
       const root = $('#order-root');
       api('/api/orders/' + encodeURIComponent(code)).then(o => {
@@ -1156,8 +1156,8 @@ function orderView(code) {
       }).catch(err => {
         if (!document.body.contains(root)) return;
         root.className = 'wrap section';
-        root.innerHTML = `<div class="empty"><h1>${err.status === 404 ? L('Walang ganitong order', 'Order not found') : L('Hindi ma-load ang order', 'Could not load the order')}</h1>
-          <p>${err.status === 404 ? L('Tingnan kung tama ang order code sa link.', 'Check that the order code in the link is right.') : esc(err.message)}</p><a class="btn go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div>`;
+        root.innerHTML = `<div class="empty"><h1>${err.status === 404 ? L('Hindi nahanap ang order', 'Order not found') : L('Hindi ma-load ang order', 'Could not load the order')}</h1>
+          <p>${err.status === 404 ? L('I-check kung tama ang order code sa link.', 'Check that the order code in the link is right.') : esc(err.message)}</p><a class="btn go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div>`;
       });
     },
   };
@@ -1171,18 +1171,18 @@ function orderHtml(o) {
       <div><h3>${esc(it.title)}</h3><p>${esc(it.studio)}</p></div><span class="amount">${peso(num(it.price))}</span></div>`;
   };
   const payouts = Array.isArray(o.payouts) ? o.payouts : [];
-  return `<div class="success"><span class="stamp">${L('Tapos na', 'Order placed')}</span>
+  return `<div class="success"><span class="stamp">${L('Na-place na ang order mo', 'Order placed')}</span>
       <h1>${L('Order', 'Order')} ${esc(o.code)}</h1>
-      <p>${L(`Salamat, ${first}! ${n} laro ang nasa koleksyon mo na. Kabuuan ${peso(num(o.total))}. Demo checkout ito, kaya walang bayad na kinuha.`, `Thank you, ${first}! ${n} ${n === 1 ? 'game is' : 'games are'} now in your collection. Total ${peso(num(o.total))}. This is a demo checkout, so no payment was taken.`)}</p>
-      <p class="mono">${esc(PAYMENTS[o.payment_method] || '')} · ${esc(fmtWhen(o.created_at))} · ${L('resibo para kay', 'receipt for')} ${esc(o.email)}</p>
-      <div class="actions"><a class="btn go" href="#/collection">${L('Buksan ang koleksyon ko', 'Open my collection')}</a><a class="btn alt" href="#/store">${L('Mag-browse pa', 'Keep browsing')}</a></div>
-      <p class="split" style="margin-top:1.2rem">${L('I-save ang link ng pahinang ito: ang order code lang ang paraan para mabuksan ito ulit.', 'Save the link to this page: the order code is the only way to open it again.')}</p></div>
+      <p>${L(`Salamat sa order mo, ${first}! Nasa Collection mo na ang ${n} laro. Total: ${peso(num(o.total))}. Demo checkout ito, kaya walang kinuhang bayad.`, `Thank you, ${first}! ${n} ${n === 1 ? 'game is' : 'games are'} now in your collection. Total ${peso(num(o.total))}. This is a demo checkout, so no payment was taken.`)}</p>
+      <p class="mono">${esc(PAYMENTS[o.payment_method] || '')} · ${esc(fmtWhen(o.created_at))} · ${L('resibo para sa', 'receipt for')} ${esc(o.email)}</p>
+      <div class="actions"><a class="btn go" href="#/collection">${L('Buksan ang Collection ko', 'Open my collection')}</a><a class="btn alt" href="#/store">${L('Mag-browse pa', 'Keep browsing')}</a></div>
+      <p class="split" style="margin-top:1.2rem">${L('I-save ang link ng page na ito: ang order code lang ang paraan para mabuksan ito ulit.', 'Save the link to this page: the order code is the only way to open it again.')}</p></div>
     <div class="cart order-cart"><div>${items.map(line).join('')}</div>
       <aside class="summary" aria-label="${L('Resibo', 'Receipt')}"><h2>${L('Resibo', 'Receipt')}</h2>
         <div class="row"><span>${L('Subtotal', 'Subtotal')}</span><span>${peso(num(o.subtotal))}</span></div>
         ${num(o.discount) ? `<div class="row"><span>${L('Promo', 'Promo')} ${esc(o.promo_code || '')}</span><span>−${peso(num(o.discount))}</span></div>` : ''}
-        <div class="row total"><span>${L('Kabuuan', 'Total')}</span><span>${peso(num(o.total))}</span></div>
-        <p class="sub">${L(`Para sa developer (${num(o.developer_share_percent)}%)`, `To developers (${num(o.developer_share_percent)}%)`)}</p>
+        <div class="row total"><span>${L('Total', 'Total')}</span><span>${peso(num(o.total))}</span></div>
+        <p class="sub">${L(`Para sa mga developer (${num(o.developer_share_percent)}%)`, `To developers (${num(o.developer_share_percent)}%)`)}</p>
         ${payouts.map(p => `<div class="row"><span>${esc(p.studio)}</span><span>${peso(num(p.amount))}</span></div>`).join('')}
       </aside></div>`;
 }
@@ -1196,8 +1196,8 @@ const adminKey = {
 };
 function adminView() {
   const key = adminKey.get();
-  const head = `<section class="page-head"><div class="wrap"><span class="eyebrow">Admin</span><h1>${L('Dashboard ng TEKS', 'TEKS dashboard')}</h1>
-    <p>${L('Para sa TEKS team lang. Nasa tab na ito lang ang key at nawawala kapag isinara mo ito.', 'For the TEKS team only. The key stays in this tab and is forgotten when you close it.')}</p></div></section>`;
+  const head = `<section class="page-head"><div class="wrap"><span class="eyebrow">Admin</span><h1>${L('TEKS dashboard', 'TEKS dashboard')}</h1>
+    <p>${L('Para lang sa TEKS team. Nasa tab na ito lang ang key, at mabubura ito kapag isinara mo ang tab.', 'For the TEKS team only. The key stays in this tab and is forgotten when you close it.')}</p></div></section>`;
   if (!key) return {
     title: 'Admin | TEKS',
     html: `${head}<div class="wrap section"><div class="box admin-gate"><h2>${L('Ilagay ang admin key', 'Enter the admin key')}</h2>
@@ -1216,7 +1216,7 @@ function adminView() {
   };
   return {
     title: 'Admin | TEKS',
-    html: `${head}<div class="wrap section" id="admin-root"><p class="mono">${L('Kinukuha...', 'Loading...')}</p></div>`,
+    html: `${head}<div class="wrap section" id="admin-root"><p class="mono">${L('Naglo-load...', 'Loading...')}</p></div>`,
     mount() {
       const root = $('#admin-root');
       const get = kind => api('/api/admin/' + kind, { headers: { 'X-Admin-Key': key } });
@@ -1226,7 +1226,7 @@ function adminView() {
         $('#admin-lock').addEventListener('click', () => { adminKey.clear(); render(false); });
       }).catch(err => {
         if (!document.body.contains(root)) return;
-        if (err.status === 401) { adminKey.clear(); adminError = L('Mali ang admin key.', 'That admin key is not right.'); return render(false); }
+        if (err.status === 401) { adminKey.clear(); adminError = L('Mali ang admin key na iyan.', 'That admin key is not right.'); return render(false); }
         root.innerHTML = `<div class="empty"><h2>${L('Hindi ma-load ang dashboard', 'Could not load the dashboard')}</h2><p>${esc(err.message)}</p></div>`;
       });
     },
@@ -1239,7 +1239,7 @@ function adminHtml(orders, subs, msgs, users) {
   const inq = Object.fromEntries(inquiries().map(([v, l]) => [v, l]));
   const orderRow = o => `<li><div class="al-top"><b class="mono">${esc(o.code)}</b><span class="amount">${peso(num(o.total))}</span></div>
     <p>${esc(o.customer_name)} · ${esc(o.email)} · ${esc(o.mobile)}</p>
-    <p class="mono">${esc(PAYMENTS[o.payment_method] || o.payment_method)}${o.promo_code ? ` · ${esc(o.promo_code)}` : ''} · ${o.user_id ? L('may account', 'account') : L('bisita', 'guest')} · ${esc(fmtWhen(o.created_at))}</p></li>`;
+    <p class="mono">${esc(PAYMENTS[o.payment_method] || o.payment_method)}${o.promo_code ? ` · ${esc(o.promo_code)}` : ''} · ${o.user_id ? L('may account', 'account') : L('guest', 'guest')} · ${esc(fmtWhen(o.created_at))}</p></li>`;
   const subRow = s => `<li><div class="al-top"><b>${esc(s.game_title)}</b><span class="tag">${esc(s.status)}</span></div>
     <p>${esc(s.studio_name)} (${esc(devTypeLabel(s.developer_type) || s.developer_type)}) · ${esc(s.contact_name)} · ${esc(s.email)}</p>
     <p class="mono">${esc(s.genre)}${s.collection ? ` · ${esc(collTitle(s.collection) || s.collection)}` : ''} · ${esc(strs(s.platforms).join(', '))}${s.price != null ? ` · ${peso(num(s.price))}` : ''} · ${esc(fmtWhen(s.created_at))}</p>
@@ -1247,16 +1247,16 @@ function adminHtml(orders, subs, msgs, users) {
     <p class="pre">${esc(s.description)}</p></li>`;
   const msgRow = m => `<li><div class="al-top"><b>${esc(m.name)}</b><span class="tag">${esc(inq[m.inquiry_type] || m.inquiry_type)}</span></div>
     <p class="mono">${esc(m.email)} · ${esc(fmtWhen(m.created_at))}</p><p class="pre">${esc(m.message)}</p></li>`;
-  return `<div class="ab-stats admin-stats">${stat(orders.length, L('Order', 'Orders'))}${stat(peso(sales), L('Kabuuang benta', 'Sales total'))}${stat(subs.length, L('Pinasang laro', 'Submissions'))}${stat(msgs.length, L('Mensahe', 'Messages'))}</div>
+  return `<div class="ab-stats admin-stats">${stat(orders.length, L('Orders', 'Orders'))}${stat(peso(sales), L('Total na benta', 'Sales total'))}${stat(subs.length, L('Submissions', 'Submissions'))}${stat(msgs.length, L('Messages', 'Messages'))}</div>
     <p class="mono admin-users">${L(`${num(users.total)} account: ${num(users.customers)} customer, ${num(users.developers)} developer`, `${num(users.total)} accounts: ${num(users.customers)} customers, ${num(users.developers)} developers`)} · <button class="linkish" type="button" id="admin-lock">${L('I-lock ang dashboard', 'Lock dashboard')}</button></p>
     <div class="admin-grid">
-      <div class="box"><h2>${L('Mga order', 'Orders')}</h2>${orders.length ? `<ul class="admin-list">${orders.map(orderRow).join('')}</ul>` : none(L('Wala pang order.', 'No orders yet.'))}</div>
-      <div class="box"><h2>${L('Mga pinasang laro', 'Submissions')}</h2>${subs.length ? `<ul class="admin-list">${subs.map(subRow).join('')}</ul>` : none(L('Wala pang pinasang laro.', 'No submissions yet.'))}</div>
-      <div class="box"><h2>${L('Mga mensahe', 'Messages')}</h2>${msgs.length ? `<ul class="admin-list">${msgs.map(msgRow).join('')}</ul>` : none(L('Wala pang mensahe.', 'No messages yet.'))}</div>
+      <div class="box"><h2>${L('Orders', 'Orders')}</h2>${orders.length ? `<ul class="admin-list">${orders.map(orderRow).join('')}</ul>` : none(L('Wala pang order.', 'No orders yet.'))}</div>
+      <div class="box"><h2>${L('Submissions', 'Submissions')}</h2>${subs.length ? `<ul class="admin-list">${subs.map(subRow).join('')}</ul>` : none(L('Wala pang submission.', 'No submissions yet.'))}</div>
+      <div class="box"><h2>${L('Messages', 'Messages')}</h2>${msgs.length ? `<ul class="admin-list">${msgs.map(msgRow).join('')}</ul>` : none(L('Wala pang message.', 'No messages yet.'))}</div>
     </div>`;
 }
 
-const notFound = () => ({ title: L('Hindi nahanap | TEKS', 'Not found | TEKS'), html: `<div class="wrap section"><div class="empty"><h1>${L('Walang ganitong pahina', 'Page not found')}</h1><p>${L('Wala ang pahinang iyon. Bumalik sa tindahan.', 'That page does not exist. Head back to the store.')}</p><a class="btn go" href="#/store">${L('Tingnan ang tindahan', 'Browse the store')}</a></div></div>` });
+const notFound = () => ({ title: L('Hindi nahanap | TEKS', 'Not found | TEKS'), html: `<div class="wrap section"><div class="empty"><h1>${L('Hindi nahanap ang page', 'Page not found')}</h1><p>${L('Walang ganyang page. Bumalik sa Store.', 'That page does not exist. Head back to the store.')}</p><a class="btn go" href="#/store">${L('Tingnan ang Store', 'Browse the store')}</a></div></div>` });
 
 /* ---------- router ---------- */
 function mountView(v, keepScroll) {
@@ -1323,7 +1323,7 @@ window.addEventListener('storage', e => {
     await loadLibrary();
     refreshAccountUi(); updateCount(); ready = true; render(false);
   } catch (e) {
-    app.innerHTML = `<div class="wrap section"><div class="empty"><h1>${L('Hindi ma-load ang tindahan', 'Could not load the store')}</h1><p>${esc(e.message)}</p><button class="btn go" type="button" id="retry">${L('Subukan ulit', 'Try again')}</button></div></div>`;
+    app.innerHTML = `<div class="wrap section"><div class="empty"><h1>${L('Hindi ma-load ang Store', 'Could not load the store')}</h1><p>${esc(e.message)}</p><button class="btn go" type="button" id="retry">${L('Subukan ulit', 'Try again')}</button></div></div>`;
     $('#retry').addEventListener('click', () => location.reload());
   }
 })();
